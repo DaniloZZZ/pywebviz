@@ -8,6 +8,7 @@ def main():
         ws_port=8000,
         vis_port=80
     )
+    vis.show()
 
     N = [42, 12]
     vis.vars['test'] = N
