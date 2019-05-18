@@ -50,12 +50,12 @@ class Server(BaseHTTPRequestHandler):
 
 def run(server_class=HTTPServer, handler_class=Server, port=80):
     server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
     print('Starting http at', port)
+    httpd = server_class(server_address, handler_class)
     httpd.serve_forever()
 
 def start_server(port):
-    run()
+    run(port=port)
 
 if __name__ == "__main__":
     from sys import argv
