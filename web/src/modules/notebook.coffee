@@ -3,10 +3,11 @@ import L from 'react-dom-factories'
 L_ = React.createElement
 
 export default Notebook = (props) ->
-  return L.div style:width:'100%',height:'100%',
+  L.div className:'widget',
     L.iframe
      src:'http://localhost:8888/notebooks/test.ipynb'
      style:
+       position:'relative'
        width:'100%'
        height:'100%'
 
