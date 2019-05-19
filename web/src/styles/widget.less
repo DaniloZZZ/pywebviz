@@ -8,5 +8,29 @@
     padding-bottom:10px;
     width:calc(100% - 2px);
     height:calc(100% - 20px);
+    overflow:hidden;
 }
 
+.vis {
+    padding:10px;
+    width:calc(100% - 20px);
+}
+
+@scale: 0.85;
+
+.frame {
+    width: calc(100%/@scale);
+    height: calc(100%/@scale);
+    border: 0;
+
+    -ms-transform: scale(@scale);
+    -moz-transform: scale(@scale);
+    -o-transform: scale(@scale);
+    -webkit-transform: scale(@scale);
+    transform: scale(@scale);
+    -ms-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}

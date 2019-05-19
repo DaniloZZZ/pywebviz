@@ -7,14 +7,12 @@ export default class Input extends React.Component
     super(props)
     @state = {}
     @state.value=props.default
-    @value = props.default
 
   onChange:(event)=>
     console.log event, event.target.value
     value = event.target.value
     @setState value:value
-    @value = value
-    @props.onChange event.value
+    @props.onChange value
 
   get_style:(value)->
     borderRadius:3
