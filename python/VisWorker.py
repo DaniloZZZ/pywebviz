@@ -1,4 +1,5 @@
 import webbrowser
+import json
 
 from helpers import threaded
 from ws_server import start_server as serve_ws
@@ -42,7 +43,9 @@ class Vis():
             return "Wrong format"
 
         if command==COMMAND_GET_VAR:
-            return self.vars.get(args)
+            val = self.vars.get(args)
+            msg = json.dumps(val)
+            return args+":"+msg
 
         return "Unknown command"
 
