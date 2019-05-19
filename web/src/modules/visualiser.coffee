@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import L from 'react-dom-factories'
 L_ = React.createElement
 import Input from './UIcomponents/input.coffee'
-import LineGraph from './presenters/lineGraph.coffee'
+import LineGraph from './presenters/lineGraph_recharts.coffee'
 
 export default class Vis extends React.Component
   state:
