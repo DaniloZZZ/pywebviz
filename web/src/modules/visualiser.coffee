@@ -3,6 +3,7 @@ import L from 'react-dom-factories'
 L_ = React.createElement
 import Input from './UIcomponents/input.coffee'
 import LineGraph from './presenters/lineGraph_recharts.coffee'
+import MplD3 from './presenters/mpld3.coffee'
 
 export default class Vis extends React.Component
   state:
@@ -11,6 +12,11 @@ export default class Vis extends React.Component
     super props
 
   choosePresenter: (val)->
+    if @props.type=='mpl'
+      return MplD3
+    console.log 'valavl',val
+    if val is null
+      return ({data})->L.div 0,data
     switch typeof val
       when 'object' then LineGraph
       else ({data})->L.div 0,data
@@ -23,7 +29,7 @@ export default class Vis extends React.Component
       L_ Input,
         default:@props.varname
         onChange:@props.onNameChange
-      Pres data:@props.value
+      L_ Pres, data:@props.value
       #@props.value
 
 

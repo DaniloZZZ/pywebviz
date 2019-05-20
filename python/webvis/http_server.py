@@ -16,7 +16,7 @@ import requests
 def get_path(path):
     if path in ['/','']:
         path = './index.html'
-    return '../web'+path
+    return '../../web/public'+path
 
 def fetch_addr(addr):
     r = requests.get(addr)
@@ -25,41 +25,27 @@ def fetch_addr(addr):
 def stop():
     print("Stopping http not yet implemented")
 
+def read_file(fname):
+    with open(fname,'rb') as f:
+        page = f.read()
+    return page
+
 class Server(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'text/css')
         self.end_headers()
 
     def do_GET(self):
         query = urlparse(self.path).path
         print("Client requested path",query)
-        path = query
-        print('path',path)
-        if path[:1]=='/':
-            addr = path[1:]
-            addr = 'http://localhost:8888/'+addr
-
-            if path[-4:]=='pynb':
-                print('fetching',addr)
-                page = fetch_addr(addr)
-                self.wfile.write(bytes(page,'utf-8'))
-                return
-
-            self.send_response(301)
-            self.send_header('Location', 'http://localhost:8888')
-            self.end_headers()
-
-            return
         self._set_headers()
         try:
             path = get_path(query)
             try:
-                with open(path,'rb') as f:
-                    page = f.read()
+                page = read_file(path)
             except:
-                with open(get_path('/index.html'),'rb') as f:
-                    page = f.read()
+                page = read_file(get_path('/index.html'))
 
             self.wfile.write(page)
         except Exception as e:

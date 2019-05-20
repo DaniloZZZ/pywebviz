@@ -15,8 +15,8 @@ import './styles/widget.less'
 export default class App extends React.Component
   state:
     vars: [
-        name:'test', value:'asss'
-      , name:'undefined', value:'asss'
+      #name:'test', value:'asss' 
+       name:'image', value:'asss'
     ]
   constructor:->
     super()
@@ -27,19 +27,29 @@ export default class App extends React.Component
       @layout.push i:'vis'+idx, x:2*(idx%2), y:7+4*idx, w:2, h:4
 
   onWsMessage: (msg)=>
-      [name, jsonser] = msg.data.split(":")
-      value = JSON.parse jsonser
+      jsonser = msg.data
+      if jsonser == "None"
+        return
 
+      # do not update if not changed
       for v in @state.vars
-        if v.name==name
-          if v.string==jsonser
-            return
+        if v.string==jsonser
+          return
       @setState (s,p)->
+        try
+          message = JSON.parse jsonser
+        catch
+          message = jsonser
+          console.error message
+          return s
+        name = message.args
+        value = message.value
+        type = message.type
         for v in s.vars
           if v.name==name
             v.value = value
+            v.type = type
             v.string = jsonser
-
 
   nameChange: (id)->(name)=>
       @setState (s,p)->
@@ -51,7 +61,7 @@ export default class App extends React.Component
     @connected = true
     f= ()=>
       for v in @state?.vars
-        ws.send 'getvar:'+v.name
+        ws.send 'get:'+v.name
       if @connected
         setTimeout f, 100
     f()
@@ -66,8 +76,8 @@ export default class App extends React.Component
         onDisconnect: @onDisconnect
       L_ GridLayout,
         className:'grid'
-        cols:6
-        rowHeight:30
+        cols:8
+        rowHeight:60
         width:1000
         layout: @layout
         draggableCancel:"input"
@@ -77,6 +87,5 @@ export default class App extends React.Component
             L_ Visualiser,
               value:v.value
               varname:v.name
+              type:v.type
               onNameChange:@nameChange idx
-
-
