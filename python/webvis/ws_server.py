@@ -4,8 +4,10 @@ from trio_websocket import serve_websocket, ConnectionClosed
 def _print(*args):
     print("WebSocket::\t",*args)
 
+def stop():
+    print("Stopping ws not yet implemented")
 
-async def ws_serve(addr,port, handler_func):
+async def ws_serve(addr, port, handler_func):
     async def server(request):
         ws = await request.accept()
         while True:
@@ -20,8 +22,11 @@ async def ws_serve(addr,port, handler_func):
                     resp = str(resp)
                     await ws.send_message(resp)
             except ConnectionClosed:
+                _print("Connection closed")
                 break
+
     await serve_websocket(server, addr, port, ssl_context=None)
+    _print("Websocket terminates")
 
 def start_server(addr, port, handler_func=None):
     print(f"Starting ws server at {addr}:{port}")
@@ -32,6 +37,3 @@ def main():
 
 if __name__=='__main__':
     main()
-
-
-

@@ -1,7 +1,7 @@
 import trio
 import time
 
-from VisWorker import Vis
+from .VisWorker import Vis
 
 def main():
     vis = Vis(

@@ -11,16 +11,29 @@ Send a POST request::
 from http.server import BaseHTTPRequestHandler, HTTPServer
 ###import SocketServer
 from urllib.parse import urlparse
+import requests
 
 def get_path(path):
     if path in ['/','']:
         path = './index.html'
-    return '../web'+path
+    return '../../web/public'+path
+
+def fetch_addr(addr):
+    r = requests.get(addr)
+    return r.text
+
+def stop():
+    print("Stopping http not yet implemented")
+
+def read_file(fname):
+    with open(fname,'rb') as f:
+        page = f.read()
+    return page
 
 class Server(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'text/css')
         self.end_headers()
 
     def do_GET(self):
@@ -30,11 +43,9 @@ class Server(BaseHTTPRequestHandler):
         try:
             path = get_path(query)
             try:
-                with open(path,'rb') as f:
-                    page = f.read()
+                page = read_file(path)
             except:
-                with open(get_path('/index.html'),'rb') as f:
-                    page = f.read()
+                page = read_file(get_path('/index.html'))
 
             self.wfile.write(page)
         except Exception as e:
@@ -50,12 +61,13 @@ class Server(BaseHTTPRequestHandler):
 
 def run(server_class=HTTPServer, handler_class=Server, port=80):
     server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
     print('Starting http at', port)
+    global httpd
+    httpd = server_class(server_address, handler_class)
     httpd.serve_forever()
 
 def start_server(port):
-    run()
+    run(port=port)
 
 if __name__ == "__main__":
     from sys import argv
