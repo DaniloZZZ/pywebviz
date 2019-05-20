@@ -11,6 +11,7 @@ import FuncChainer from './modules/helpers/funchainer.coffee'
 
 import './styles/grid.css'
 import './styles/widget.less'
+import './styles/graph.less'
 
 export default class App extends React.Component
   state:

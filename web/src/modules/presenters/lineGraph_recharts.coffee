@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import L from 'react-dom-factories'
 L_ = React.createElement
-import {LineChart, Line, XAxis, YAxis, CartesianGrid} from 'recharts'
+import {LineChart, Line,
+XAxis, YAxis,
+ResponsiveContainer, CartesianGrid} from 'recharts'
 
 transpose_01 = (obj)->
   k1 = Object.keys obj
@@ -50,15 +52,19 @@ export default Vis = (props)->
   data = Object.keys(data).map (d)->data[d]
 
   L.div className:'presenter graph',
-    L_ LineChart, data:data, width:300, height:150,
-      L_ XAxis, dataKey:domainLabel
-      L_ YAxis,0
-      L_ CartesianGrid, strokeDasharray:'3 3'
-      for k in data_keys
-        L_ Line,
-          key:k
-          stroke:'#c43a31'
-          type:"monotone"
-          dataKey:k
+    L_ ResponsiveContainer,
+      width:"100%"
+      height:"100%"
+      margin: {top: 4, right: 4, left: -20, bottom: 10}
+      L_ LineChart, data:data,
+        L_ XAxis, dataKey:domainLabel
+        L_ YAxis,0
+        L_ CartesianGrid, strokeDasharray:'3 3'
+        for k in data_keys
+          L_ Line,
+            key:k
+            stroke:'#c43a31'
+            type:"monotone"
+            dataKey:k
 
 

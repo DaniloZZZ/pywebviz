@@ -14,7 +14,6 @@ export default class Vis extends React.Component
   choosePresenter: (val)->
     if @props.type=='mpl'
       return MplD3
-    console.log 'valavl',val
     if val is null
       return ({data})->L.div 0,data
     switch typeof val
