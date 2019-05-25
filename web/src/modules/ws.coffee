@@ -64,7 +64,7 @@ export default class WebSocketWrapper extends React.Component
 
 
   render:() ->
-    L.div className:'webSocket',
+    L.div className:'webSocket '+@props.className,
       if @state.status!=2
         L_ Input,
           default:@state.addr
