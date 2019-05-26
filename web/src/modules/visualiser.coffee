@@ -4,6 +4,7 @@ L_ = React.createElement
 import Input from './UIcomponents/input.coffee'
 import LineGraph from './presenters/lineGraph_recharts.coffee'
 import MplD3 from './presenters/mpld3.coffee'
+import Image from './presenters/image.coffee'
 
 export default class Vis extends React.Component
   state:
@@ -16,10 +17,16 @@ export default class Vis extends React.Component
       return MplD3
     if val is null
       return ({data})->L.div 0,data
+    try
+      if val.length>10
+        if val[0].length>10
+          console.log 'image'
+          return Image
+    catch
+      print("error", val)
     switch typeof val
       when 'object' then LineGraph
       else ({data})->L.div 0,data
-      
 
   render:->
     Pres = @choosePresenter @props.value
