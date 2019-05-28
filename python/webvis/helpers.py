@@ -1,9 +1,15 @@
 import multiprocessing.dummy as thr
-import mpld3
-import matplotlib.pyplot as plt
-import seaborn as sns
+try:
+    import matplotlib.pyplot as plt
+    import mpld3
+except Exception as e:
+    print(e)
+try:
+    import seaborn as sns
+    sns.set()
+except Exception as e:
+    print(e)
 
-sns.set()
 
 def threaded(f,*args):
     p = thr.Process(target=(f),args = args)
