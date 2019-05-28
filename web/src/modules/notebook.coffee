@@ -7,7 +7,7 @@ export default Notebook = (props) ->
   nb_addr = 'notebooks/test.ipynb'
   addr = 'http://localhost:8888/notebooks/'+nb_addr
   L.div className:'widget',
-    L.div className:'frame',
+    L.div className:'container jupyter',
       L.iframe
        src:addr
        style:

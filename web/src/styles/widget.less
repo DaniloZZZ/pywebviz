@@ -1,28 +1,36 @@
 .widget{
-    position:relative;
-    -webkit-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.71); 
-    box-shadow: 0px 0px 10px -2px rgba(0,0,0,0.71);
-    border-radius:5px;
-    padding:1px;
-    padding-top:10px;
-    padding-bottom:10px;
+
+    display:flex;
+    flex-direction:column;
+
     width:calc(100% - 2px);
     height:calc(100% - 20px);
     overflow:hidden;
+
+    padding:1px;
+    padding-top:10px;
+    padding-bottom:10px;
+
+    border-radius:5px;
+    -webkit-box-shadow: 0px 0px 9px -4px rgba(0,0,0,0.71); 
+    box-shadow: 0px 0px 9px -4px rgba(0,0,0,0.71);
 }
 
 .vis {
-    padding:10px;
-    width:calc(100% - 20px);
+    padding:2px;
+    width:calc(100% - 4px);
+    height:calc(100% - 4px);
+}
+
+.container{
+    flex-grow:100;
+}
+
+.frame {
+    margin:0;
 }
 
 @scale: 0.85;
-
-.frame {
-    width:100%;
-    height: 100%
-}
-
 .jupyter {
     width: calc(100%/@scale);
     height: calc(100%/@scale);

@@ -15,6 +15,8 @@ export default class Vis extends React.Component
   choosePresenter: (val)->
     if @props.type=='mpl'
       return MplD3
+    if @props.type=='img'
+      return Image
     if val is null
       return ({data})->L.div 0,data
     try

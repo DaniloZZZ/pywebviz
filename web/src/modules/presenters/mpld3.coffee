@@ -19,4 +19,5 @@ export default class Vis extends React.Component
 
   render:->
     @set_contents()
-    L.iframe className:'frame',ref:'frame',
+    L.div className: 'container',
+      L.iframe className:'mpl',ref:'frame',

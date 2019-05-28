@@ -63,8 +63,12 @@ class Vis():
                 if id(val) == cache: return
                 self.cached_vars[var] = id(val)
 
-                msg = ifc.get_var( val, params)
-                return msg
+                try:
+                    msg = ifc.get_var( val, params)
+                    return msg
+                except Exception as e:
+                    msg = ifc.get_var(str(e), params)
+                    return msg
 
         return "Unknown command"
 
