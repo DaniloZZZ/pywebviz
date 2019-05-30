@@ -12,11 +12,18 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 ###import SocketServer
 from urllib.parse import urlparse
 import requests
+import webvis
+from pathlib import Path
+path = webvis.__file__
+print("path",path)
+p = Path(path)
+
+pywebvis_path = p.parent.parent.parent / 'web'
 
 def get_path(path):
     if path in ['/','']:
         path = './index.html'
-    return '../../web/public'+path
+    return str(pywebvis_path) +'/dist'+path
 
 def fetch_addr(addr):
     r = requests.get(addr)
@@ -33,7 +40,7 @@ def read_file(fname):
 class Server(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
-        self.send_header('Content-type', 'text/css')
+        self.send_header('Content-type', 'text/html')
         self.end_headers()
 
     def do_GET(self):
