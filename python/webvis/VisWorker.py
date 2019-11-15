@@ -18,11 +18,13 @@ class Vis():
         self.vis_port = vis_port
         self.pws = threaded(
             serve_ws,
-            'localhost', ws_port, self.handler
+            'localhost', ws_port, self.handler,
+            name='ws'
         )
         self.phttp = threaded(
             serve_http,
-            vis_port
+            vis_port,
+            name='http'
         )
         self.vars = {}
         self.cached_vars = {}

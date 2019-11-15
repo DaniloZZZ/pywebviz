@@ -15,12 +15,9 @@ async def ws_serve(addr, port, handler_func):
                 message = await ws.get_message()
                 #_print("got message",message)
 
-                if not handler_func:
-                    await ws.send_message(message)
-                else:
-                    resp = handler_func(message)
-                    resp = str(resp)
-                    await ws.send_message(resp)
+                resp = handler_func(message)
+                resp = str(resp)
+                await ws.send_message(resp)
             except ConnectionClosed:
                 _print("Connection closed")
                 break

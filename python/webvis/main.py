@@ -1,5 +1,7 @@
 import trio
 import time
+with open('./front/teet.t') as f:
+    a = f.read()
 
 from .VisWorker import Vis
 
