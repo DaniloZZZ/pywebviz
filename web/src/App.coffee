@@ -12,6 +12,7 @@ import WSwrap from './modules/ws.coffee'
 import Button from './modules/UIcomponents/button.coffee'
 
 import FuncChainer from './modules/helpers/funchainer.coffee'
+import {get_nb_name} from './modules/helpers/argparser.coffee'
 
 import './styles/grid.css'
 import './styles/widget.less'
@@ -109,7 +110,7 @@ export default class App extends React.Component
         breakpoints:{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}
         cols:{lg: 18, md: 12, sm: 10, xs: 4, xxs: 2}
         draggableCancel:"input"
-        L.div key:'notebook', L_ Notebook
+        L.div key:'notebook', L_ Notebook, nb_name:get_nb_name()
         for v,idx in @state.vars
           L.div key:'vis'+idx,
             L_ Visualiser,

@@ -3,9 +3,8 @@ import L from 'react-dom-factories'
 L_ = React.createElement
 
 export default Notebook = (props) ->
-  addr = 'http://localhost:8888/notebooks/test.ipynb'
-  nb_addr = 'notebooks/test.ipynb'
-  addr = 'http://localhost:8888/notebooks/'+nb_addr
+  {nb_name} = props
+  addr = 'http://localhost:8888/notebooks/' + nb_name
   L.div className:'widget',
     L.div className:'container jupyter',
       L.iframe
