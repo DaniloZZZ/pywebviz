@@ -32,8 +32,8 @@ export default class Vis extends React.Component
 
   render:->
     Pres = @choosePresenter @props.value
-    L.div className:'widget vis',
-      L.div 0,"Name: ",
+    L.div className:'widget',
+      L.div className:'title',"Name: ",
       L_ Input,
         default:@props.varname
         onChange:@props.onNameChange
