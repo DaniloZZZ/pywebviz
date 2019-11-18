@@ -13,7 +13,7 @@ COMMAND_GET_VAR="getvar"
 COMMAND_GET_MPL="getmpl"
 
 class Vis():
-    def __init__(self, ws_port = 8000, vis_port=80):
+    def __init__(self, ws_port = 8000, vis_port=80, nb_name=None):
         self.ws_port = ws_port
         self.vis_port = vis_port
         self.pws = threaded(
@@ -28,10 +28,14 @@ class Vis():
         )
         self.vars = {}
         self.cached_vars = {}
+        self.nb_name = nb_name
 
     def show(self):
-        webbrowser.open(
-            f"localhost:{self.vis_port}"
+        if self.nb_name:
+            params = '?nb_name='+self.nb_name
+        else: params = ''
+        webbrowser.open_new_tab(
+            f"localhost:{self.vis_port}/{params}"
         )
 
     def stop(self):
