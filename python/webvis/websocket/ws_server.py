@@ -27,7 +27,8 @@ def start_server(addr, port, handler_func=print):
     log.info(f"Starting ws server at {addr}:{port}")
     try:
         trio.run(ws_serve, addr, port, handler_func)
-    except StopServer:
+    except ConnectionClosed as e:
+        log.warning(f"Connection closed: {e}")
         return
 
 def main():
