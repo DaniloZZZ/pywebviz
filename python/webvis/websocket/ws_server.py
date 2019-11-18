@@ -1,7 +1,7 @@
 import trio
 from trio_websocket import serve_websocket, ConnectionClosed
 from logging import getLogger
-from message_gen import message_gen
+from .message_gen import message_gen
 
 log = getLogger("Websocket")
 
@@ -30,6 +30,15 @@ def start_server(addr, port, handler_func=print):
     except ConnectionClosed as e:
         log.warning(f"Connection closed: {e}")
         return
+
+def start_server_old(addr, port, handler_func):
+    async def handler(client_messages):
+        async for message in client_messages:
+            yield str(handler_func(message))
+    start_server(addr, port, handler)
+
+def stop():
+    print("You found a stub!")
 
 def main():
     start_server('127.0.0.1',8000)

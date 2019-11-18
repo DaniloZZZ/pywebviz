@@ -4,8 +4,8 @@ import json
 from . import helpers
 from . import interface as ifc
 from .helpers import threaded
-from .ws_server import start_server as serve_ws
-from .ws_server import stop as stop_ws
+from .websocket.ws_server import start_server_old as serve_ws
+from .websocket.ws_server import stop as stop_ws
 from .http_server import start_server as serve_http
 from .http_server import stop as stop_http
 

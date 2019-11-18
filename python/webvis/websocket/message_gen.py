@@ -1,6 +1,6 @@
 from trio_websocket import ConnectionClosed
 import logging as log
-log.basicConfig(level=log.DEBUG)
+#log.basicConfig(level=log.DEBUG)
 
 async def message_gen(ws):
     while True:
