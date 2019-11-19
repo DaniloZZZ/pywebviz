@@ -1,9 +1,9 @@
 import webbrowser
 import json
 
-from . import helpers
 from . import interface as ifc
-from .helpers import threaded
+from .helpers.threaded import threaded
+from .helpers.AttrDict import AttrCbDict
 from .websocket.ws_server import start_server_old as serve_ws
 from .websocket.ws_server import stop as stop_ws
 from .http_server import start_server as serve_http
@@ -26,7 +26,10 @@ class Vis():
             vis_port,
             name='http'
         )
-        self.vars = {}
+        self.vars = AttrCbDict(
+            get_cb=lambda *x: None,
+            set_cx=lambda *x: None
+        )
         self.cached_vars = {}
         self.nb_name = nb_name
 
