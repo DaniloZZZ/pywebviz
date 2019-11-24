@@ -14,16 +14,17 @@ from urllib.parse import urlparse
 import requests
 import webvis
 from pathlib import Path
+
 path = webvis.__file__
 print("path",path)
 p = Path(path)
 
-pywebvis_path = p.parent.parent.parent / 'web'
+pywebvis_path = p.parent / 'front_build'
 
 def get_path(path):
-    if path in ['/','']:
-        path = './index.html'
-    return str(pywebvis_path) +'/dist'+path
+    #if path in ['/','']:
+    #    path = './index.html'
+    return str(pywebvis_path) + path
 
 def fetch_addr(addr):
     r = requests.get(addr)

@@ -11,8 +11,8 @@ except Exception as e:
     print(e)
 
 
-def threaded(f,*args):
-    p = thr.Process(target=(f),args = args)
+def threaded(f,*args, **kwargs):
+    p = thr.Process(target=(f),args = args, **kwargs)
     p.start()
     return p
 
