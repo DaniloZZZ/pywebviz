@@ -6,6 +6,7 @@ from . import interface as ifc
 from .helpers.threaded import threaded
 from .helpers.AttrDict import AttrCbDict
 from .websocket.ws_server import start_server as serve_ws
+from .websocket.ws_server import ws_serve
 from .websocket.ws_server import stop as stop_ws
 from .http_server import start_server as serve_http
 from .http_server import stop as stop_http
@@ -26,11 +27,23 @@ class Vis():
         self.active_vars = []
         self.nb_name = nb_name
         self.running = True
+        self.ws = None
 
-        args = ('localhost', ws_port, self._ws_handler, self._on_connect)
-        self.pws = threaded( serve_ws, *args, name='ws')
+        self.pws = threaded( self.main_loop, name='main')
         self.phttp = threaded( serve_http, vis_port, name='http')
         self.pmon = threaded( self._monitor_vars, name='monitor')
+
+    def main_loop(self):
+        args = ('localhost', self.ws_port, self._ws_handler, self._on_connect)
+        trio.run(self.run, args)
+        print("Exited main loop")
+
+    async def run(self, args):
+        with trio.CancelScope() as scope:
+            self.cancel_scope = scope
+            async with trio.open_nursery() as nursery:
+                nursery.start_soon(ws_serve, *args+(nursery,))
+                nursery.start_soon(self._monitor_vars)
 
     def show(self):
         if self.nb_name:
@@ -43,6 +56,7 @@ class Vis():
     def stop(self):
         print("Stopping websocket server")
         self.running = False
+        self.cancel_scope.cancel()
         stop_ws()
         #self.pws.terminate()
         #self.pws.join()
@@ -52,24 +66,27 @@ class Vis():
         #self.phttp.terminate()
         #self.phttp.join()
 
-    def _monitor_vars(self):
-        async def monitor():
-            while True:
-                if not self.running: return
-                time.sleep(1)
-                print("Checking",self.active_vars)
-                for varname in self.active_vars:
-                    val = self.vars.get(varname)
+    async def _monitor_vars(self):
+        while True:
+            if not self.running: return
+            #time.sleep(1)
+            await trio.sleep(.01)
+            if not self.ws: continue
+            for varname in self.active_vars:
+                val = self.vars.get(varname)
 
-                    cached_id = self.cached_vars.get(varname)
-                    if cached_id==id(val): continue
+                cached_id = self.cached_vars.get(varname)
+                if cached_id==id(val): continue
 
-                    msg = ifc.get_var( val, {'varname': varname} )
-                    cached_msg = self.cached_msgs.get(varname)
-                    if msg==cached_msg: continue
+                msg = ifc.get_var( val, {'varname': varname} )
+                cached_msg = self.cached_msgs.get(varname)
+                if msg==cached_msg: continue
 
+                try:
                     await self.ws.send_message(msg)
-        trio.run(monitor)
+                except Exception: self.ws = None
+                self.cached_msgs[varname] = msg
+                self.cached_vars[varname]=id(val)
 
 
     def _on_connect(self, ws):
@@ -100,9 +117,9 @@ class Vis():
                         msg = ifc.get_var(str(e), params)
                         yield msg
             if command=='setvars':
+                print("Set active_vars", params)
                 self.active_vars = params
+                continue
 
             yield "Unknown command"
-
-
 

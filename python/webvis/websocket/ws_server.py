@@ -8,7 +8,7 @@ log = getLogger("Websocket")
 class StopServer(Exception):
     pass
 
-async def ws_serve(addr, port, iterable_fn, on_connect=lambda x:None):
+async def ws_serve(addr, port, iterable_fn, on_connect=lambda x:None, nursery=None):
     async def server(request):
 
         ws = await request.accept()
@@ -21,7 +21,7 @@ async def ws_serve(addr, port, iterable_fn, on_connect=lambda x:None):
                 log.warning("Connection closed")
                 break
 
-    await serve_websocket(server, addr, port, ssl_context=None)
+    await serve_websocket(server, addr, port, ssl_context=None, handler_nursery=nursery)
     log.info("Websocket terminates")
 
 def start_server(addr, port, handler_func=print, on_connect=lambda x: None):
