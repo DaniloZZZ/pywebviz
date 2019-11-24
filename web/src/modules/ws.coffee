@@ -18,13 +18,12 @@ export default class WebSocketWrapper extends React.Component
 
 
   handleMessage:(msg)=>
-    console.debug 'message', msg
     @onMessage? msg
 
   handleError:(error)=>
-    console.error error
     @setState status:3
     @onError? error
+    console.error error
 
   handleConnect:()=>
     console.log 'ws connected'
@@ -62,7 +61,6 @@ export default class WebSocketWrapper extends React.Component
       when 2 then 'Disconnect'
       when 3 then 'Error'
 
-
   render:() ->
     L.div className:'webSocket '+@props.className,
       if @state.status!=2
@@ -75,4 +73,3 @@ export default class WebSocketWrapper extends React.Component
       L_ Button,
         onPress:@makeAction
         text:@get_status_text()
-

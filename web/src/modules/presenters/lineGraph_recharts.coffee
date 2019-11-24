@@ -51,12 +51,13 @@ export default Vis = (props)->
   #convert to array
   data = Object.keys(data).map (d)->data[d]
 
-  L.div className:'presenter graph',
+  L.div className:'container graph',
     L_ ResponsiveContainer,
       width:"100%"
       height:"100%"
-      margin: {top: 4, right: 4, left: -20, bottom: 10}
-      L_ LineChart, data:data,
+      L_ LineChart, 
+        data:data
+        margin: {top: 2, right: 8, left: -20, bottom: 2}
         L_ XAxis, dataKey:domainLabel
         L_ YAxis,0
         L_ CartesianGrid, strokeDasharray:'3 3'
@@ -64,7 +65,9 @@ export default Vis = (props)->
           L_ Line,
             key:k
             stroke:'#c43a31'
-            type:"monotone"
+            type:"linear"
+            animationDuration:500
+            dot:false
             dataKey:k
 
 

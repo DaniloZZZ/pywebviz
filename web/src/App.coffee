@@ -23,8 +23,7 @@ import './styles/misc.less'
 visStorage = new LocalStorage key:'webvis'
 
 defaultVars = [
-      #name:'test', value:'asss' 
-       name:'image', value:'asss'
+       name:'dummyvar', value:'hello world'
     ]
 
 export default class App extends React.Component
@@ -57,14 +56,15 @@ export default class App extends React.Component
             v.value = value
             v.type = type
             v.string = jsonser
+        s
 
   nameChange: (id)->(name)=>
       @setState (s,p)->
         s.vars[id].name = name
+        visStorage.save 'vars', s.vars
         s
       console.log @state
-
-  add_widget: ()=>
+  addWidget: ()=>
     new_var = name:'New variable',value:'Nothing here yet'
     @setState (s,p)->
       s.vars.push new_var
@@ -75,21 +75,19 @@ export default class App extends React.Component
       s.vars.pop id
       visStorage.save 'vars', s.vars
       s
+
   onConnect:(ws)=>
     @connected = true
-    f= ()=>
-      for v in @state?.vars
-        ws.send 'get:'+v.name
+    f = ()=>
+      names = @state.vars.map (v)->v.name
+      msg = command:'setvars', params: names
+      ws.send  JSON.stringify msg
       if @connected
-        setTimeout f, 100
+        setTimeout f, 4000
     f()
   onDisconnect:()=>
     @connected = false
 
-  wrap: (props)->
-    L.div '',
-      props.children
-  
   render: ->
     L.div className:'app',
       L.div className:'top-bar',
@@ -101,7 +99,7 @@ export default class App extends React.Component
         L_ Button,
           className:'add-widget'
           text:'Add widget'
-          onPress:@add_widget
+          onPress:@addWidget
       L_ ResponsiveGL,
         className:'grid'
         draggableCancel:"input"
@@ -110,9 +108,8 @@ export default class App extends React.Component
           Widget
             onDelete:@deleteWidget idx
             key:'vis'+idx
-            L.div key:'vis'+idx,
-              L_ Visualiser,
-                value:v.value
-                varname:v.name
-                type:v.type
-                onNameChange:@nameChange idx
+            L_ Visualiser,
+              value:v.value
+              varname:v.name
+              type:v.type
+              onNameChange:@nameChange idx
