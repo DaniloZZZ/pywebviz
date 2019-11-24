@@ -9,6 +9,7 @@ import ResponsiveGL from './modules/ResponsiveStorageGrid.coffee'
 import {Responsive, WidthProvider} from 'react-grid-layout'
 
 import Button from './modules/UIcomponents/button.coffee'
+import Widget from './modules/Widget.coffee'
 
 import FuncChainer from './modules/helpers/funchainer.coffee'
 import LocalStorage from './modules/helpers/localStorage.coffee'
@@ -69,7 +70,11 @@ export default class App extends React.Component
       s.vars.push new_var
       visStorage.save 'vars', s.vars
       s
-
+  deleteWidget: (id)->()=>
+    @setState (s,p)->
+      s.vars.pop id
+      visStorage.save 'vars', s.vars
+      s
   onConnect:(ws)=>
     @connected = true
     f= ()=>
@@ -102,9 +107,12 @@ export default class App extends React.Component
         draggableCancel:"input"
         L.div key:'notebook', L_ Notebook, nb_name:get_nb_name()
         for v,idx in @state.vars
-          L.div key:'vis'+idx,
-            L_ Visualiser,
-              value:v.value
-              varname:v.name
-              type:v.type
-              onNameChange:@nameChange idx
+          Widget
+            onDelete:@deleteWidget idx
+            key:'vis'+idx
+            L.div key:'vis'+idx,
+              L_ Visualiser,
+                value:v.value
+                varname:v.name
+                type:v.type
+                onNameChange:@nameChange idx
