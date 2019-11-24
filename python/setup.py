@@ -1,7 +1,7 @@
 from setuptools import setup
 setup(
     name = 'webvis',
-    packages = ['webvis','websocket','helpers'],
+    packages = ['webvis'],
     version = '0.0.1',
     description = 'A live two-way data binder for python',
     author = 'Danil Lykov',
