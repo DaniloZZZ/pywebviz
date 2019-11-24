@@ -6,9 +6,6 @@ import GridLayout from 'react-grid-layout'
 #import ResponsiveGL from 'react-grid-layout'
 import {Responsive, WidthProvider} from 'react-grid-layout'
 
-Function::property = (prop, desc) ->
-  Object.defineProperty @prototype, prop, desc
-
 ResponsiveGrid = WidthProvider Responsive
 
 getFromLS = (key) ->
@@ -29,7 +26,6 @@ originalLayouts = getFromLS("layouts") || {}
 
 export default class ResponsiveGL extends React.PureComponent
   defaultProps =
-    className:'grid'
     breakpoints:{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}
     cols:{lg: 18, md: 12, sm: 10, xs: 4, xxs: 2}
     rowHeight:60
@@ -44,8 +40,10 @@ export default class ResponsiveGL extends React.PureComponent
     this.state = layouts: JSON.parse(JSON.stringify(originalLayouts))
 
   render: ->
+    props = {
+      @props...
+      layouts:@state.layouts,
+      onLayoutChange:@onLayoutChange,
+    }
     L.div '',
-      L_ ResponsiveGrid,
-        layouts:@state.layouts,
-        onLayoutChange:@onLayoutChange,
-        @props.children
+      L_ ResponsiveGrid, props, @props.children

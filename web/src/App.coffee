@@ -2,42 +2,35 @@ import React, { Component } from 'react'
 import L from 'react-dom-factories'
 L_ = React.createElement
 
-import GridLayout from 'react-grid-layout'
-#import ResponsiveGL from 'react-grid-layout'
-import {Responsive, WidthProvider} from 'react-grid-layout'
 import Notebook from './modules/notebook.coffee'
 import Visualiser from './modules/visualiser.coffee'
 import WSwrap from './modules/ws.coffee'
+import ResponsiveGL from './modules/ResponsiveStorageGrid.coffee'
+import {Responsive, WidthProvider} from 'react-grid-layout'
 
 import Button from './modules/UIcomponents/button.coffee'
 
 import FuncChainer from './modules/helpers/funchainer.coffee'
+import LocalStorage from './modules/helpers/localStorage.coffee'
+import {get_nb_name} from './modules/helpers/argparser.coffee'
 
 import './styles/grid.css'
 import './styles/widget.less'
 import './styles/graph.less'
 import './styles/misc.less'
 
-ResponsiveGL = WidthProvider( Responsive)
+visStorage = new LocalStorage key:'webvis'
 
-_get_layout=(vars)->
-  layout = [
-      i:'notebook', x:0, y:0, w:4, h:7
-  ]
-
-  for v, idx in vars
-    layout.push i:'vis'+idx, x:2*(idx%2), y:7+4*idx, w:2, h:4
-  return layout
-
-export default class App extends React.Component
-  state:
-    vars: [
+defaultVars = [
       #name:'test', value:'asss' 
        name:'image', value:'asss'
     ]
+
+export default class App extends React.Component
+  state: {}
   constructor:->
     super()
-    @state.layout = _get_layout(@state.vars)
+    @state.vars = visStorage.get('vars') or defaultVars
 
   onWsMessage: (msg)=>
       jsonser = msg.data
@@ -71,10 +64,10 @@ export default class App extends React.Component
       console.log @state
 
   add_widget: ()=>
+    new_var = name:'New variable',value:'Nothing here yet'
     @setState (s,p)->
-      new_var = name:'New',value:'Not init'
-      s.layout.push _get_layout new_var
       s.vars.push new_var
+      visStorage.save 'vars', s.vars
       s
 
   onConnect:(ws)=>
@@ -87,6 +80,10 @@ export default class App extends React.Component
     f()
   onDisconnect:()=>
     @connected = false
+
+  wrap: (props)->
+    L.div '',
+      props.children
   
   render: ->
     L.div className:'app',
@@ -102,14 +99,8 @@ export default class App extends React.Component
           onPress:@add_widget
       L_ ResponsiveGL,
         className:'grid'
-        cols:12
-        rowHeight:60
-        width:1000
-        layouts: @state.layout
-        breakpoints:{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}
-        cols:{lg: 18, md: 12, sm: 10, xs: 4, xxs: 2}
         draggableCancel:"input"
-        L.div key:'notebook', L_ Notebook
+        L.div key:'notebook', L_ Notebook, nb_name:get_nb_name()
         for v,idx in @state.vars
           L.div key:'vis'+idx,
             L_ Visualiser,
