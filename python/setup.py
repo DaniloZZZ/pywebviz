@@ -1,6 +1,6 @@
 from setuptools import setup
 setup(
-    name = 'pywebvis',
+    name = 'webvis',
     packages = ['webvis','websocket','helpers'],
     version = '0.0.1',
     description = 'A live two-way data binder for python',
