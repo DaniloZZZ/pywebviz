@@ -22,7 +22,7 @@ export default class WebSocketWrapper extends React.Component
     @onMessage? msg
 
   handleError:(error)=>
-    console.err error
+    console.error error
     @setState status:3
     @onError? error
 
