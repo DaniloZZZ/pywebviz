@@ -2,11 +2,11 @@ from setuptools import setup
 setup(
     name = 'webvis',
     packages = ['webvis'],
-    version = '0.0.1',
+    version = '0.0.2',
     description = 'A live two-way data binder for python',
     author = 'Danil Lykov',
     author_email = 'lkvdan@gmail.com',
-    url = 'https://github.com/DaniloZZZ/pywebvis',
+    url = 'https://github.com/DaniloZZZ/pywebviz',
     install_requires=['matplotlib', 'numpy', 'requests','webbrowser',
                       'mpld3','trio','trio-websocket'],
     python_requires='>=3.3',
