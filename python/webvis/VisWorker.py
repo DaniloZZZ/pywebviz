@@ -117,7 +117,6 @@ class Vis():
                         msg = ifc.get_var(str(e), params)
                         yield msg
             if command=='setvars':
-                print("Set active_vars", params)
                 self.active_vars = params
                 continue
 

@@ -6,6 +6,15 @@ import mpld3
 try:
     import matplotlib
     import mpld3
+    #mpld3 hack
+    class NumpyEncoder(json.JSONEncoder):
+        def default(self, obj):
+            import numpy as np
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return json.JSONEncoder.default(self, obj)
+    from mpld3 import _display
+    _display.NumpyEncoder = NumpyEncoder
     import bokeh
 except Exception as e:
     print(e)

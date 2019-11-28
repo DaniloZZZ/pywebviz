@@ -1,8 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
 setup(
     name = 'webvis',
-    packages = ['webvis'],
-    version = '0.0.3',
+    packages = find_packages(),
+    version = '0.0.5',
     description = 'A live two-way data binder for python',
     author = 'Danil Lykov',
     author_email = 'lkvdan@gmail.com',

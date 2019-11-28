@@ -51,11 +51,13 @@ export default Vis = (props)->
   #convert to array
   data = Object.keys(data).map (d)->data[d]
 
+  render_dots = data.length < 100
+
   L.div className:'container graph',
     L_ ResponsiveContainer,
       width:"100%"
       height:"100%"
-      L_ LineChart, 
+      L_ LineChart,
         data:data
         margin: {top: 2, right: 8, left: -20, bottom: 2}
         L_ XAxis, dataKey:domainLabel
@@ -67,7 +69,7 @@ export default Vis = (props)->
             stroke:'#c43a31'
             type:"linear"
             animationDuration:500
-            dot:false
+            dot: render_dots
             dataKey:k
 
 
