@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name = 'webvis',
     packages = find_packages(),
-    version = '0.0.6',
+    version = '0.0.8',
     description = 'A live two-way data binder for python',
     author = 'Danil Lykov',
     author_email = 'lkvdan@gmail.com',
