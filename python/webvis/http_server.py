@@ -9,8 +9,8 @@ Send a POST request::
     curl -d "foo=bar&bin=baz" http://localhost
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
-###import SocketServer
 from urllib.parse import urlparse
+import sys
 import requests
 import webvis
 from pathlib import Path
@@ -71,7 +71,11 @@ def run(server_class=HTTPServer, handler_class=Server, port=80):
     server_address = ('', port)
     print('Starting http at', port)
     global httpd
-    httpd = server_class(server_address, handler_class)
+    try:
+        httpd = server_class(server_address, handler_class)
+    except OSError as ose:
+        print(f"HTTPServer start on {port} failed: {ose}", file=sys.stderr)
+        return
     httpd.serve_forever()
 
 def start_server(port):

@@ -1,5 +1,5 @@
 import webbrowser
-import json, time
+import json
 import trio
 
 from . import interface as ifc
@@ -31,7 +31,6 @@ class Vis():
 
         self.pws = threaded( self.main_loop, name='main')
         self.phttp = threaded( serve_http, vis_port, name='http')
-        self.pmon = threaded( self._monitor_vars, name='monitor')
 
     def main_loop(self):
         args = ('localhost', self.ws_port, self._ws_handler, self._on_connect)

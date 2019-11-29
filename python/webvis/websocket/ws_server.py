@@ -1,4 +1,5 @@
 import trio
+import sys
 from trio_websocket import serve_websocket, ConnectionClosed
 from logging import getLogger
 from .message_gen import message_gen
@@ -21,7 +22,11 @@ async def ws_serve(addr, port, iterable_fn, on_connect=lambda x:None, nursery=No
                 log.warning("Connection closed")
                 break
 
-    await serve_websocket(server, addr, port, ssl_context=None, handler_nursery=nursery)
+    try:
+        await serve_websocket(server, addr, port, ssl_context=None, handler_nursery=nursery)
+    except OSError as ose:
+        print(f"Websocket start on {port} failed: {ose}", file=sys.stderr)
+        return
     log.info("Websocket terminates")
 
 def start_server(addr, port, handler_func=print, on_connect=lambda x: None):
@@ -32,7 +37,7 @@ def start_server(addr, port, handler_func=print, on_connect=lambda x: None):
         log.warning(f"Connection closed: {e}")
         return
 
-def start_server_old(addr, port, handler_func):
+def start_server_handler(addr, port, handler_func):
     async def handler(client_messages):
         async for message in client_messages:
             yield str(handler_func(message))
