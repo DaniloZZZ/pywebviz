@@ -61,7 +61,7 @@ export default Vis = (props)->
         data:data
         margin: {top: 2, right: 8, left: -20, bottom: 2}
         L_ XAxis, dataKey:domainLabel
-        L_ YAxis,0
+        L_ YAxis, domain: ['auto', 'auto']
         L_ CartesianGrid, strokeDasharray:'3 3'
         for k in data_keys
           L_ Line,
