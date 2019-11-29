@@ -33,7 +33,7 @@ class Vis():
         self.phttp = threaded( serve_http, vis_port, name='http')
 
     def main_loop(self):
-        args = ('localhost', self.ws_port, self._ws_handler, self._on_connect)
+        args = ('0.0.0.0', self.ws_port, self._ws_handler, self._on_connect)
         trio.run(self.run, args)
         print("Exited main loop")
 
