@@ -15,7 +15,7 @@ COMMAND_GET_VAR="getvar"
 COMMAND_GET_MPL="getmpl"
 
 class Vis():
-    def __init__(self, ws_port = 8000, vis_port=80, nb_name=None):
+    def __init__(self, ws_port = 7700, vis_port=7000, nb_name=None):
         self.ws_port = ws_port
         self.vis_port = vis_port
         self.vars = AttrCbDict(

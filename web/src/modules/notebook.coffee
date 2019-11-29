@@ -4,7 +4,7 @@ L_ = React.createElement
 
 export default Notebook = (props) ->
   {nb_name} = props
-  addr = 'http://localhost:8888/notebooks/' + nb_name
+  addr = "http://#{window.location.hostname}:8888/notebooks/" + nb_name
   L.div className:'widget',
     L.div className:'container jupyter',
       L.iframe

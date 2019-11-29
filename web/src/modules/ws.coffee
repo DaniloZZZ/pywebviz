@@ -9,7 +9,7 @@ export default class WebSocketWrapper extends React.Component
     super(props)
     @state =
       status:0
-      addr:'localhost:7700'
+      addr:"#{window.location.hostname}:7700"
 
 
     @onError = props.onError
