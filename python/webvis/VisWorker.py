@@ -47,7 +47,7 @@ class Vis():
 
     def show(self):
         if self.nb_name:
-            params = '?nb_name='+self.nb_name
+            params = '?p='+self.nb_name
         else: params = ''
         webbrowser.open_new_tab(
             f"localhost:{self.vis_port}/{params}"
