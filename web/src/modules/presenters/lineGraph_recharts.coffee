@@ -51,7 +51,7 @@ export default Vis = (props)->
   #convert to array
   data = Object.keys(data).map (d)->data[d]
 
-  render_dots = data.length < 100
+  render_dots = data.length < 30
 
   L.div className:'container graph',
     L_ ResponsiveContainer,

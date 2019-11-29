@@ -6,39 +6,31 @@ import LineGraph from './presenters/lineGraph_recharts.coffee'
 import MplD3 from './presenters/mpld3.coffee'
 import Image from './presenters/image.coffee'
 
-export default class Vis extends React.Component
-  state:
-    value:"None"
-  constructor:(props)->
-    super props
+choosePresenter = (type, val)->
+  if type=='mpl'
+    return MplD3
+  if type=='img'
+    return Image
+  if val is null
+    return ({data})->L.div 0,data
+  try
+    if val.length>10
+      if val[0].length>10
+        return Image
+  catch
+  switch typeof val
+    when 'object' then LineGraph
+    else ({data})->L.div 0,data
 
-  choosePresenter: (val)->
-    if @props.type=='mpl'
-      return MplD3
-    if @props.type=='img'
-      return Image
-    if val is null
-      return ({data})->L.div 0,data
-    try
-      if val.length>10
-        if val[0].length>10
-          console.log 'image'
-          return Image
-    catch
-      print("error", val)
-    switch typeof val
-      when 'object' then LineGraph
-      else ({data})->L.div 0,data
-
-  render:->
-    Pres = @choosePresenter @props.value
-    L.div className:'vis',
-      L.div className:'title',"Name: ",
-      L_ Input,
-        default:@props.varname
-        onChange:@props.onNameChange
-      L_ Pres, data:@props.value
-      #@props.value
+export default Vis = (props)->
+  {variable, onNameChange} = props
+  Pres = choosePresenter variable.type, variable.value
+  L.div className:'vis',
+    L.div className:'title',"Name: ",
+    L_ Input,
+      value:variable.name
+      onChange:onNameChange
+    L_ Pres, data:variable.value
 
 
 

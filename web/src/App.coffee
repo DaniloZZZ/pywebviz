@@ -14,6 +14,7 @@ import Widget from './modules/Widget.coffee'
 import FuncChainer from './modules/helpers/funchainer.coffee'
 import LocalStorage from './modules/helpers/localStorage.coffee'
 import {get_nb_name} from './modules/helpers/argparser.coffee'
+import {parse_message} from './Data/interface.coffee'
 
 import './styles/grid.css'
 import './styles/widget.less'
@@ -33,37 +34,20 @@ export default class App extends React.Component
     @state.vars = visStorage.get('vars') or defaultVars
 
   onWsMessage: (msg)=>
-      jsonser = msg.data
-      if jsonser == "None"
-        return
+      new_var = parse_message msg.data
 
-      # do not update if not changed
-      for v in @state.vars
-        if v.string==jsonser
-          return
       @setState (s,p)->
-        try
-          message = JSON.parse jsonser
-        catch
-          message = jsonser
-          console.error message
-          return s
-        name = message.args
-        value = message.value
-        type = message.type
-        for v in s.vars
-          if v.name==name
-            v.value = value
-            v.type = type
-            v.string = jsonser
+        s.vars = s.vars.map (v)->
+          if (v.name==new_var.name) then new_var else v
         s
 
   nameChange: (id)->(name)=>
-      @setState (s,p)->
-        s.vars[id].name = name
-        visStorage.save 'vars', s.vars
-        s
-      console.log @state
+    console.log 'namechange'
+    @setState (s,p)->
+      s.vars[id].name = name
+      visStorage.save 'vars', s.vars
+      s
+    console.log @state
   addWidget: ()=>
     new_var = name:'New variable',value:'Nothing here yet'
     @setState (s,p)->
@@ -71,8 +55,10 @@ export default class App extends React.Component
       visStorage.save 'vars', s.vars
       s
   deleteWidget: (id)->()=>
+    console.log "Deleting widget #{id}"
     @setState (s,p)->
-      s.vars.pop id
+      console.log s.vars
+      s.vars.splice id, 1
       visStorage.save 'vars', s.vars
       s
 
@@ -109,7 +95,5 @@ export default class App extends React.Component
             onDelete:@deleteWidget idx
             key:'vis'+idx
             L_ Visualiser,
-              value:v.value
-              varname:v.name
-              type:v.type
+              variable: v
               onNameChange:@nameChange idx
