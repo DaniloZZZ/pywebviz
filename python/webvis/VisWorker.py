@@ -3,6 +3,7 @@ import json
 import trio
 
 from . import interface as ifc
+from .modules.Base import BaseModule
 from .helpers.threaded import threaded
 from .helpers.AttrDict import AttrCbDict
 from .websocket.ws_server import start_server as serve_ws
