@@ -1,6 +1,7 @@
 import json
 import numpy as np
 #from . import helpers as h
+from webvis.modules.Base import BaseModule
 import matplotlib
 import mpld3
 try:
@@ -43,6 +44,8 @@ def get_var(val, params):
         type_ = 'mpl'
     elif type(val)==np.ndarray:
         ret, type_ = ndarray_val(val)
+    elif type(val)==BaseModule:
+        ret, type_ = vismodule_val(val)
     else:
         ret = val
         type_ = 'raw'
@@ -52,6 +55,12 @@ def get_var(val, params):
            'type':type_
           }
     return json.dumps(msg)
+
+def vismodule_val(val):
+    ret = val.ser()
+    val._touched = False
+    type_ = val.__file__.split('.')[0]
+    return ret, type_
 
 def ndarray_val(val):
     sh = val.shape
