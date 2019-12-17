@@ -44,7 +44,7 @@ def get_var(val, params):
         type_ = 'mpl'
     elif type(val)==np.ndarray:
         ret, type_ = ndarray_val(val)
-    elif type(val)==BaseModule:
+    elif isinstance(val, BaseModule):
         ret, type_ = vismodule_val(val)
     else:
         ret = val
@@ -59,7 +59,7 @@ def get_var(val, params):
 def vismodule_val(val):
     ret = val.ser()
     val._touched = False
-    type_ = val.__file__.split('.')[0]
+    type_ = val.name
     return ret, type_
 
 def ndarray_val(val):
