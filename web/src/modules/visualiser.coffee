@@ -21,7 +21,7 @@ get_var_type = (type, val)->
   catch
   switch typeof val
     when 'object' then 'LineGraph'
-    else 'Raw'
+    else type
 
 choosePresenter = (type, val)->
   console.log('Choosing presenter for', type, val)
