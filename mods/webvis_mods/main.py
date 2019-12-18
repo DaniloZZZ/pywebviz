@@ -1,50 +1,60 @@
-import inspect
-from shutil import copy as copyfile
-import subprocess
-import hosta
+from os import makedirs
+import os
 import webvis_mods
-try:
-    import webvis
-except ImportError:
-    raise
-    print("You need to install webvis")
+import webvis
 from pathlib import Path
 from loguru import logger as log
+
+from .utils import run_cmd, copy, write_to
 
 # Sources
 manager_path = Path(webvis_mods.__file__).parent
 web_src = manager_path / 'web'
-web_mods_dir = web_src /'src'/ 'modules'/'presenters'/'custom'
+web_mods = web_src /'src'/ 'modules'/'presenters'
+web_user_mods = web_mods / 'installed'
 
 # Target
 vis_dir = Path(webvis.__file__).parent
 build_dir = vis_dir / 'front_build'
 python_mods_dir = vis_dir / 'modules'
+python_user_mods = python_mods_dir / 'installed'
 
-def install_mod(pyfile, webfile, modname):
-    log.debug("Web source path: {}", web_src)
+
+
+def init_mod(name, path='~/webvis_modules/'):
+    path = Path(path)
+    mod_path = path / name
+    makedirs(mod_path / 'back', exist_ok=True)
+    makedirs(mod_path / 'front', exist_ok=True)
+
+def install_mod(back_src, front_src, modname):
+    os.makedirs(web_user_mods, exist_ok=True)
+    os.makedirs(python_user_mods, exist_ok=True)
+    log.debug("Web modules path: {}", web_src)
+
+
+    back_moddir = python_user_mods / modname
+    front_moddir = web_user_mods / modname
+    os.makedirs(back_moddir, exist_ok=True)
+    os.makedirs(front_moddir, exist_ok=True)
 
     ## Copy files
-    copyfile(pyfile, python_mods_dir)
-    copyfile(webfile, web_mods_dir)
+    copy(back_src, back_moddir)
+    copy(front_src, front_moddir)
 
-    ## Build the app and copy dist
-    def run(cmds):
-        try:
-            subprocess.run(' '.join([str(x) for x in cmds]),
-                       check=True,
-                       shell=True,
-                       capture_output=True
-                      )
-        except subprocess.CalledProcessError as e:
-            print(e.cmd, e.output, e.stderr)
-            raise
+    ## Update imports
+    if os.path.isfile(back_src):
+        write_to(f"from .{back_src.stem} import {modname} ",
+                 back_moddir/'__init__.py')
+    write_to(f"from .{modname} import {modname}",
+             python_user_mods/'__init__.py')
 
-    run([web_mods_dir.parent/'import_string.sh',
-         modname,
-         'custom/'+ webfile.split('/')[-1],
-         '>>',
-         web_mods_dir.parent/'index.js'
-        ])
-    run([manager_path/'build.sh', web_src])
-    run(['rsync', '-r','--ignore-existing', web_src/'dist', build_dir])
+    if os.path.isfile(front_src):
+        write_to(f"export {{default as {modname}}} from './{front_src.name}'",
+                 front_moddir/'index.js')
+    write_to(f"export {{default as {modname}}} from './{modname}'",
+             web_user_mods/'index.js')
+
+    ## Build the front and copy dist
+    run_cmd([manager_path/'build.sh', web_src])
+    run_cmd(['rsync', '-r', web_src/'dist', build_dir])

@@ -8,16 +8,16 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='webvis_mods',
-    version='0.1',
+    version='0.1.7',
     license='MIT',
 
     packages=find_packages(),
-    python_requires='>=3.7',
+    python_requires='>=3.6',
 
     author = 'Danil Lykov',
     author_email = 'lkvdan@gmail.com',
 
-    install_requires = ['loguru', 'hosta'],
+    install_requires = ['loguru', 'webvis'],
     setup_requires = ['pytest-runner'],
     tests_require  = ['pytest'],
     include_package_data=True,
