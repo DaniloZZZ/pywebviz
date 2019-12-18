@@ -6,6 +6,9 @@ import LineGraph from './presenters/lineGraph_recharts.coffee'
 import MplD3 from './presenters/mpld3.coffee'
 import Image from './presenters/image.coffee'
 import * as Modules from './presenters'
+import installed from './presenters'
+Object.assign( Modules, installed )
+console.log(Modules)
 
 get_var_type = (type, val)->
   if type=='mpl'

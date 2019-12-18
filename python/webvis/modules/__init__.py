@@ -1,2 +1,2 @@
-from .Text import TextModule
+from .installed import *
 
