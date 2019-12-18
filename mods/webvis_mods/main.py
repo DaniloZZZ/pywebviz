@@ -50,9 +50,13 @@ def install_mod(back_src, front_src, modname):
              python_user_mods/'__init__.py')
 
     if os.path.isfile(front_src):
-        write_to(f"export {{default as {modname}}} from './{front_src.name}'",
+        imp = f"import {{default as {modname}}} from './{front_src.name}'; export default {modname}"
+
+        write_to(imp,
                  front_moddir/'index.js')
-    write_to(f"export {{default as {modname}}} from './{modname}'",
+    imp = f"export {{default as {modname}}} from './{modname}'"
+
+    write_to(imp,
              web_user_mods/'index.js')
 
     ## Build the front and copy dist
