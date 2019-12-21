@@ -11,6 +11,7 @@ import Visualiser from './modules/visualiser.coffee'
 import WSwrap from './modules/ws.coffee'
 import ResponsiveGL from './modules/ResponsiveStorageGrid.coffee'
 import Widget from './modules/Widget.coffee'
+import TopBar from './modules/topbar.coffee'
 import Input from './modules/UIcomponents/input.coffee'
 import Button from './modules/UIcomponents/button.coffee'
 
@@ -56,7 +57,7 @@ export default class App extends React.Component
     delete @state.widgets[id]
     @set_widgets @state.widgets
 
-  widget: (v, name, idx) =>
+  _widget: (v, name, idx) =>
     Widget
       key: idx
       onDelete:@deleteWidget idx
@@ -66,62 +67,40 @@ export default class App extends React.Component
         variable: v
         addr: @state.addr
 
-  dataWidget:(refval, name, idx)=>
-      L.div key:idx,
-        L_ LeClient, addr:@state.addr, refval:refval,
-          (data, setattr) =>
-            if data is undefined
-              data = value:'Loading',type:'raw'
-              return @widget data, name, idx
-            data = JSON.parse data
-            @widget data, name, idx
- 
-  get_widgets:(root)=>
+  _get_widgets:(vars)=>
     nb = L.div key:'notebook', L_ Notebook, nb_name:get_nb_name()
+    widgets = [nb]
 
-    widgets = []
     for idx, params of @state.widgets
       {name} = params
-      variable = root?[name]
-      if variable is undefined
-        v = value:'No such value',type:'raw'
-        widgets.push @widget v, name, idx
-        continue
-      
-      widgets.push @widget variable, name, idx
-    return [nb, widgets...]
+      variable = vars?[name] or value:'No value',type:'raw'
 
-  topbar:(addr)=>
-    L.div className:'top-bar',
-      L.div className:'address inline',
-        L_ Input,
-          value: addr
-          onChange: (addr)=>@setState {addr}
-      L_ Button,
-        className: 'add-widget'
-        text: 'Add widget'
-        onPress: @addWidget
+      widgets.push @_widget variable, name, idx
+    return widgets
 
-  grid:(vars)->
+  _grid:(vars)->
     L_ ResponsiveGL,
       className:'grid'
       draggableCancel:"input"
-      @get_widgets vars
+      @_get_widgets vars
 
   render: ->
     {addr} = @state
     L.div className:'app',
-      @topbar addr
+      L_ TopBar,
+        addr:addr
+        addWidget:@addWidget
+        addrChange:(addr)=>@setState {addr}
       L_ LeClient, addr:addr, refval:'',
       (root, setattr) =>
         console.log 'root ref', root
         if not root
-          return @grid()
+          return @_grid()
         L_ LeClient, addr:addr, refval:root,
           (vars, setattr) =>
             if not vars
               return 'Loading...'
             vars = JSON.parse vars
-            @grid vars
+            @_grid vars
 
 
