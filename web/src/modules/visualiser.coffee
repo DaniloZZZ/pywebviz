@@ -8,7 +8,6 @@ import Image from './presenters/image.coffee'
 import * as Modules from './presenters'
 import installed from './presenters'
 Object.assign( Modules, installed )
-console.log(Modules)
 
 get_var_type = (type, val)->
   if type=='mpl'
@@ -22,11 +21,14 @@ get_var_type = (type, val)->
       if val[0].length>10
         return 'Image'
   catch
-  switch typeof val
-    when 'object' then 'LineGraph'
-    else type
+  if Array.isArray(val)
+    return 'LineGraph'
+  if type=='raw'
+    return 'Raw'
+    
+  return type
 
-choosePresenter = (type, val)->
+export choosePresenter = (type, val)->
   console.log('Choosing presenter for', type, val)
   type = get_var_type type, val
   presenter = Modules[type]
@@ -36,14 +38,15 @@ choosePresenter = (type, val)->
     return ({data})->L.div 0,JSON.stringify data
 
 export default Vis = (props)->
-  {variable, onNameChange} = props
+  console.log props
+  {variable, name, onNameChange} = props
   Pres = choosePresenter variable.type, variable.value
   L.div className:'vis',
     L.div className:'title',"Name: ",
     L_ Input,
-      value:variable.name
+      value:name
       onChange:onNameChange
-    L_ Pres, data:variable.value
+    L_ Pres, data:variable.value, addr:props.addr
 
 
 
