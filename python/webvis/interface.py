@@ -2,6 +2,7 @@ import json
 import numpy as np
 #from . import helpers as h
 from webvis.modules.Base import BaseModule
+from webvis.VisVars import VisVars
 import matplotlib
 import mpld3
 try:
@@ -31,11 +32,7 @@ def is_bokeh(val):
     except Exception as e:
         return False
 
-def get_var(val, params):
-    """
-    Val: some value from user
-    params: dict of params from frontend
-    """
+def preprocess_value(val):
     if is_bokeh(val):
         ret = bokeh.embed.file_html(val, bokeh.resources.Resources('cdn'))
         type_ = 'mpl'
@@ -44,21 +41,16 @@ def get_var(val, params):
         type_ = 'mpl'
     elif type(val)==np.ndarray:
         ret, type_ = ndarray_val(val)
-    elif isinstance(val, BaseModule):
+    elif isinstance(val, VisVars):
         ret, type_ = vismodule_val(val)
     else:
         ret = val
         type_ = 'raw'
 
-    msg = {'args':params['varname'],
-           'value':ret,
-           'type':type_
-          }
-    return json.dumps(msg)
+    return ret, type_
 
 def vismodule_val(val):
-    ret = val.ser()
-    val._touched = False
+    ret = val.ref()
     type_ = val.name
     return ret, type_
 

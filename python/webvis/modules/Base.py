@@ -1,11 +1,10 @@
-class BaseModule:
-    def __init__(self):
-        self._touched = True
+from hosta import Hobject
 
+class BaseModule(Hobject):
     def _touch(self):
         self._touched = True
 
-    def ser(self):
+    def serial(self):
         return self.__dict__
 
 
