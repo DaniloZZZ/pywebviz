@@ -1,6 +1,6 @@
-from hosta import Hobject
+from webvis import VisVars
 
-class BaseModule(Hobject):
+class BaseModule(VisVars):
     def _touch(self):
         self._touched = True
 

@@ -28,6 +28,8 @@ def init_mod(name, path='~/webvis_modules/'):
     makedirs(mod_path / 'front', exist_ok=True)
 
 def install_mod(back_src, front_src, modname):
+    back_src = Path(back_src)
+    front_src = Path(front_src)
     os.makedirs(web_user_mods, exist_ok=True)
     os.makedirs(python_user_mods, exist_ok=True)
     log.debug("Web modules path: {}", web_src)

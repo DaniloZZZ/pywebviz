@@ -4,7 +4,15 @@ export {default as MplD3} from './mpld3.coffee'
 export {default as Raw} from './Raw.coffee'
 export {default as VisVar} from './LeWidget.coffee'
 
+import {wrapLeWidget} from "./LeWidget.coffee"
+
 // installed modules, generated automatically
 import * as installed from "./installed"
-export default installed
+
+var x = {}
+
+for (let key of Object.keys(installed)) {
+    x[key] = wrapLeWidget( installed[key] );
+    }
+export default x
 //export {* as installed} from './installed/'

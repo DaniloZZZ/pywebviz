@@ -1,10 +1,6 @@
 import json
 import numpy as np
-#from . import helpers as h
-from webvis.modules.Base import BaseModule
 from webvis.VisVars import VisVars
-import matplotlib
-import mpld3
 try:
     import matplotlib
     import mpld3
