@@ -19,6 +19,11 @@ build_dir = vis_dir / 'front_build'
 python_user_mods = vis_dir / 'modules' / 'installed'
 
 def _prepare_dir_struct(src, usr_mods, modname):
+    """
+    :arg src: source directory of module
+    :arg usr_mods: a root directory of modules installed
+    :arg modname: module name
+    """
     moddir = usr_mods / modname
     makedirs(moddir, exist_ok=True)
     utils.copy(src, moddir)
