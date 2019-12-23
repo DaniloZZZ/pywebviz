@@ -7,13 +7,20 @@ def generate_index(import_str, mod_dir):
     x = '\n'.join(map(import_str, mods))
     return x
 
+def generate_index_py(import_str, mod_dir):
+    mod_dir = Path(mod_dir)
+    mods = [x.name for x in mod_dir.iterdir() if x.is_dir()]
+    mods = [x for x in mods if x!='__pycache__']
+    x = '\n'.join(map(import_str, mods))
+    return x
+
 ## Python
 
 def _import_str_py(modname):
     return f"from .{modname} import {modname}"
 
 def index_import_py(usr_mods):
-    index = generate_index(_import_str_py, usr_mods)
+    index = generate_index_py(_import_str_py, usr_mods)
     utils.write_to(index, usr_mods/'__init__.py')
 
 def root_import_py(src_file, moddir):
