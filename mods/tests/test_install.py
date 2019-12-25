@@ -1,6 +1,5 @@
 from importlib import reload
-import webvis.modules as modules
-import webvis
+import webvis.modules.installed as modules
 import webvis_mods
 
 from pathlib import Path
@@ -11,7 +10,6 @@ pyfile, webfle = mocks/'module.py', mocks/'blah.coffee'
 
 webvis_mods.install_mod(pyfile, webfle, 'Test')
 modules = reload(modules)
-reload(webvis)
 
 t = modules.Test()
 t = None
@@ -21,7 +19,6 @@ pyfile, webfle = mocks/'BirModule'/'back', mocks/'BirModule'/'front'
 
 webvis_mods.install_mod(pyfile, webfle, 'BirModule')
 modules = reload(modules)
-reload(webvis)
 
 m = modules.BirModule(count=5)
 m.serial()
