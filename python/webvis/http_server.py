@@ -16,7 +16,7 @@ import webvis
 from pathlib import Path
 
 path = webvis.__file__
-print("path",path)
+#print("path",path)
 p = Path(path)
 
 pywebvis_path = p.parent / 'front_build'

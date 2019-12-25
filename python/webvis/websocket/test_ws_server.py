@@ -5,9 +5,9 @@ from multiprocessing.dummy import Process
 
 # For some reason trio does not rethrow StopIteration
 from trio_websocket import ConnectionClosed
-from ws_server import start_server
-from ws_client import start_client
-from message_gen import async_list, async_gen
+from .ws_server import start_server
+from .ws_client import start_client
+from .message_gen import async_list, async_gen
 
 
 def test_simple():
