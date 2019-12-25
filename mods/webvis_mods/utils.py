@@ -1,6 +1,10 @@
 import subprocess
+import os
 
 def copy(src, dest):
+    print("copy", src, dest)
+    if src.is_dir():
+        src = str(src) + str(os.sep)
     run_cmd(['rsync','-r', src, dest])
 
 def write_to(s, dest):
@@ -13,5 +17,9 @@ def run_cmd(cmds):
                    shell=True,
                   )
     except subprocess.CalledProcessError as e:
-        print(e.cmd, e.output, e.stderr)
-        raise Exception(f"Failed to execute {e.cmd}. output: {e.output}, error: {e.stderr}")
+        output, stderr = e.output, e.stderr
+        if output:
+            output = output.decode()
+        if stderr:
+            stderr = stderr.decode()
+        raise Exception(f"Failed to execute.\n!!Command: {e.cmd}.\n!!Output: {output}.\n!!Error: {stderr}")

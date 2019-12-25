@@ -1,4 +1,5 @@
 from os import makedirs
+from shutil import rmtree as rmdir
 import webvis_mods, webvis
 from pathlib import Path
 
@@ -29,6 +30,10 @@ def _prepare_dir_struct(src, usr_mods, modname):
     utils.copy(src, moddir)
     return moddir
 
+def _update_imports():
+    index_import_py(python_user_mods)
+    index_import_js(web_user_mods)
+
 def init_mod(name, path='~/webvis_modules/'):
     path = Path(path)
     mod_path = path / name
@@ -42,15 +47,26 @@ def install_mod(back_src, front_src, modname):
     back_moddir = _prepare_dir_struct(back_src, python_user_mods, modname)
     if back_src.is_file():
         root_import_py(back_src, back_moddir)
-    index_import_py(python_user_mods)
 
     # Front src 
     front_moddir = _prepare_dir_struct(front_src, web_user_mods, modname)
     if front_src.is_file():
         root_import_js(front_src, front_moddir)
-    index_import_js(web_user_mods)
+
+    _update_imports()
 
     ## Build the front and copy dist
     print(f"Building the app from {web_src}...")
     utils.run_cmd([manager_path/'build.sh', web_src])
     utils.run_cmd(['rsync', '-r', web_src/'dist', build_dir])
+    print(f"Successfully installed module {modname}")
+
+def uninstall_mod(modname):
+    rmdir(python_user_mods / modname)
+    rmdir(web_user_mods / modname)
+    _update_imports()
+    print(f"Successfully uninstalled module {modname}")
+
+def installed():
+    import webvis.modules.installed as installed
+    return [x for x in installed.__dir__() if x[0] != '_']
