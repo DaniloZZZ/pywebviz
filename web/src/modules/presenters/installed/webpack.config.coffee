@@ -14,28 +14,14 @@ cssProd = ExtractTextPlugin.extract
 
 cssConfig = if isProduction then cssProd else cssDev
 
-HtmlWebpackPluginConfig = new HtmlWebpackPlugin
-  template: './src/index.html'
-  filename: 'index.html'
-  hash: true
-
 module.exports =
-  entry: './src/index.coffee'
+  entry: 
+    installed: ['./BirModule']
   output:
-    filename: 'index.bundle.js'
+    filename: 'installed.js'
+    #path: path.resolve(__dirname, '../../../../dist')
     path: path.resolve(__dirname, 'dist')
-    publicPath: '/'
-  devServer:
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true
-    hot: true
-    open: true
-    host: 'localhost'
-    historyApiFallback: true,
-    headers:
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "content-type, Authorization, x-id, Content-Length, X-Requested-With",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS"
+    library: 'installed_[hash]'
   module:
     rules: [
       {
@@ -67,16 +53,13 @@ module.exports =
 
     ]
   plugins: [
-    new webpack.DllReferencePlugin
-      context: path.join(__dirname, './src/modules/presenters/installed/dist')
-      manifest: require('./src/modules/presenters/installed/dist/installed-manifest.json')
-      scope: 'installed'
-
-    HtmlWebpackPluginConfig
     new ExtractTextPlugin
       filename: 'app.css'
       disable: !isProduction
       allChunks: true
-    new webpack.HotModuleReplacementPlugin()
     new webpack.NamedModulesPlugin()
+    new webpack.DllPlugin
+      name: 'installed_[hash]'
+      path: path.resolve(__dirname, 'dist/installed-manifest.json')
+
   ]

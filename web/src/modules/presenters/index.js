@@ -7,7 +7,8 @@ export {default as VisVar} from './LeWidget.coffee'
 import {wrapLeWidget} from "./LeWidget.coffee"
 
 // installed modules, generated automatically
-import * as installed from "./installed"
+installed = require('installed')
+//import * as installed from "installed"
 
 var x = {}
 
