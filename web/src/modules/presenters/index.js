@@ -13,6 +13,6 @@ var x = {}
 
 for (let key of Object.keys(installed)) {
     x[key] = wrapLeWidget( installed[key] );
+    console.log(x)
     }
-export default x
-//export {* as installed} from './installed/'
+export {x as installed}
