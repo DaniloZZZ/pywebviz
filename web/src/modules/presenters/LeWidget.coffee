@@ -6,7 +6,7 @@ import LeClient from 'legimens'
 import {choosePresenter} from '../visualiser.coffee'
 
 export wrapLeWidget = (Pres) => ({data, addr}) =>
-  console.log 'wrapping pres',Pres
+  console.log 'wrapping pres', Pres
   L.div className:'container',
     L_ LeClient, addr:addr, refval:data,
       (variable, setattr) =>
@@ -15,7 +15,9 @@ export wrapLeWidget = (Pres) => ({data, addr}) =>
           variable = value:'Loading', type:'raw'
           return "Loading"
         else
-          variable = JSON.parse variable
+          try
+            variable = JSON.parse variable
+          catch
         L_ Pres, data:variable, addr:addr, setattr:setattr
 
 export default LeWidget = ({data, addr})->
