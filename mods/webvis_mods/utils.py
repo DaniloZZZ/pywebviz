@@ -10,7 +10,6 @@ def rm(obj):
     elif obj.is_file():
         os.remove(obj)
 
-
 def copy(src, dest):
     print("cp", src, dest)
     if src.is_dir():
@@ -31,6 +30,7 @@ def run_cmd(cmds):
     try:
         subprocess.check_output(' '.join([str(x) for x in cmds]),
                    shell=True,
+                    stderr=subprocess.STDOUT
                   )
     except subprocess.CalledProcessError as e:
         output, stderr = e.output, e.stderr
@@ -38,4 +38,6 @@ def run_cmd(cmds):
             output = output.decode()
         if stderr:
             stderr = stderr.decode()
-        raise Exception(f"Failed to execute.\n!!Command: {e.cmd}.\n!!Output: {output}.\n!!Error: {stderr}")
+        raise Exception(f"Failed to execute `{cmds[0]}`.\n\
+ Command: {e.cmd}.\n\
+ Output: {output}")

@@ -1,53 +1,47 @@
-from webvis_mods import install_mod, uninstall_mod, installed, develop
-import sys
+import click
+import webvis_mods as wm
 
-usage = """\
-Usage: python -m webvis_mods.cli <command> [MODULE_NAME [BACK [FRONT]]]
-Commands:
-    install         Requires BACK and FRONT parametens.
-    list
-    uninstall
-        """
+class CatchAllExceptions(click.Group):
+    def __call__(self, *args, **kwargs):
+        try:
+            return self.main(*args, **kwargs)
+        except Exception as exc:
+            click.echo('Error:\n%s' % exc)
 
-def install():
-    try:
-        modname = sys.argv[2]
-        back = sys.argv[3]
-        front = sys.argv[4]
-    except IndexError:
-        print(usage)
+@click.group(cls = CatchAllExceptions)
+def cli():
+    pass
 
-    install_mod(back, front, modname)
+name = click.argument('modname')#, help='Name of module')
+back = click.argument('back')#, help='Directory or file with backend code')
+front = click.argument('front')#, help='Directory or file with backend code')
 
+files = lambda x: back( front(x) )
+
+@cli.command()
+@name
+@files
+def install(modname, back, front):
+    """ Install a module from directory """
+    wm.install_mod(back, front, modname)
+
+@cli.command()
+@name
+@files
+def develop(modname, back, front):
+    """ Run the web server in development mode """
+    wm.develop(back, front, modname)
+
+@cli.command('list')
 def list_():
-    ms = installed()
+    """ list installed modules """
+    ms = wm.installed()
     print("\n".join(ms))
 
-def uninstall():
-    try:
-        modname = sys.argv[2]
-    except IndexError:
-        print(usage)
-
-    uninstall_mod(modname)
-
-def main():
-    cmd = None
-    try:
-        cmd = sys.argv[1]
-    except IndexError:
-        print(usage)
-        return
-    if cmd == 'install':
-        install()
-    elif cmd == 'uninstall':
-        uninstall()
-    elif cmd == 'list':
-        list_()
-    elif cmd == 'develop':
-        develop(sys.argv[3], sys.argv[4], sys.argv[2])
-    else:
-        print(usage)
+@cli.command()
+@name
+def uninstall(modname):
+    wm.uninstall_mod(modname)
 
 if __name__ == '__main__':
-    main()
+    cli()
