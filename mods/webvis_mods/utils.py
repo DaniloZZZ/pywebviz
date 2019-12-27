@@ -1,11 +1,27 @@
 import subprocess
+import shutil
 import os
 
+def rm(obj):
+    if obj.is_symlink():
+        os.unlink(obj)
+    elif obj.is_dir():
+        shutil.rmtree(obj)
+    elif obj.is_file():
+        os.remove(obj)
+
+
 def copy(src, dest):
-    print("copy", src, dest)
+    print("cp", src, dest)
     if src.is_dir():
         src = str(src) + str(os.sep)
     run_cmd(['rsync','-r', src, dest])
+
+def ln(src, dest):
+    print("ln -sf", src, dest)
+    if src.is_dir():
+        src = str(src) + str(os.sep)
+    run_cmd(['ln','-s', src, dest])
 
 def write_to(s, dest):
     with open(dest, 'w+') as f:

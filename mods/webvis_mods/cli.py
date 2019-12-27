@@ -1,4 +1,4 @@
-from webvis_mods import install_mod, uninstall_mod, installed
+from webvis_mods import install_mod, uninstall_mod, installed, develop
 import sys
 
 usage = """\
@@ -44,6 +44,8 @@ def main():
         uninstall()
     elif cmd == 'list':
         list_()
+    elif cmd == 'develop':
+        develop(sys.argv[3], sys.argv[4], sys.argv[2])
     else:
         print(usage)
 

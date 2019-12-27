@@ -25,6 +25,7 @@ module.exports =
     filename: 'index.bundle.js'
     path: path.resolve(__dirname, 'dist')
     publicPath: '/'
+  resolve: symlinks:false
   devServer:
     contentBase: path.join(__dirname, 'dist'),
     compress: true

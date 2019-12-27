@@ -1,1 +1,1 @@
-from .main import install_mod, uninstall_mod, installed
+from .main import install_mod, uninstall_mod, installed, develop
