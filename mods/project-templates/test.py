@@ -1,11 +1,7 @@
-import subprocess
-import sys
-
-cmd = ['cookiecutter','source-files']
-cmd += sys.argv[1:]
+from cookiecutter.main import cookiecutter
 
 def main():
-    subprocess.call(cmd)
+    cookiecutter('source-files')#, no_input=True)
 
 if __name__ == '__main__':
     main()
