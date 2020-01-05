@@ -9,15 +9,11 @@ from .imports import (
     , index_import_js , root_import_js
 )
 
-# Sources
-manager_path = Path(webvis_mods.__file__).parent
-web_src = manager_path / 'web'
-web_user_mods = web_src /'src'/ 'modules' / 'presenters' / 'installed'
-
-# Target
-vis_dir = Path(webvis.__file__).parent
-build_dir = vis_dir / 'front_build'
-python_user_mods = vis_dir / 'modules' / 'installed'
+from webvis_mods.paths_config import (
+    manager_path,
+    web_src, web_user_mods,
+    build_dir, python_user_mods
+)
 
 def _prepare_dir_struct(src, usr_mods, modname):
     """
@@ -66,7 +62,7 @@ def develop(back_src, front_src, modname):
     print(f"Running devolopment server from {web_src}...")
     utils.run_cmd([manager_path/'develop.sh', web_src])
 
-def install_mod(back_src, front_src, modname):
+def install(back_src, front_src, modname):
     back_src, front_src = Path(back_src), Path(front_src)
 
     # Back src
@@ -87,7 +83,7 @@ def install_mod(back_src, front_src, modname):
     utils.run_cmd(['rsync', '-r', web_src/'dist', build_dir])
     print(f"Successfully installed module {modname}")
 
-def uninstall_mod(modname):
+def uninstall(modname):
     utils.rm(python_user_mods / modname)
     utils.rm(web_user_mods / modname)
     _update_imports()

@@ -8,19 +8,19 @@ mocks = Path(__file__).parent / 'mocks'
 
 pyfile, webfle = mocks/'module.py', mocks/'blah.coffee'
 
-webvis_mods.install_mod(pyfile, webfle, 'Test')
+webvis_mods.install(pyfile, webfle, 'Test')
 modules = reload(modules)
 
 t = modules.Test()
 t = None
-webvis_mods.uninstall_mod('Test')
+webvis_mods.uninstall('Test')
 
 pyfile, webfle = mocks/'BirModule'/'back', mocks/'BirModule'/'front'
 
-webvis_mods.install_mod(pyfile, webfle, 'BirModule')
+webvis_mods.install(pyfile, webfle, 'BirModule')
 modules = reload(modules)
 
 m = modules.BirModule(count=5)
 m.serial()
 m = None
-webvis_mods.uninstall_mod('BirModule')
+webvis_mods.uninstall('BirModule')

@@ -23,7 +23,7 @@ files = lambda x: back( front(x) )
 @files
 def install(modname, back, front):
     """ Install a module from directory """
-    wm.install_mod(back, front, modname)
+    wm.install(back, front, modname)
 
 @cli.command()
 @name
@@ -41,7 +41,13 @@ def list_():
 @cli.command()
 @name
 def uninstall(modname):
-    wm.uninstall_mod(modname)
+    wm.uninstall(modname)
+
+@cli.command()
+@click.option('-o', '--output-dir', 'output_dir', default='.')
+@name
+def init_file(modname, output_dir):
+    wm.init_file(modname, output_dir=output_dir)
 
 if __name__ == '__main__':
     cli()
