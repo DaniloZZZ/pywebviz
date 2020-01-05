@@ -25,12 +25,13 @@ module.exports =
     filename: 'index.bundle.js'
     path: path.resolve(__dirname, 'dist')
     publicPath: '/'
+  resolve: symlinks:false
   devServer:
     contentBase: path.join(__dirname, 'dist'),
     compress: true
     hot: true
     open: true
-    host: '0.0.0.0'
+    host: 'localhost'
     historyApiFallback: true,
     headers:
       "Access-Control-Allow-Origin": "*",

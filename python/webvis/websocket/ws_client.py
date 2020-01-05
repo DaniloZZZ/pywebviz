@@ -1,7 +1,7 @@
 import trio
 from sys import stderr
 from trio_websocket import open_websocket_url, ConnectionClosed
-from message_gen import message_gen
+from .message_gen import message_gen
 
 def main(addr='wss://echo.websocket.org', message='hello world'):
     trio.run(send_one, addr, message)
