@@ -8,7 +8,7 @@ mocks = Path(__file__).parent / 'mocks'
 
 pyfile, webfle = mocks/'module.py', mocks/'blah.coffee'
 
-webvis_mods.install(pyfile, webfle, 'Test')
+webvis_mods.install('Test', pyfile, webfle)
 modules = reload(modules)
 
 t = modules.Test()
@@ -17,7 +17,7 @@ webvis_mods.uninstall('Test')
 
 pyfile, webfle = mocks/'BirModule'/'back', mocks/'BirModule'/'front'
 
-webvis_mods.install(pyfile, webfle, 'BirModule')
+webvis_mods.install('BirModule', pyfile, webfle)
 modules = reload(modules)
 
 m = modules.BirModule(count=5)

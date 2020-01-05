@@ -30,9 +30,9 @@ class Vis():
 
         self.vars = self.app.vars
 
+    def start(self):
         self.app.run()
-
-        self.phttp = threaded( serve_http, vis_port, name='http')
+        self.phttp = threaded( serve_http, self.vis_port, name='http')
 
     def show(self):
         if self.nb_name:

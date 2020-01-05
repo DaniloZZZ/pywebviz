@@ -48,7 +48,7 @@ def init_mod(name, path='~/webvis_modules/'):
     makedirs(mod_path / 'back', exist_ok=True)
     makedirs(mod_path / 'front', exist_ok=True)
 
-def develop(back_src, front_src, modname):
+def develop(modname, back_src, front_src):
     back_src, front_src = Path(back_src), Path(front_src)
     back_moddir = _prepare_dir_struct_dev(back_src, python_user_mods, modname)
     if back_src.is_file():
@@ -62,7 +62,7 @@ def develop(back_src, front_src, modname):
     print(f"Running devolopment server from {web_src}...")
     utils.run_cmd([manager_path/'develop.sh', web_src])
 
-def install(back_src, front_src, modname):
+def install(modname, back_src, front_src):
     back_src, front_src = Path(back_src), Path(front_src)
 
     # Back src
