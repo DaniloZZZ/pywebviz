@@ -11,13 +11,10 @@ Send a POST request::
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse
 import sys
-import requests
 import webvis
 from pathlib import Path
 
-path = webvis.__file__
-#print("path",path)
-p = Path(path)
+p = Path(webvis.__file__)
 
 pywebvis_path = p.parent / 'front_build'
 
@@ -25,13 +22,6 @@ def get_path(path):
     #if path in ['/','']:
     #    path = './index.html'
     return str(pywebvis_path) + path
-
-def fetch_addr(addr):
-    r = requests.get(addr)
-    return r.text
-
-def stop():
-    print("Stopping http not yet implemented")
 
 def read_file(fname):
     with open(fname,'rb') as f:
@@ -67,7 +57,7 @@ class Server(BaseHTTPRequestHandler):
         self._set_headers()
         self.wfile.write("<html><body><h1>POST!</h1></body></html>")
 
-def run(server_class=HTTPServer, handler_class=Server, port=80):
+def create_server(server_class=HTTPServer, handler_class=Server, port=80):
     server_address = ('', port)
     print('Starting http at', port)
     global httpd
@@ -76,6 +66,10 @@ def run(server_class=HTTPServer, handler_class=Server, port=80):
     except OSError as ose:
         print(f"HTTPServer start on {port} failed: {ose}", file=sys.stderr)
         return
+    return httpd
+
+def run(server_class=HTTPServer, handler_class=Server, port=80):
+    httpd = create_server(server_class, handler_class, port)
     httpd.serve_forever()
 
 def start_server(port):

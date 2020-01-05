@@ -1,10 +1,12 @@
 from importlib import reload
 from selenium import webdriver
 import time
+import os
 
 import webvis_mods
 import webvis
 
+os.environ['MOZ_HEADLESS'] = '1'
 
 def test_init_instal(tmp_path):
     import webvis.modules.installed as modules
@@ -14,6 +16,8 @@ def test_init_instal(tmp_path):
     3. Start the WebVis
     4. Test front with selenium
     """
+    print("Starting Selenium...")
+    browser = webdriver.Firefox()
 
     # 1.
     target_dir = tmp_path/'tmp_mods'
@@ -38,12 +42,11 @@ def test_init_instal(tmp_path):
         v.vars.test = m
 
         # 4.
-        browser = webdriver.Firefox()
         browser.get('http://localhost:7000')
 
         widget = add_widget(browser, 'test')
         # Wait for webvis to answer. 
-        # This is probably not the best way, since this time may vary 
+        # This is probably not the best way, since loading time may vary 
         # for complex visualisations or big data. 
         # May cause false negatives
         time.sleep(.05)
@@ -54,6 +57,7 @@ def test_init_instal(tmp_path):
     finally:
         webvis_mods.uninstall(modname)
         v.stop()
+        browser.quit()
 
 
 def add_widget(browser, name):
@@ -62,7 +66,6 @@ def add_widget(browser, name):
     widget = browser.find_element_by_xpath(
         '(//*[@id="root"]/div/div[2]/div/div)[last()]'
     )
-    print(widget.get_attribute('class'))
     varname_input = widget.find_element_by_xpath('.//input')
     varname_input.clear()
     varname_input.send_keys(name)

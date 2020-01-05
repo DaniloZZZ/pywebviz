@@ -1,12 +1,9 @@
 import webbrowser
-import trio
-from hosta import Hobject, Happ
+from hosta import Happ
 
-from . import interface as ifc
 from .helpers.threaded import threaded
 from .helpers.AttrDict import AttrCbDict
-from .http_server import start_server as serve_http
-from .http_server import stop as stop_http
+from .http_server import create_server as create_http
 from webvis.VisVars import VisVars
 
 COMMAND_GET_VAR="getvar"
@@ -28,11 +25,13 @@ class Vis():
         self.app.vars = VisVars()
         self.app._on_val_set(None, self.app.vars)
 
+        self.http_server = create_http(port=vis_port)
+
         self.vars = self.app.vars
 
     def start(self):
         self.app.run()
-        self.phttp = threaded( serve_http, self.vis_port, name='http')
+        self.phttp = threaded( self.http_server.serve_forever, name='http')
 
     def show(self):
         if self.nb_name:
@@ -45,9 +44,8 @@ class Vis():
     def stop(self):
         print("Stopping websocket server")
         self.app.stop()
-
-        print("Stopping Http server")
-        stop_http()
+        print("Stopping app server")
+        self.http_server.shutdown()
 
     def _on_connect(self, ws):
         self.ws = ws
