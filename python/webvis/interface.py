@@ -4,6 +4,7 @@ try:
     import numpy as np
     import matplotlib
     import mpld3
+    import bokeh
     #mpld3 hack
     from mpld3 import _display
     class NumpyEncoder(json.JSONEncoder):
@@ -13,25 +14,8 @@ try:
                 return obj.tolist()
             return json.JSONEncoder.default(self, obj)
     _display.NumpyEncoder = NumpyEncoder
-    import bokeh
 except Exception as e:
     print(e)
-
-def is_mpl(val):
-    try:
-        return isinstance(val, matplotlib.figure.Figure)
-    except Exception:
-        return False
-def is_bokeh(val):
-    try:
-        return isinstance(val,bokeh.model.Model) or isinstance(val,bokeh.document.document.Document)
-    except Exception:
-        return False
-def is_numpy(val):
-    try:
-        return isinstance(val, np.ndarray)
-    except Exception:
-        return False
 
 def preprocess_value(val):
     if is_bokeh(val):
@@ -84,3 +68,20 @@ def numpy_to_image(val):
     ret = list(sh[:2]) + val.tolist()
     return ret
 
+def _siletly_catch_return_false(f):
+    def g(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except Exception:
+            return False
+    return g
+
+@_siletly_catch_return_false
+def is_mpl(val):
+    return isinstance(val, matplotlib.figure.Figure)
+@_siletly_catch_return_false
+def is_bokeh(val):
+    return isinstance(val,bokeh.model.Model) or isinstance(val,bokeh.document.document.Document)
+@_siletly_catch_return_false
+def is_numpy(val):
+    return isinstance(val, np.ndarray)
