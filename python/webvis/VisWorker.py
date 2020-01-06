@@ -19,7 +19,7 @@ class Vis():
         self.vars = self.app.vars
 
     def start(self):
-        _ = threaded( self.http_server.serve_forever, name='http')
+        self.phttp = threaded( self.http_server.serve_forever, name='http')
         self.app.run()
 
     def show(self):
@@ -32,6 +32,7 @@ class Vis():
 
     def stop(self):
         print("Stopping app server")
-        self.http_server.shutdown()
+        if self.phttp.is_alive():
+            self.http_server.shutdown()
         print("Stopping websocket server")
         self.app.stop()
