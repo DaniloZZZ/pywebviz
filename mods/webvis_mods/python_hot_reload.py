@@ -1,59 +1,55 @@
 import webvis
 from importlib import reload
 import importlib
-import time
 from watchdog import observers, events
+from types import ModuleType
+import webvis.modules.installed as modules
+from loguru import logger as log
 
-def reload_module(full_module_name):
-    """
-        Assuming the folder `full_module_name` is a folder inside some
-        folder on the python sys.path, for example, sys.path as `C:/`, and
-        you are inside the folder `C:/Path With Spaces` on the file 
-        `C:/Path With Spaces/main.py` and want to re-import some files on
-        the folder `C:/Path With Spaces/tests`
-
-        @param full_module_name   the relative full path to the module file
-                                  you want to reload from a folder on the
-                                  python `sys.path`
-    """
-    import imp
-    import sys
-    import importlib
-
-    if full_module_name in sys.modules:
-        module_object = sys.modules[full_module_name]
-        module_object = imp.reload( module_object )
-
-    else:
-        importlib.import_module( full_module_name )
+def rreload(module):
+    """Recursively reload modules."""
+    reload(module)
+    for attribute_name in dir(module):
+        attribute = getattr(module, attribute_name)
+        if type(attribute) is ModuleType:
+            rreload(attribute)
+    return module
 
 class ModHotReload(events.PatternMatchingEventHandler):
     def __init__(self, modname, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        import webvis.modules.installed as modules
         self.modname = modname
+        Mod = getattr(modules, self.modname)
+        self.module = importlib.import_module(Mod.__module__)
         self.vis = webvis.Vis()
-        self.Mod = importlib.import_module(
-            f"webvis.modules.installed.{modname}")
         self.test_data = {}
         self.vis.start()
         self.set_testmod()
 
+    def _init_mod(self):
+        Mod = getattr(self.module, self.modname)
+        print("Module dict:", Mod.__dict__)
+        with log.catch():
+            m = Mod(self.test_data)
+            return m
+            #print('Fix the module, save the file, webvis will reload it for you.')
+
     def set_testmod(self):
-        m = self.Mod(self.test_data)
+        m = self._init_mod()
         self.vis.vars.test = m
 
     def on_any_event(self, event):
-        print('mod changed', event)
-        self.Mod = reload(self.Mod)
+        print('Module changed', event)
+        with log.catch():
+            self.module = rreload(self.module)
         self.set_testmod()
 
 def python_dev_server(modname, path):
     observer = observers.Observer()
     if path.is_file():
         handler = ModHotReload(modname, patterns=['*.py'])
-        print(f"watching {path.parent} pattern {path.name}")
+        print(f"Watching {path.parent}")
         observer.schedule(handler, str(path.parent), recursive=False)
     else:
         handler = ModHotReload(modname)
