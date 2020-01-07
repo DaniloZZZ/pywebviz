@@ -36,7 +36,6 @@ class Server(BaseHTTPRequestHandler):
 
     def do_GET(self):
         query = urlparse(self.path).path
-        print("Client requested path",query)
         self._set_headers()
         try:
             path = get_path(query)
