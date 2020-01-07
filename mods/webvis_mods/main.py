@@ -15,48 +15,42 @@ from webvis_mods.paths_config import (
     build_dir, python_user_mods
 )
 
-def _prepare_dir_struct(src, usr_mods, modname):
+def _prepare_dir_struct(src, usr_mods, modname, action):
     """
     :arg src: source directory of module
     :arg usr_mods: a root directory of modules installed
     :arg modname: module name
-    """
-    moddir = usr_mods / modname
-    makedirs(moddir, exist_ok=True)
-    utils.copy(src, moddir)
-    return moddir
-def _prepare_dir_struct_dev(src, usr_mods, modname):
-    """
-    :arg src: source directory of module
-    :arg usr_mods: a root directory of modules installed
-    :arg modname: module name
+    :arg action: copy, link or whatever function that takes src and moddir
     """
     moddir = usr_mods / modname
     makedirs(usr_mods, exist_ok=True)
     if src.is_file():
         makedirs(moddir, exist_ok=True)
-    utils.ln(src.absolute(), moddir)
+    action(src.absolute(), moddir)
     return moddir
 
 def _update_imports():
     index_import_py(python_user_mods)
     index_import_js(web_user_mods)
 
-def init_mod(name, path='~/webvis_modules/'):
-    path = Path(path)
-    mod_path = path / name
-    makedirs(mod_path / 'back', exist_ok=True)
-    makedirs(mod_path / 'front', exist_ok=True)
-
-def develop(modname, back_src, front_src):
-    back_src, front_src = Path(back_src), Path(front_src)
-    back_moddir = _prepare_dir_struct_dev(back_src, python_user_mods, modname)
+def _process_py(modname, back_src, action=utils.copy):
+    back_moddir = _prepare_dir_struct(back_src, python_user_mods, modname,
+                                      action=action)
     if back_src.is_file():
         root_import_py(back_src, back_moddir)
 
-    front_moddir = _prepare_dir_struct_dev(front_src, web_user_mods, modname)
+def _process_js(modname, front_src, action=utils.copy):
+    front_moddir = _prepare_dir_struct(front_src, web_user_mods, modname,
+                                           action=action)
     if front_src.is_file():
         root_import_js(front_src, front_moddir)
+
+## ## ## API ## ## ##  
+
+def develop(modname, back_src, front_src):
+    back_src, front_src = Path(back_src), Path(front_src)
+    _process_py(modname, back_src, action=utils.ln)
+    _process_js(modname, front_src, action=utils.ln)
     _update_imports()
 
     print(f"Running devolopment server from {web_src}...")
@@ -64,17 +58,8 @@ def develop(modname, back_src, front_src):
 
 def install(modname, back_src, front_src):
     back_src, front_src = Path(back_src), Path(front_src)
-
-    # Back src
-    back_moddir = _prepare_dir_struct(back_src, python_user_mods, modname)
-    if back_src.is_file():
-        root_import_py(back_src, back_moddir)
-
-    # Front src 
-    front_moddir = _prepare_dir_struct(front_src, web_user_mods, modname)
-    if front_src.is_file():
-        root_import_js(front_src, front_moddir)
-
+    _process_py(modname, back_src, action=utils.copy)
+    _process_js(modname, front_src, action=utils.copy)
     _update_imports()
 
     ## Build the front and copy dist
