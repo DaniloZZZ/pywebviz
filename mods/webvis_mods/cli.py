@@ -23,14 +23,14 @@ files = lambda x: back( front(x) )
 @files
 def install(modname, back, front):
     """ Install a module from directory """
-    wm.install(back, front, modname)
+    wm.install(modname, back, front)
 
 @cli.command()
 @name
 @files
 def develop(modname, back, front):
     """ Run the web server in development mode """
-    wm.develop(back, front, modname)
+    wm.develop(modname, back, front)
 
 @cli.command('list')
 def list_():
