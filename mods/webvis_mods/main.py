@@ -1,9 +1,12 @@
 from os import makedirs
+import sys
 from shutil import rmtree as rmdir
 import webvis_mods, webvis
 from pathlib import Path
+from loguru import logger as log
 
 from . import utils
+from .python_hot_reload import python_dev_server
 from .imports import (
       index_import_py , root_import_py
     , index_import_js , root_import_js
@@ -48,12 +51,17 @@ def _process_js(modname, front_src, action=utils.copy):
 ## ## ## API ## ## ##  
 
 def develop(modname, back_src, front_src):
+    log.remove()
+    log.add(sys.stdout, level='DEBUG')
     back_src, front_src = Path(back_src), Path(front_src)
     _process_py(modname, back_src, action=utils.ln)
     _process_js(modname, front_src, action=utils.ln)
     _update_imports()
 
-    print(f"Running devolopment server from {web_src}...")
+    print(f"watching python src dir")
+    python_dev_server(modname, back_src)
+
+    print(f"Running webpack devolopment server from {web_src}...")
     utils.run_cmd([manager_path/'develop.sh', web_src])
 
 def install(modname, back_src, front_src):
