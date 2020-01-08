@@ -1,0 +1,11 @@
+.testm-presenter{
+    font-family: monospace;
+    font-size: 18px;
+    color: darkblue;
+    padding:  1em;
+    border: 2px solid teal;
+}
+.testm-presenter p{
+    display: inline;
+    color: darkred;
+}

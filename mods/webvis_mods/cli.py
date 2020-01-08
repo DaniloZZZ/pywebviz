@@ -29,7 +29,7 @@ def install(modname, back, front):
 @name
 @files
 def develop(modname, back, front):
-    """ Run the web server in development mode """
+    """ Run the web server in nidevelopment mode """
     wm.develop(modname, back, front)
 
 @cli.command('list')
@@ -48,6 +48,12 @@ def uninstall(modname):
 @name
 def init_file(modname, output_dir):
     wm.init_file(modname, output_dir=output_dir)
+
+@cli.command()
+@click.option('-o', '--output-dir', 'output_dir', default='.')
+@name
+def init_dir(modname, output_dir):
+    wm.init_dir(modname, output_dir=output_dir)
 
 if __name__ == '__main__':
     cli()

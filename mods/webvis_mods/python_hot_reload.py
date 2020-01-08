@@ -1,5 +1,6 @@
 import webvis
 from importlib import reload
+import time
 import importlib
 from watchdog import observers, events
 from types import ModuleType
@@ -20,6 +21,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
         super().__init__(*args, **kwargs)
 
         self.modname = modname
+        print(modules)
         Mod = getattr(modules, self.modname)
         self.module = importlib.import_module(Mod.__module__)
         self.vis = webvis.Vis()
@@ -41,6 +43,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
 
     def on_any_event(self, event):
         print('Module changed', event)
+        time.sleep(.05)
         with log.catch():
             self.module = rreload(self.module)
         self.set_testmod()
