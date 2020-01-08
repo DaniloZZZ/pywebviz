@@ -29,7 +29,7 @@ def install(modname, back, front):
 @name
 @files
 def develop(modname, back, front):
-    """ Run the web server in nidevelopment mode """
+    """ Run the web server in development mode with hot reload """
     wm.develop(modname, back, front)
 
 @cli.command('list')

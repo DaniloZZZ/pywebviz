@@ -23,6 +23,10 @@ setup(
     include_package_data=True,
     keywords = ['tools', 'webvis', 'package manager', 'data', 'framework', 'visualization'],
 
+    entry_points = {
+        'console_scripts':['webvis-mods=webvis_mods.cli:cli']
+    },
+
     long_description=long_description,
     long_description_content_type='text/markdown',
 
