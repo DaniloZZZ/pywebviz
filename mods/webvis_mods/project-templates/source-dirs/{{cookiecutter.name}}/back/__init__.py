@@ -1,1 +1,1 @@
-from .main import {{cookiecutter.name}}
+from .main import testm
