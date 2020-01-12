@@ -1,13 +1,9 @@
-from hosta import Hobject
-import json
+from legimens import Object
 from . import interface as ifc
 
-class VisVars(Hobject):
+class VisVars(Object):
     name='VisVar'
-    def serial(self):
-        ser = {}
-        for name, value in self.items():
-            value, type_= ifc.preprocess_value(value)
-            o = {'value': value, 'type': type_}
-            ser[name] = o
-        return json.dumps(ser)
+    def _before_send(self, name, value):
+        value, type_= ifc.preprocess_value(value)
+        o = {'value': value, 'type': type_}
+        return name, o

@@ -1,5 +1,5 @@
 import webbrowser
-from hosta import Happ
+from legimens import App
 
 from .helpers.threaded import threaded
 from .http_server import create_server as create_http
@@ -13,9 +13,9 @@ class Vis():
 
         self.http_server = create_http(port=vis_port)
 
-        self.app = Happ(addr='localhost', port=ws_port)
+        self.app = App(addr='localhost', port=ws_port)
         self.app.vars = VisVars()
-        self.app._on_val_set(None, self.app.vars)
+        self.app._register_child(self.app.vars)
         self.vars = self.app.vars
 
     def start(self):
