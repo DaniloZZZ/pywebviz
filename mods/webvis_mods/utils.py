@@ -29,8 +29,7 @@ def write_to(s, dest):
 def run_cmd(cmds):
     try:
         subprocess.run(' '.join([str(x) for x in cmds]),
-                   shell=True,
-                    stderr=subprocess.STDOUT
+                   shell=True, check=True
                   )
     except subprocess.CalledProcessError as e:
         output, stderr = e.output, e.stderr

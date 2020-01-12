@@ -1,5 +1,7 @@
 import click
+from pathlib import Path
 import webvis_mods as wm
+from .config_gen import read_config, write_config
 
 class CatchAllExceptions(click.Group):
     def __call__(self, *args, **kwargs):
@@ -12,25 +14,42 @@ class CatchAllExceptions(click.Group):
 def cli():
     pass
 
-name = click.argument('modname')#, help='Name of module')
-back = click.argument('back')#, help='Directory or file with backend code')
-front = click.argument('front')#, help='Directory or file with backend code')
+name = click.argument('modname', required=False)#, help='Name of module')
+back = click.argument('back_src', type=click.Path(exists=True),
+                      required=False) #, help='Directory or file with backend code')
+front = click.argument('front_src', type=click.Path(exists=True),
+                       required=False)#, help='Directory or file with backend code')
 
 files = lambda x: back( front(x) )
 
-@cli.command()
-@name
-@files
-def install(modname, back, front):
-    """ Install a module from directory """
-    wm.install(modname, back, front)
+def command_wrapper(cmd):
+    def ncmd(*args, **kwargs):
+        config = dict(read_config(Path('.')))
+        print('config', config)
+        for key, value in kwargs.items():
+            if value is not None:
+                config[key] = value
+        return cmd(*args, **config)
+    ncmd.__name__ = cmd.__name__
+    ncmd.__doc__ = cmd.__doc__
+    return ncmd
 
 @cli.command()
 @name
 @files
-def develop(modname, back, front):
+@command_wrapper
+def install(*args, **kwargs):
+    """ Install a module from directory """
+    print('wn', kwargs)
+    wm.install(*args, **kwargs)
+
+@cli.command()
+@name
+@files
+@command_wrapper
+def develop(*args, **kwargs):
     """ Run the web server in development mode with hot reload """
-    wm.develop(modname, back, front)
+    wm.develop(*args, **kwargs)
 
 @cli.command('list')
 def list_():
@@ -40,8 +59,9 @@ def list_():
 
 @cli.command()
 @name
-def uninstall(modname):
-    wm.uninstall(modname)
+@command_wrapper
+def uninstall(*args, **kwargs):
+    wm.uninstall(*args, **kwargs)
 
 @cli.command()
 @click.option('-o', '--output-dir', 'output_dir', default='.')
