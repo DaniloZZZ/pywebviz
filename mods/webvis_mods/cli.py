@@ -25,7 +25,6 @@ files = lambda x: back( front(x) )
 def command_wrapper(cmd):
     def ncmd(*args, **kwargs):
         config = dict(read_config(Path('.')))
-        print('config', config)
         for key, value in kwargs.items():
             if value is not None:
                 config[key] = value
