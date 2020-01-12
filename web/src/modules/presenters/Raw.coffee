@@ -6,4 +6,4 @@ export default Vis = (props)->
   {data} = props
   if typeof data == 'object'
     data = JSON.stringify data
-   data 
+  data

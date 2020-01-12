@@ -96,11 +96,11 @@ export default class App extends React.Component
         console.log 'root ref', root
         if not root
           return @_grid()
-        L_ LeClient, addr:addr, refval:root,
+        L_ LeClient, addr:addr, refval:root.root,
           (vars, setattr) =>
+            console.log 'vars', vars
             if not vars
               return 'Loading...'
-            vars = JSON.parse vars
             @_grid vars
 
 

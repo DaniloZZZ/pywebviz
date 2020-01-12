@@ -26,8 +26,6 @@ export default LeWidget = ({data, addr})->
       (variable, setattr) =>
         if variable is undefined
           variable = value:'Loading', type:'raw'
-        else
-          variable = JSON.parse variable
         console.log('in le_widget choosePresenter', variable)
         Pres = choosePresenter variable.type, variable
         L_ Pres, data:variable, addr:addr, setattr:setattr
