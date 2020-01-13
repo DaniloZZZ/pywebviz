@@ -1,16 +1,19 @@
-name: CI
+name: Docs
 
-on: [push]
+on:
+  push:
+    paths:
+      - ".github/"
+      - "python/"
+
 
 jobs:
   build:
-
     runs-on: self-hosted
-
     steps:
     - uses: actions/checkout@v2
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "python/docs/"
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        pre-build-command: "python python/setup.py develop"
+        pre-build-command: "python python/setup.py develop --user"
