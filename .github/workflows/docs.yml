@@ -11,8 +11,8 @@ jobs:
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v2
-    - uses: ammaraskar/sphinx-action@master
-      with:
-        docs-folder: "python/docs/"
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        pre-build-command: "python3 python/setup.py develop --user"
+    - name: build docs
+      run: |
+          python3 python/setup.py develop --user
+          cd python/docs
+          make html
