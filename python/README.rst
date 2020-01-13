@@ -1,3 +1,7 @@
+.. image:: https://img.shields.io/pypi/v/webvis.svg
+   :target: https://pypi.python.org/pypi/webvis
+      :alt: PyPi version
+
 # Data visualization made easier
 
 This is a project for interactive data visualization
