@@ -6,7 +6,6 @@ on:
       - ".github/**"
       - "python/**"
 
-
 jobs:
   build:
     runs-on: self-hosted
@@ -16,4 +15,4 @@ jobs:
       with:
         docs-folder: "python/docs/"
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        pre-build-command: "python python/setup.py develop --user"
+        pre-build-command: "python3 python/setup.py develop --user"
