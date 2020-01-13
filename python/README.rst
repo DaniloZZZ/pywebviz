@@ -28,7 +28,7 @@ Quick start
    vis.show()
 
 
-Then change the name in card to "test" viola!
+Then change the name in card to "test", and your variable will appear!
 
 The values are updated dynamically, a separate thread is created that checks the changes.
 
