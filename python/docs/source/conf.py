@@ -37,6 +37,7 @@ copyright = u'Copyright 2016 - {0} {1}'.format(date.today().year, author)
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
