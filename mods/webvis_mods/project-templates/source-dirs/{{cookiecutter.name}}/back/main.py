@@ -8,5 +8,11 @@ class {{cookiecutter.name}}(BaseModule):
         super().__init__(*args, **kwargs)
         self.quote = random_quote()
 
-    def serial(self):
-        return json.dumps(self)
+    def vis_get(self, key):
+        value = super().vis_get(key) # same as self[key]
+        print('sending value to front: ', key, value)
+        return value
+
+    def vis_set(self, key, value):
+        super().vis_set(key, value) # same as self[key] = value
+        print('updated value form front: ', key, value)
