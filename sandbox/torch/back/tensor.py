@@ -1,9 +1,9 @@
 from webvis.modules import BaseModule
 from webvis.modules import BaseTestModule
-import torch as tch
+import torch
 
-class torch(BaseModule):
-    name="torch"
+class Tensor(BaseModule):
+    name="torchTensor"
     def __init__(self, tensor):
         super().__init__()
         self.tensor = tensor
@@ -11,11 +11,7 @@ class torch(BaseModule):
     def vis_get(self, name):
         return self.tensor.tolist()
 
+class test_torchTensor(Tensor, BaseTestModule):
     @classmethod
     def test_object(cls):
-        return cls(tch.ones((20,30)))
-
-class test_torch(torch, BaseTestModule):
-    @classmethod
-    def test_object(cls):
-        return cls(tch.ones((2,3)))
+        return cls(torch.rand(30,30))

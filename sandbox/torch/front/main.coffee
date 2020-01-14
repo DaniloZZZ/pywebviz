@@ -1,5 +1,5 @@
 import React from 'react'
-import './style.css'
+import './style.less'
 
 export default Presenter = ({data, setattr}) =>
   {tensor} = data
@@ -9,13 +9,13 @@ export default Presenter = ({data, setattr}) =>
     Torch tensor:
     <table>
       <tbody>
-        { 
+        {
             tensor.map (row, i)=>
               if Array.isArray row
                 <tr key={i}>
                 {
                   row.map (val, j) =>
-                    <td key={j}>{val}</td>
+                    <td key={j}>{val.toFixed(3)}</td>
                 }
                 </tr>
               else

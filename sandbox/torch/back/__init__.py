@@ -1,2 +1,1 @@
-from .foo import test_torch as torch
-print('torch export', torch)
+from .tensor import test_torchTensor as torchTensor
