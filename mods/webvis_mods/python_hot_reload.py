@@ -23,31 +23,38 @@ class ModHotReload(events.PatternMatchingEventHandler):
         self.modname = modname
         print(modules)
         rreload(modules)
+        print(modules)
         Mod = getattr(modules, self.modname)
+        print('hot reloading module:', Mod, Mod.__module__)
+        self._cls_name = Mod.__name__
         self.module = importlib.import_module(Mod.__module__)
+
         self.vis = webvis.Vis()
         self.test_data = {}
         self.vis.start()
         self.set_testmod()
-
-    def _init_mod(self):
-        Mod = getattr(self.module, self.modname)
-        print("Module dict:", Mod.__dict__)
-        with log.catch():
-            m = Mod.test_object()
-            return m
-            #print('Fix the module, save the file, webvis will reload it for you.')
+        self._last_event = time.time()
+        self._timedelta = .3
 
     def set_testmod(self):
         m = self._init_mod()
         self.vis.vars.test = m
 
     def on_any_event(self, event):
-        print('Module changed', event)
-        time.sleep(.05)
+        if time.time() - self._last_event > self._timedelta:
+            print('Module changed', event)
+            with log.catch():
+                self.module = rreload(self.module)
+            self.set_testmod()
+            self._last_event = time.time()
+
+    def _init_mod(self):
+        Mod = getattr(self.module, self._cls_name)
+        print("Module dict:", Mod.__dict__)
         with log.catch():
-            self.module = rreload(self.module)
-        self.set_testmod()
+            m = Mod.test_object()
+            return m
+            #print('Fix the module, save the file, webvis will reload it for you.')
 
 def python_dev_server(modname, path):
     observer = observers.Observer()

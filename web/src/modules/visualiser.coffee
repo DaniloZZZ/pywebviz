@@ -30,7 +30,6 @@ get_var_type = (type, val)->
   return type
 
 export choosePresenter = (type, val)->
-  console.log "Choosing presenter for '#{type}' value:", val, "from", Modules
   type = get_var_type type, val
   presenter = Modules[type]
   if presenter
@@ -40,6 +39,7 @@ export choosePresenter = (type, val)->
 
 export default Vis = (props)->
   {variable, name, onNameChange} = props
+  console.log "Choosing presenter for '#{name}' variable", variable, "from", Modules
   Pres = choosePresenter variable.type, variable.value
   L.div className:'vis',
     L.div className:'title',"Name: ",
