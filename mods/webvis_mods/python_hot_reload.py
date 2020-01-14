@@ -22,6 +22,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
 
         self.modname = modname
         print(modules)
+        rreload(modules)
         Mod = getattr(modules, self.modname)
         self.module = importlib.import_module(Mod.__module__)
         self.vis = webvis.Vis()
@@ -33,7 +34,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
         Mod = getattr(self.module, self.modname)
         print("Module dict:", Mod.__dict__)
         with log.catch():
-            m = Mod(self.test_data)
+            m = Mod.test_object()
             return m
             #print('Fix the module, save the file, webvis will reload it for you.')
 
@@ -58,5 +59,3 @@ def python_dev_server(modname, path):
         handler = ModHotReload(modname)
         observer.schedule(handler, str(path), recursive=True)
     observer.start()
-
-

@@ -60,7 +60,7 @@ def list_():
 @name
 @command_wrapper
 def uninstall(*args, **kwargs):
-    wm.uninstall(*args, **kwargs)
+    wm.uninstall(kwargs['modname'])
 
 @cli.command()
 @click.option('-o', '--output-dir', 'output_dir', default='.')

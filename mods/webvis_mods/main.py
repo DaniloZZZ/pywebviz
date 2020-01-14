@@ -57,10 +57,11 @@ def develop(modname, back_src, front_src):
     _process_py(modname, back_src, action=utils.ln)
     _process_js(modname, front_src, action=utils.ln)
 
+    _update_imports()
+
     print(f"watching python src dir")
     python_dev_server(modname, back_src)
 
-    _update_imports()
     print(f"Running webpack devolopment server from {web_src}...")
     utils.run_cmd([manager_path/'develop.sh', web_src])
 
