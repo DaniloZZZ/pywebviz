@@ -34,7 +34,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
         self.vis.start()
         self.set_testmod()
         self._last_event = time.time()
-        self._timedelta = .3
+        self._timedelta = .5
 
     def set_testmod(self):
         m = self._init_mod()
