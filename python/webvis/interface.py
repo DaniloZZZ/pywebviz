@@ -35,7 +35,7 @@ def preprocess_value(val):
     return ret, type_
 
 def vismodule_val(val):
-    ret = val.ref()
+    ret = val._ref()
     type_ = val.name
     return ret, type_
 
