@@ -1,7 +1,6 @@
 import click
-from pathlib import Path
 import webvis_mods as wm
-from .config_gen import read_config, write_config
+from .config_gen import with_webvis_config
 
 class CatchAllExceptions(click.Group):
     def __call__(self, *args, **kwargs):
@@ -20,23 +19,14 @@ back = click.argument('back_src', type=click.Path(exists=True),
 front = click.argument('front_src', type=click.Path(exists=True),
                        required=False)#, help='Directory or file with backend code')
 
-files = lambda x: back( front(x) )
+files = lambda x: back( front(
+    with_webvis_config( x )
+) )
 
-def command_wrapper(cmd):
-    def ncmd(*args, **kwargs):
-        config = dict(read_config(Path('.')))
-        for key, value in kwargs.items():
-            if value is not None:
-                config[key] = value
-        return cmd(*args, **config)
-    ncmd.__name__ = cmd.__name__
-    ncmd.__doc__ = cmd.__doc__
-    return ncmd
 
 @cli.command()
 @name
 @files
-@command_wrapper
 def install(*args, **kwargs):
     """ Install a module from directory """
     print('wn', kwargs)
@@ -45,7 +35,6 @@ def install(*args, **kwargs):
 @cli.command()
 @name
 @files
-@command_wrapper
 def develop(*args, **kwargs):
     """ Run the web server in development mode with hot reload """
     wm.develop(*args, **kwargs)
@@ -58,7 +47,6 @@ def list_():
 
 @cli.command()
 @name
-@command_wrapper
 def uninstall(*args, **kwargs):
     wm.uninstall(kwargs['modname'])
 
