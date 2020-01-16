@@ -1,6 +1,26 @@
 import subprocess
+import inspect
+from inspect import Parameter
 import shutil
-import os
+
+def only_required_kwargs_call(f, *args, **kwargs):
+    sig = inspect.signature(f)
+    of_type = lambda type: [name for name, param in sig.parameters.items()
+                if param.kind == type
+               ]
+    pos = of_type(Parameter.kind.POSITIONAL_OR_KEYWORD)
+    #_args = of_type( Parameter.kind.VAR_KEYWORD)
+    keyw = of_type(Parameter.kind.KEYWORD_ONLY)
+    _kwargs = of_type(Parameter.kind.VAR_KEYWORD)
+    if len(_kwargs):
+        return f(*args, **kwargs)
+    else:
+        names = pos + keyw
+        conf = {name:value for 
+                name, value in kwargs if name in names
+               }
+        return f(*args, **conf)
+
 
 def rm(obj):
     if obj.is_symlink():
