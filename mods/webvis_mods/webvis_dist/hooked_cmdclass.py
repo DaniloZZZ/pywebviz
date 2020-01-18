@@ -12,6 +12,8 @@ def get_class(orig, pre=noop, post=noop):
             super().__init__(*args, **kwargs)
             self.webvis_pre_hook = pre
             self.webvis_post_hook = post
+            self._args = args
+            self._kwargs = kwargs
 
         def run(self):
             self.webvis_pre_hook()

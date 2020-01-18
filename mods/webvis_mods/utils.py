@@ -8,10 +8,10 @@ def only_required_kwargs_call(f, *args, **kwargs):
     of_type = lambda type: [name for name, param in sig.parameters.items()
                 if param.kind == type
                ]
-    pos = of_type(Parameter.kind.POSITIONAL_OR_KEYWORD)
-    #_args = of_type( Parameter.kind.VAR_KEYWORD)
-    keyw = of_type(Parameter.kind.KEYWORD_ONLY)
-    _kwargs = of_type(Parameter.kind.VAR_KEYWORD)
+    pos = of_type(Parameter.POSITIONAL_OR_KEYWORD)
+    #_args = of_type( Parameter.VAR_KEYWORD)
+    keyw = of_type(Parameter.KEYWORD_ONLY)
+    _kwargs = of_type(Parameter.VAR_KEYWORD)
     if len(_kwargs):
         return f(*args, **kwargs)
     else:
@@ -29,6 +29,13 @@ def rm(obj):
         shutil.rmtree(obj)
     elif obj.is_file():
         os.remove(obj)
+
+def safe_copy(src, dest):
+    if not dest.exists():
+        shutil.copy(src, dest)
+        return True
+    else:
+        return False
 
 def copy(src, dest):
     print("cp", src, dest)
@@ -48,8 +55,9 @@ def write_to(s, dest):
 
 def run_cmd(cmds):
     try:
-        subprocess.run(' '.join([str(x) for x in cmds]),
-                   shell=True, check=True
+        subprocess.run(cmds,
+            #' '.join([str(x) for x in cmds]),
+                   shell=False, check=True
                   )
     except subprocess.CalledProcessError as e:
         output, stderr = e.output, e.stderr
@@ -59,4 +67,4 @@ def run_cmd(cmds):
             stderr = stderr.decode()
         raise Exception(f"Failed to execute `{cmds[0]}`.\n\
  Command: {e.cmd}.\n\
- Output: {output}")
+Output: {output}, stderr: {stderr}")

@@ -4,6 +4,20 @@ from webvis_mods.utils import only_required_kwargs_call
 
 filename = 'webvis-mod.conf'
 
+def module_path(module):
+    maybe_path = module.__path__
+    try:
+        path = maybe_path.pop()
+    except (TypeError, AttributeError):
+        # For _NamespacePath. Maybe I'm doing it wrong?
+        path = maybe_path._path.pop()
+    return path
+
+def config_of_module(module):
+    path = module_path(module)
+    config = read_config(path)
+    return config
+
 def with_webvis_config(cmd, path='.'):
     def ncmd(*args, **kwargs):
         config = dict(read_config(Path(path)))
@@ -16,11 +30,13 @@ def with_webvis_config(cmd, path='.'):
     return ncmd
 
 def read_config(path):
+    path = Path(path)
     config=configparser.ConfigParser()
     config.read(path / filename)
     if 'Module' in config.sections():
         mod = config['Module']
-        return mod
+        mod['name'] =mod['modname']
+        return dict(mod)
     else: return {}
 
 def write_config(conf_dict, path):

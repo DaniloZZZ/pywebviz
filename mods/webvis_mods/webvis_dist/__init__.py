@@ -1,2 +1,1 @@
-from .webvis_setup import webvis_setup as setup
-from .webvis_setup import hook_setup
+from webvis_mods.tools.setuptools_hook import hook_setup

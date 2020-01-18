@@ -1,6 +1,8 @@
 import click
 import webvis_mods as wm
+
 from .config_gen import with_webvis_config
+from .publish import publish
 
 class CatchAllExceptions(click.Group):
     def __call__(self, *args, **kwargs):
@@ -61,6 +63,8 @@ def init_file(modname, output_dir):
 @name
 def init_dir(modname, output_dir):
     wm.init_dir(modname, output_dir=output_dir)
+
+cli.command()( publish)
 
 if __name__ == '__main__':
     cli()
