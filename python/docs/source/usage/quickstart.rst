@@ -8,6 +8,7 @@ Fire up your ``python`` interpreter or jupyter notebook
 and type the following:
 
 .. code-block:: python
+
    from webvis import Vis
    vis = Vis()
    vis.start()
