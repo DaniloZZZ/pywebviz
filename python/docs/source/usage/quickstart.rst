@@ -24,7 +24,7 @@ Widgets are basic blocks of our dashboard, you can drag them and resize.
 
 type in the name of your variable, ``test``, and your array will appear.
 
-.. image:: quickstart.png
+.. image:: pictures/quickstart.png
    :alt: Dashboard with y=x^2 graph
 
 Interactive
