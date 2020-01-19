@@ -31,7 +31,7 @@ Interactive
 -----------
 
 Now, the most awesome feature about libvis is that
-python objects from ``vis.vars`` are _automatically synchronized_.
+python objects from ``vis.vars`` are *automatically synchronized*.
 
 
 Try this one:
