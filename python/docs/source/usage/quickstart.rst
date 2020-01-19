@@ -14,7 +14,7 @@ and type the following:
    vis.start()
    vis.vars.test = [ x**2 for x in range(-20,20) ]
 
-Now, open `localhost:7700 <http://localhost:7700>`_ in your browser.
+Now, open `localhost:7000 <http://localhost:7000>`_ in your browser.
 
 There's not much there now, 
 but let's go ahead and click 'Add Widget' button at the top left.
@@ -24,7 +24,7 @@ Widgets are basic blocks of our dashboard, you can drag them and resize.
 
 type in the name of your variable, ``test``, and your array will appear.
 
-.. image:: ../pictures/quickstart.png
+.. image:: pictures/quickstart.png
    :alt: Dashboard with y=x^2 graph
 
 Interactive
