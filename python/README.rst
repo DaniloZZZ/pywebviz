@@ -1,6 +1,6 @@
 
-.. image:: https://img.shields.io/pypi/v/webvis.svg
-    :target: https://pypi.python.org/pypi/webvis
+.. image:: https://img.shields.io/pypi/v/libvis.svg
+    :target: https://pypi.python.org/pypi/libvis
     :alt: PyPi version
 
 
@@ -21,7 +21,7 @@ Quick start
 
 .. code-block:: python
 
-   from webvis import Vis
+   from libvis import Vis
    import time
 
    vis = Vis(vis_port=7007)
@@ -36,7 +36,7 @@ Quick start
 
 Add a widget, call it "line", and a live plot appears.
 
-WebVis is a live object visualization tool, best used with jupyter notebook.
+Libvis is a live object visualization tool, best used with jupyter notebook.
 
 A separate thread is created that checks the changes. No network requests performed in main thread.
 
