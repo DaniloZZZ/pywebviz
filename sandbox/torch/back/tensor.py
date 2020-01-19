@@ -1,5 +1,5 @@
-from webvis.modules import BaseModule
-from webvis.modules import BaseTestModule
+from libvis.modules import BaseModule
+from libvis.modules import BaseTestModule
 import torch
 
 class Tensor(BaseModule):
@@ -14,4 +14,4 @@ class Tensor(BaseModule):
 class test_torchTensor(Tensor, BaseTestModule):
     @classmethod
     def test_object(cls):
-        return cls(torch.rand(30,30))
+        return cls(torch.rand(20,30))
