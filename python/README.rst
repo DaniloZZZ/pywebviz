@@ -22,18 +22,29 @@ Quick start
 .. code-block:: python
 
    from webvis import Vis
+   import time
 
    vis = Vis(vis_port=7007)
-
-   vis.vars.test = "Hello World!"
-
-   # Open the browser on 7007 port 
+   vis.start()
+   # Opens the browser on 7007 port 
    vis.show()
 
+   # Live plotting
+   for i in range(0,100):
+      vis.vars.line = [(2**x)%100 for x in range(i)]
+      time.sleep(.2)
 
-Then change the name in card to "test", and your variable will appear!
+Add a widget, call it "line", and a live plot appears.
 
-The values are updated dynamically, a separate thread is created that checks the changes.
+WebVis is a live object visualization tool, best used with jupyter notebook.
 
-values can be matplotlib figures, 1-d and 2-d arrays,
+A separate thread is created that checks the changes. No network requests performed in main thread.
+
+Values can be matplotlib figures, 1-d and 2-d arrays,
 and even bokeh is supported!
+
+Documentation
+-------------
+
+http://docs.webvis.dev
+
