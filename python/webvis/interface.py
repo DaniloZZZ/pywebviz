@@ -1,5 +1,5 @@
 import json
-from .VisVars import VisVars
+from webvis.VisVars import VisVars
 try:
     import numpy as np
     import matplotlib

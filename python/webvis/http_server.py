@@ -11,10 +11,10 @@ Send a POST request::
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse
 import sys
-import libvis
+import webvis
 from pathlib import Path
 
-p = Path(libvis.__file__)
+p = Path(webvis.__file__)
 
 pywebvis_path = p.parent / 'front_build'
 

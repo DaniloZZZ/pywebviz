@@ -1,9 +1,10 @@
-from libvis import VisVars
+from webvis import VisVars
+import json
 
 class BaseModule(VisVars):
     def vis_get(self, key):
         value = self[key]
-        name, value = super()._prepare_send(key, value)
+        name, value = super()._prepare_send(name, value)
         return value
 
     def vis_set(self, key, value):

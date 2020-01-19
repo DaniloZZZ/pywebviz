@@ -3,7 +3,7 @@ from legimens import App
 
 from .helpers.threaded import threaded
 from .http_server import create_server as create_http
-from .VisVars import VisVars
+from webvis.VisVars import VisVars
 
 class Vis():
     def __init__(self, ws_port = 7700, vis_port=7000, nb_name=None):
