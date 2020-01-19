@@ -13,7 +13,7 @@ It uses a dedicated web app with cards that display python variables.
 
 Check out the notebooks folder for examples
 
-Jump right in: `Quick start <http://docs.webvis.dev/usage/quickstart.html#>`.
+Jump right in: `Quick start <http://docs.webvis.dev/usage/quickstart.html#>`_.
 
 
 Quick start
