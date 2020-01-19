@@ -1,7 +1,5 @@
 from os import makedirs
 import sys
-from shutil import rmtree as rmdir
-import webvis_mods, webvis
 from pathlib import Path
 from loguru import logger as log
 
@@ -84,9 +82,6 @@ def uninstall(modname):
     print(f"Successfully uninstalled module {modname}")
 
 def installed():
-    import webvis.modules.installed as installed
+    import libvis.modules.installed as installed
     return [x for x in installed.__dir__() if x[0] != '_']
-
-
-
 

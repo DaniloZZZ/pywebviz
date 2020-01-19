@@ -24,6 +24,7 @@ def with_webvis_config(cmd, path='.'):
         for key, value in kwargs.items():
             if value is not None:
                 config[key] = value
+        print(config)
         return only_required_kwargs_call(cmd, *args, **config)
     ncmd.__name__ = cmd.__name__
     ncmd.__doc__ = cmd.__doc__

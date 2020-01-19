@@ -3,6 +3,7 @@ import webvis_mods as wm
 
 from .config_gen import with_webvis_config
 from .publish import publish
+from webvis_mods.utils import only_required_kwargs_call
 
 class CatchAllExceptions(click.Group):
     def __call__(self, *args, **kwargs):
@@ -39,7 +40,9 @@ def install(*args, **kwargs):
 @files
 def develop(*args, **kwargs):
     """ Run the web server in development mode with hot reload """
-    wm.develop(*args, **kwargs)
+    print(args, kwargs)
+    only_required_kwargs_call(
+        wm.develop, *args, **kwargs)
 
 @cli.command('list')
 def list_():

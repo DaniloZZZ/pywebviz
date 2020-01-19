@@ -17,11 +17,11 @@ setup(
     author = 'Danil Lykov',
     author_email = 'lkvdan@gmail.com',
 
-    install_requires = ['loguru', 'click', 'webvis'],
+    install_requires = ['loguru', 'click', 'libvis'],
     setup_requires = ['pytest-runner'],
     tests_require  = ['pytest'],
     include_package_data=True,
-    keywords = ['tools', 'webvis', 'package manager', 'data', 'framework', 'visualization'],
+    keywords = ['tools', 'libvis', 'package manager', 'data', 'framework', 'visualization'],
 
     entry_points = {
         'console_scripts':['webvis-mods=webvis_mods.cli:cli']

@@ -1,7 +1,7 @@
 import subprocess
 import inspect
 from inspect import Parameter
-import shutil
+import shutil, os
 
 def only_required_kwargs_call(f, *args, **kwargs):
     sig = inspect.signature(f)
@@ -16,8 +16,9 @@ def only_required_kwargs_call(f, *args, **kwargs):
         return f(*args, **kwargs)
     else:
         names = pos + keyw
+        print(names)
         conf = {name:value for 
-                name, value in kwargs if name in names
+                name, value in kwargs.items() if name in names
                }
         return f(*args, **conf)
 
