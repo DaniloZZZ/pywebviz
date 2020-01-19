@@ -22,7 +22,7 @@ but let's go ahead and click 'Add Widget' button at the top left.
 
 Widgets are basic blocks of our dashboard, you can drag them and resize.
 
-type in the name of your variable, ``test``, and your array will appear.
+Type in the name of your variable, ``test``, and your array will appear.
 
 .. image:: pictures/quickstart.png
    :alt: Dashboard with y=x^2 graph
@@ -31,7 +31,7 @@ Interactive
 -----------
 
 Now, the most awesome feature about libvis is that
-python objects form ``vis.vars`` are automatically synchronized.
+python objects from ``vis.vars`` are _automatically synchronized_.
 
 
 Try this one:
