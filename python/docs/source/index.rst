@@ -11,6 +11,9 @@ Release v\ |version|
 .. toctree::
    :maxdepth: 2
 
+   usage/installation
+   usage/quickstart
+
    webvis
 
 
