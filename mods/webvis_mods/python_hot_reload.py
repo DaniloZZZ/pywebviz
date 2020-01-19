@@ -1,10 +1,8 @@
-import webvis
 from importlib import reload
 import time
 import importlib
 from watchdog import observers, events
 from types import ModuleType
-import webvis.modules.installed as modules
 from loguru import logger as log
 
 def rreload(module):
@@ -19,6 +17,8 @@ def rreload(module):
 class ModHotReload(events.PatternMatchingEventHandler):
     def __init__(self, modname, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        import webvis
+        import webvis.modules.installed as modules
 
         self.modname = modname
         print(modules)

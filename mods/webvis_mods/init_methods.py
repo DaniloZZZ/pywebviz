@@ -1,4 +1,3 @@
-from cookiecutter.main import cookiecutter
 
 from webvis_mods.paths_config import (
     files_template, dirs_template
@@ -18,6 +17,9 @@ def init(name, output_dir='.', **kwargs):
     init_dir(name, output_dir, **kwargs)
 
 def _install_template(template, interactive=False, **kwargs):
+    # Import here because we need it only one time when init, 
+    # and import takes .3s
+    from cookiecutter.main import cookiecutter
     out_dir = kwargs.pop('output_dir')
     print(template, kwargs, out_dir)
     cookiecutter(str(template),
