@@ -1,4 +1,5 @@
 from os import makedirs
+import os
 import sys
 from pathlib import Path
 from loguru import logger as log
@@ -61,25 +62,39 @@ def develop(modname, back_src, front_src):
     python_dev_server(modname, back_src)
 
     print(f"Running webpack devolopment server from {web_src}...")
+
+    p = os.getcwd()
+    os.chdir(web_src)
     utils.run_cmd([manager_path/'develop.sh', web_src])
+    os.chdir(p)
 
-def install(modname, back_src, front_src):
-    back_src, front_src = Path(back_src), Path(front_src)
-    _process_py(modname, back_src, action=utils.copy)
-    _process_js(modname, front_src, action=utils.copy)
+def install(modname, back_src, front_src,
+            post_cmd=None
+           ):
+    try:
+        back_src, front_src = Path(back_src), Path(front_src)
+        _process_py(modname, back_src, action=utils.copy)
+        _process_js(modname, front_src, action=utils.copy)
 
-    ## Build the front and copy dist
-    print(f"Building the app from {web_src}...")
-    utils.run_cmd([manager_path/'build.sh', web_src])
-    utils.run_cmd(['rsync', '-r', web_src/'dist', build_dir])
-    _update_imports()
-    print(f"Successfully installed module {modname}")
+        ## Build the front and copy dist
+        print(f"Building the app from {web_src}...")
+        utils.run_cmd([manager_path/'build.sh', web_src])
+        utils.run_cmd(['rsync', '-r', web_src/'dist', build_dir])
+        print(f"Successfully installed module {modname}")
+    except:
+        uninstall(modname)
+        raise
+    finally:
+        _update_imports()
+        if post_cmd:
+            print("Running post install", post_cmd)
+            utils.run_cmd(post_cmd.split())
 
 def uninstall(modname):
     utils.rm(python_user_mods / modname)
     utils.rm(web_user_mods / modname)
     _update_imports()
-    print(f"Successfully uninstalled module {modname}")
+    print(f"Uninstalled module {modname}")
 
 def installed():
     import libvis.modules.installed as installed

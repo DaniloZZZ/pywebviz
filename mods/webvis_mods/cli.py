@@ -33,7 +33,8 @@ files = lambda x: back( front(
 def install(*args, **kwargs):
     """ Install a module from directory """
     print('wn', kwargs)
-    wm.install(*args, **kwargs)
+    only_required_kwargs_call(
+        wm.install, *args, **kwargs)
 
 @cli.command()
 @name

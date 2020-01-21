@@ -48,7 +48,10 @@ def ln(src, dest):
     print("ln -sf", src, dest)
     if src.is_dir():
         src = str(src) + str(os.sep)
-    run_cmd(['ln','-s', src, dest])
+    try:
+        run_cmd(['ln','-s', src, dest])
+    except:
+        print("Failed to link,skipping")
 
 def write_to(s, dest):
     with open(dest, 'w+') as f:
