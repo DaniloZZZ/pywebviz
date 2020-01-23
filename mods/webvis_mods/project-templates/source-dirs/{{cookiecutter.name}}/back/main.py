@@ -1,4 +1,4 @@
-from webvis.modules import BaseModule
+from libvis.modules import BaseModule
 import json
 from .utils import random_quote
 
