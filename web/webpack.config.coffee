@@ -3,7 +3,6 @@ webpack = require 'webpack'
 
 HtmlWebpackPlugin = require 'html-webpack-plugin'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
-VueLoaderPlugin = require 'vue-loader/lib/plugin'
 
 isProduction = process.env.NODE_ENV is 'production'
 
@@ -49,7 +48,6 @@ module.exports =
             loader: 'babel-loader'
             options:
               presets: ['@babel/preset-env', '@babel/preset-react'],
-              plugins: ['vuera/babel']
           }
           'coffee-loader'
         ],
@@ -87,7 +85,6 @@ module.exports =
     ]
   plugins: [
     HtmlWebpackPluginConfig
-    new VueLoaderPlugin()
     new ExtractTextPlugin
       filename: 'app.css'
       disable: !isProduction
