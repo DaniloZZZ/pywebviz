@@ -3,6 +3,7 @@ webpack = require 'webpack'
 
 HtmlWebpackPlugin = require 'html-webpack-plugin'
 ExtractTextPlugin = require 'extract-text-webpack-plugin'
+VueLoaderPlugin = require 'vue-loader/lib/plugin'
 
 isProduction = process.env.NODE_ENV is 'production'
 
@@ -48,11 +49,21 @@ module.exports =
             loader: 'babel-loader'
             options:
               presets: ['@babel/preset-env', '@babel/preset-react'],
+              plugins: ['vuera/babel']
           }
           'coffee-loader'
         ],
         exclude: /node_modules/
       },
+      {
+        test: /\.styl(us)?$/,
+        #exclude: /node_modules/
+        use: [
+          # this will apply to both plain `.scss` files
+          #AND `<style lang="stylus">` blocks in `.vue` files
+          'vue-style-loader',
+          'style-loader','css-loader','stylus-loader']
+      }
       {
         test: /\.less$/,
         use: [{
@@ -64,6 +75,11 @@ module.exports =
         }],
       },
       {
+        test: /\.vue$/,
+        #exclude: /node_modules/
+        use: ['vue-loader'],
+      },
+      {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
@@ -71,6 +87,7 @@ module.exports =
     ]
   plugins: [
     HtmlWebpackPluginConfig
+    new VueLoaderPlugin()
     new ExtractTextPlugin
       filename: 'app.css'
       disable: !isProduction
