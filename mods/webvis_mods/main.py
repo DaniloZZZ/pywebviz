@@ -69,8 +69,11 @@ def develop(modname, back_src, front_src):
     os.chdir(p)
 
 def install(modname, back_src, front_src,
-            post_cmd=None
+            post_cmd=None, pre_cmd=None
            ):
+    if pre_cmd:
+        print("Running pre install", post_cmd)
+        utils.run_cmd(pre_cmd.split())
     try:
         back_src, front_src = Path(back_src), Path(front_src)
         _process_py(modname, back_src, action=utils.copy)
