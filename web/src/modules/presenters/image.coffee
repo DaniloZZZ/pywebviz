@@ -1,7 +1,6 @@
 import React, { Component, createRef, useEffect} from 'react'
 import L from 'react-dom-factories'
 L_ = React.createElement
-import {VictoryChart, VictoryTheme, VictoryLine} from 'victory'
 
 
 
