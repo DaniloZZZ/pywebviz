@@ -9,6 +9,9 @@ from loguru import logger as log
 
 def rreload(module):
     """Recursively reload modules."""
+    print('reload', module)
+    if 'libvis' not in module.__file__:
+        return
     reload(module)
     for attribute_name in dir(module):
         attribute = getattr(module, attribute_name)
@@ -17,17 +20,18 @@ def rreload(module):
     return module
 
 class ModHotReload(events.PatternMatchingEventHandler):
+    @log.catch
     def __init__(self, modname, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.modname = modname
         print(modules)
         rreload(modules)
-        print(modules)
+        print(modules.__dict__.keys())
         Mod = getattr(modules, self.modname)
-        print('hot reloading module:', Mod, Mod.__module__)
-        self._cls_name = Mod.__name__
-        self.module = importlib.import_module(Mod.__module__)
+        print('hot reloading module:', Mod)
+        self._cls_name = self.modname
+        self.module = importlib.import_module(Mod.__name__)
 
         self.vis = libvis.Vis()
         self.test_data = {}
