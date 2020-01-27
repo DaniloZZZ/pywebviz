@@ -4,6 +4,7 @@ import webvis_mods as wm
 from .config_gen import with_webvis_config
 from .publish import publish
 from webvis_mods.utils import only_required_kwargs_call
+from webvis_mods.download import repository
 
 class CatchAllExceptions(click.Group):
     def __call__(self, *args, **kwargs):
@@ -67,6 +68,12 @@ def init_file(modname, output_dir):
 @name
 def init_dir(modname, output_dir):
     wm.init_dir(modname, output_dir=output_dir)
+
+@cli.command()
+@click.option('-o', '--output-dir', 'output_dir', default='.')
+@click.argument('source')
+def download(source, output_dir):
+    repository.determine_repo_dir(source, output_dir)
 
 cli.command()( publish)
 

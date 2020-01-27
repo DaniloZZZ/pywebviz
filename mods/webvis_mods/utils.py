@@ -1,7 +1,21 @@
 import subprocess
 import inspect
 from inspect import Parameter
-import shutil, os
+from loguru import logger as log
+import shutil, os, errno
+
+def make_sure_path_exists(path):
+    """Ensure that a directory exists.
+    :param path: A directory path.
+    """
+    log.debug("Making sure path exists: {}", path)
+    try:
+        os.makedirs(path)
+        log.debug("Created directory at: {}", path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            return False
+    return True
 
 def only_required_kwargs_call(f, *args, **kwargs):
     sig = inspect.signature(f)

@@ -4,6 +4,12 @@ from webvis_mods.utils import only_required_kwargs_call
 
 filename = 'webvis-mod.conf'
 
+BUILTIN_ABBREVIATIONS = {
+    "gh": "https://github.com/{0}.git",
+    "gl": "https://gitlab.com/{0}.git",
+    "bb": "https://bitbucket.org/{0}",
+}
+
 def module_path(module):
     maybe_path = module.__path__
     try:
