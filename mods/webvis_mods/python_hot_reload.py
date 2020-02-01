@@ -82,6 +82,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
         rreload(module)
 
     def _init_mod(self):
+        self._update_module()
         Mod = getattr(self.parent, self.name)
         print("Module dict:", Mod.__dict__)
         with log.catch():
