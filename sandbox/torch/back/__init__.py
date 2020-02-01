@@ -1,1 +1,1 @@
-from .tensor import test_torchTensor as torchTensor
+from . import model as torchTensor

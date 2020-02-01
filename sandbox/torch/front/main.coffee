@@ -1,36 +1,37 @@
 import React from 'react'
+import Tensor from './tensor.coffee'
 import './style.less'
+import LeClient from 'legimens'
 
-export default Presenter = ({data, setattr}) =>
-  {tensor} = data
 
-  if tensor is undefined
+export default ModelPresenter = ({data, setattr, addr}) =>
+  {model} = data
+
+  if model is undefined
     return 'Wait...'
 
-  len = tensor.length
+  console.log 'model', model
 
-  get_style=(val)=>
-    return
-      backgroundColor:"hsl(0,10%,#{20+val*80}%)"
-      fontSize: "#{250/len}px"
-      padding: "#{20//len}px"
-      margin: "#{20//len}px"
-  <div className="torch-presenter">
-    Torch tensor:
-    <table>
-      <tbody>
+  <div style={{width:'100%',height:'100%', overflow: 'auto'}} className="torch-model-presenter">
+    Torch model:
+      {JSON.stringify model}
+    <div>
         {
-            tensor.map (row, i)=>
-              if Array.isArray row
-                <tr key={i}>
-                {
-                  row.map (val, j) =>
-                    <td style={get_style val} key={j}>{val.toFixed(3)}</td>
-                }
-                </tr>
-              else
-                <tr key={i}>{row}</tr>
+          model.value.map (item, idx) =>
+            <div>
+              <p> {item[0]} </p>
+              <LeClient addr={addr} refval={item[1]}>
+              {
+                (variable, setattr)->
+                  console.log 'data', variable, setattr
+                  if not variable
+                    return 'Loading'
+                  <div className='container'>
+                    <Tensor data={variable}/>
+                  </div>
+              }
+              </LeClient>
+            </div>
         }
-      </tbody>
-    </table>
+    </div>
   </div>
