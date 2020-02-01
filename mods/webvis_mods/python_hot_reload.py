@@ -7,10 +7,17 @@ from types import ModuleType
 import libvis.modules.installed as modules
 from loguru import logger as log
 
+def _ismodule(mod):
+    """ Module can be considered a file, it does not
+    have a __path__ attribute,
+    but has __name__ (which is path + name.py) """
+    return hasattr(mod, '__name__')
+
 def rreload(module):
     """Recursively reload modules."""
     print('reload', module)
     if 'libvis' not in module.__file__:
+        # Reload only libvis. Some packages raise recursion error
         return
     reload(module)
     for attribute_name in dir(module):
@@ -23,37 +30,59 @@ class ModHotReload(events.PatternMatchingEventHandler):
     @log.catch
     def __init__(self, modname, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self._last_event = time.time()
+        self._timedelta = .5
         self.modname = modname
-        print(modules)
-        rreload(modules)
-        print(modules.__dict__.keys())
-        Mod = getattr(modules, self.modname)
-        print('hot reloading module:', Mod)
-        self._cls_name = self.modname
-        self.module = importlib.import_module(Mod.__name__)
+
+        # We may already have libvis modules in cache, 
+        # so better reload them, modules/installed/__init__.py should 
+        # contain import string for a new module if it was
+        # installed after first import of libvis.modules.installed
+        reload(modules)
+        print('libvis modules loaded:', modules.__dict__.keys())
+        mod = getattr(modules, self.modname)
+        # mod can be ModuleType or Class, depending on what user 
+        # choses to export
+        self._exported = mod
+        print('hot reloading module:', self._exported)
+
+        if not isinstance(self._exported, ModuleType):
+            print(f'Assuming {mod} is a class')
+            parent_name = mod.__module__
+            name = mod.__name__
+        else:
+            parent_name = 'libvis.modules.installed'
+            name = modname
+
+        self.parent = importlib.import_module(parent_name)
+        self.name = name
 
         self.vis = libvis.Vis()
         self.test_data = {}
         self.vis.start()
+
         self.set_testmod()
-        self._last_event = time.time()
-        self._timedelta = .5
+
+    def on_any_event(self, event):
+        if time.time() - self._last_event > self._timedelta:
+            print('Module changed', event)
+            self.set_testmod()
+            self._last_event = time.time()
 
     def set_testmod(self):
         m = self._init_mod()
         self.vis.vars.test = m
 
-    def on_any_event(self, event):
-        if time.time() - self._last_event > self._timedelta:
-            print('Module changed', event)
-            with log.catch():
-                self.module = rreload(self.module)
-            self.set_testmod()
-            self._last_event = time.time()
+    @log.catch
+    def _update_module(self):
+        if not isinstance(self._exported, ModuleType):
+            module = self.parent
+        else:
+            module = self._exported
+        rreload(module)
 
     def _init_mod(self):
-        Mod = getattr(self.module, self._cls_name)
+        Mod = getattr(self.parent, self.name)
         print("Module dict:", Mod.__dict__)
         with log.catch():
             m = Mod.test_object()
