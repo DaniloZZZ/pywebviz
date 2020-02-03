@@ -28,6 +28,8 @@ module.exports =
   resolve:
     symlinks:true
     modules: [path.resolve(__dirname, 'node_modules')]
+    alias:
+      libvis: path.resolve(__dirname, 'lib/libvis.js')
   devServer:
     contentBase: path.join(__dirname, 'dist'),
     compress: true

@@ -4,10 +4,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "GPL-3.0-only",
-  "repository": "https://github.com/DaniloZZZ/react-coffeescript-boilerplate",
+  "repository": "https://github.com/DaniloZZZ/pywebvis",
   "scripts": {
     "start": "npm run dev",
     "dev": "webpack-dev-server",
+    "lib-dev": "webpack-dev-server -p --config webpack-lib.config.coffee",
+    "lib": "NODE_ENV=production webpack -p --config webpack-lib.config.coffee",
     "build": "npm run clean && NODE_ENV=production webpack -p",
     "clean": "rimraf ./dist/*"
   },
