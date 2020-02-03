@@ -3,10 +3,13 @@ import './style.less'
 
 export default Presenter = ({data, setattr}) =>
   console.log 'data t', data
-  {tensor} = data
+  if data is undefined
+    return 'Connecting...'
 
+  {tensor} = data
   if tensor is undefined
-    return 'Wait...'
+    return 'Waiting for tensor...'
+
 
   getMax = (a)=>
     return Math.max(...a.map((e) => if Array.isArray(e) then getMax(e) else e))
