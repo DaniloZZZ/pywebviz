@@ -7,6 +7,11 @@ from webvis_mods.publish import publish
 from webvis_mods.utils import only_required_kwargs_call
 from webvis_mods.download import repository
 
+from webvis_mods.paths_config import (
+    web_user_mods, python_user_mods
+)
+
+
 @click.group()
 def cli(): pass
 
@@ -21,6 +26,8 @@ files = lambda x: back( front(
 ))
 
 
+## ## ## User ## ## ##
+
 @cli.command()
 @name
 @files
@@ -29,6 +36,44 @@ def install(*args, **kwargs):
     print('Arguments', kwargs)
     only_required_kwargs_call(
         wm.install, *args, **kwargs)
+
+
+@cli.command('list')
+def list_():
+    """ list installed modules """
+    mods = wm.installed()
+    print("\n".join(mods))
+
+@cli.command()
+@name
+def uninstall(**kwargs):
+    """ Uninstall module """
+    wm.uninstall(kwargs['modname'])
+
+## ## ## Utils ## ## ##
+
+@cli.command()
+@click.option('-o', '--output-dir', 'output_dir', default='.')
+@click.argument('source')
+def download(source, output_dir):
+    """ Download source for the module into ./`module_name`"""
+    repository.determine_repo_dir(source, output_dir)
+
+@cli.command()
+@click.option('--front', 'request', flag_value='front')
+@click.option('--back', 'request', flag_value='back')
+@click.option('--both', 'request', flag_value='both', default=True)
+def where(request):
+    """ Prints locations of where modules are installed """
+    if request == 'back':
+        print(python_user_mods.absolute())
+    if request == 'front':
+        print(web_user_mods.absolute())
+    else:
+        print('back: {}'.format(python_user_mods))
+        print('front: {}'.format(web_user_mods))
+
+## ## ## Developer ## ## ##
 
 @cli.command()
 @name
@@ -39,16 +84,6 @@ def develop(*args, **kwargs):
     only_required_kwargs_call(
         wm.develop, *args, **kwargs)
 
-@cli.command('list')
-def list_():
-    """ list installed modules """
-    mods = wm.installed()
-    print("\n".join(mods))
-
-@cli.command()
-@name
-def uninstall(*args, **kwargs):
-    wm.uninstall(kwargs['modname'])
 
 @cli.command()
 @click.option('-o', '--output-dir', 'output_dir', default='.')
@@ -62,11 +97,6 @@ def init_file(modname, output_dir):
 def init_dir(modname, output_dir):
     wm.init_dir(modname, output_dir=output_dir)
 
-@cli.command()
-@click.option('-o', '--output-dir', 'output_dir', default='.')
-@click.argument('source')
-def download(source, output_dir):
-    repository.determine_repo_dir(source, output_dir)
 
 cli.command()(publish)
 
