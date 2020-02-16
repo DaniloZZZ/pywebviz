@@ -17,7 +17,8 @@ setup(
     author = 'Danil Lykov',
     author_email = 'lkvdan@gmail.com',
 
-    install_requires = ['loguru', 'click', 'libvis'],
+    install_requires = ['loguru', 'click', 'libvis'
+                       ,'watchdog', 'cookiecutter'],
     setup_requires = ['pytest-runner'],
     tests_require  = ['pytest'],
     include_package_data=True,
