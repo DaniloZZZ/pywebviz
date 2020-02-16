@@ -1,10 +1,8 @@
-import libvis
 from importlib import reload
 import time
 import importlib
 from watchdog import observers, events
 from types import ModuleType
-import libvis.modules.installed as modules
 from loguru import logger as log
 
 def _ismodule(mod):
@@ -33,6 +31,8 @@ class ModHotReload(events.PatternMatchingEventHandler):
         self._last_event = time.time()
         self._timedelta = .5
         self.modname = modname
+        modules = importlib.import_module('libvis.modules.installed')
+        libvis = importlib.import_module('libvis')
 
         # We may already have libvis modules in cache, 
         # so better reload them, modules/installed/__init__.py should 

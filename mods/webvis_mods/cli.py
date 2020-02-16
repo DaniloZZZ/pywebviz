@@ -1,31 +1,24 @@
+""" Cli interface for libvis modules and dev """
 import click
 import webvis_mods as wm
 
-from .config_gen import with_webvis_config
-from .publish import publish
+from webvis_mods.config_gen import with_webvis_config
+from webvis_mods.publish import publish
 from webvis_mods.utils import only_required_kwargs_call
 from webvis_mods.download import repository
 
-class CatchAllExceptions(click.Group):
-    def __call__(self, *args, **kwargs):
-        try:
-            return self.main(*args, **kwargs)
-        except Exception as exc:
-            click.echo('Error:\n%s' % exc)
+@click.group()
+def cli(): pass
 
-@click.group(cls = CatchAllExceptions)
-def cli():
-    pass
-
-name = click.argument('modname', required=False)#, help='Name of module')
-back = click.argument('back_src', type=click.Path(exists=True),
-                      required=False) #, help='Directory or file with backend code')
-front = click.argument('front_src', type=click.Path(exists=True),
-                       required=False)#, help='Directory or file with backend code')
+name = click.argument('modname', required=False)
+back = click.argument('back_src'
+                      , type=click.Path(exists=True), required=False)
+front = click.argument('front_src'
+                       , type=click.Path(exists=True), required=False)
 
 files = lambda x: back( front(
-    with_webvis_config( x )
-) )
+    with_webvis_config(x)
+))
 
 
 @cli.command()
@@ -33,7 +26,7 @@ files = lambda x: back( front(
 @files
 def install(*args, **kwargs):
     """ Install a module from directory """
-    print('wn', kwargs)
+    print('Arguments', kwargs)
     only_required_kwargs_call(
         wm.install, *args, **kwargs)
 
@@ -49,8 +42,8 @@ def develop(*args, **kwargs):
 @cli.command('list')
 def list_():
     """ list installed modules """
-    ms = wm.installed()
-    print("\n".join(ms))
+    mods = wm.installed()
+    print("\n".join(mods))
 
 @cli.command()
 @name
@@ -75,7 +68,7 @@ def init_dir(modname, output_dir):
 def download(source, output_dir):
     repository.determine_repo_dir(source, output_dir)
 
-cli.command()( publish)
+cli.command()(publish)
 
 if __name__ == '__main__':
     cli()
