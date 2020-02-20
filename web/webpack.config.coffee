@@ -29,7 +29,7 @@ module.exports =
     symlinks:true
     modules: [path.resolve(__dirname, 'node_modules')]
     alias:
-      libvis: path.resolve(__dirname, 'lib/libvis.js')
+      libvis: path.resolve(__dirname, 'src/libvis.coffee')
   devServer:
     contentBase: path.join(__dirname, 'dist'),
     compress: true

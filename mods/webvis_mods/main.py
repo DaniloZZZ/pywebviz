@@ -71,13 +71,14 @@ def develop(modname, back_src, front_src):
 def install(modname, back_src, front_src,
             post_cmd=None, pre_cmd=None
            ):
-    if pre_cmd:
-        print("Running pre install", post_cmd)
-        utils.run_cmd(pre_cmd.split())
     try:
         back_src, front_src = Path(back_src), Path(front_src)
         _process_py(modname, back_src, action=utils.copy)
         _process_js(modname, front_src, action=utils.copy)
+
+        if pre_cmd:
+            print("Running pre install", post_cmd)
+            utils.run_cmd(pre_cmd.split())
 
         ## Build the front and copy dist
         print(f"Building the app from {web_src}...")

@@ -31,19 +31,30 @@ get_var_type = (type, val)->
 
 export choosePresenter = (type, val)->
   type = get_var_type type, val
+  console.log "Choosing presenter for '#{type}' value", val, "from", Modules
   presenter = Modules[type]
   if presenter
     return presenter
   else
     return ({data})->L.div 0,JSON.stringify data
 
+export LibvisModule = ({object, addr})->
+  if object is undefined
+    type= 'Raw'
+    value = null
+  else
+    {type, value} =  object
+
+  Pres = choosePresenter type, value
+  L.div className:'libvismod',
+    L_ Pres, data:value, addr:addr
+
 export default Vis = (props)->
   {variable, name, onNameChange} = props
-  console.log "Choosing presenter for '#{name}' variable", variable, "from", Modules
-  Pres = choosePresenter variable.type, variable.value
   L.div className:'vis',
     L.div className:'title',"Name: ",
     L_ Input,
       value:name
       onChange:onNameChange
-    L_ Pres, data:variable.value, addr:props.addr
+    L.div className:'container',
+      LibvisModule object:variable, addr:props.addr
