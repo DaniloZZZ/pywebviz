@@ -8,14 +8,10 @@ import LeClient from 'legimens'
 
 import Notebook from './modules/notebook.coffee'
 import {LibvisModule} from './modules/visualiser.coffee'
-import WSwrap from './modules/ws.coffee'
 import ResponsiveGL from './modules/ResponsiveStorageGrid.coffee'
 import Widget from './modules/Widget.coffee'
 import TopBar from './modules/topbar.coffee'
-import Input from './modules/UIcomponents/input.coffee'
-import Button from './modules/UIcomponents/button.coffee'
 
-import FuncChainer from './modules/helpers/funchainer.coffee'
 import LocalStorage from './modules/helpers/localStorage.coffee'
 import {get_nb_name} from './modules/helpers/argparser.coffee'
 import {parse_message} from './Data/interface.coffee'
@@ -47,7 +43,7 @@ export default class App extends React.Component
     @set_widgets @state.widgets
 
   addWidget: ()=>
-    new_widget = name:'New'
+    new_widget = name:'variable name'
     new_id = Date.now()
     @state.widgets[new_id] = new_widget
     @set_widgets @state.widgets
