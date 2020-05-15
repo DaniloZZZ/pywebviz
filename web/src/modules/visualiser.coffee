@@ -48,13 +48,3 @@ export LibvisModule = ({object, addr})->
   Pres = choosePresenter type, value
   L.div className:'libvismod',
     L_ Pres, data:value, addr:addr
-
-export default Vis = (props)->
-  {variable, name, onNameChange} = props
-  L.div className:'vis',
-    L.div className:'title',"Name: ",
-    L_ Input,
-      value:name
-      onChange:onNameChange
-    L.div className:'container',
-      LibvisModule object:variable, addr:props.addr

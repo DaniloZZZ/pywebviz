@@ -7,7 +7,7 @@ import {Responsive, WidthProvider} from 'react-grid-layout'
 import LeClient from 'legimens'
 
 import Notebook from './modules/notebook.coffee'
-import Visualiser from './modules/visualiser.coffee'
+import {LibvisModule} from './modules/visualiser.coffee'
 import WSwrap from './modules/ws.coffee'
 import ResponsiveGL from './modules/ResponsiveStorageGrid.coffee'
 import Widget from './modules/Widget.coffee'
@@ -57,15 +57,13 @@ export default class App extends React.Component
     delete @state.widgets[id]
     @set_widgets @state.widgets
 
-  _widget: (v, name, idx) =>
+  _widget: (var_, name, idx) =>
     Widget
       key: idx
-      onDelete:@deleteWidget idx
-      L_ Visualiser,
-        onNameChange:@nameChange idx
-        name: name
-        variable: v
-        addr: @state.addr
+      onDelete: @deleteWidget idx
+      onNameChange: @nameChange idx
+      name: name
+      LibvisModule object:var_, addr:@state.addr
 
   _get_widgets:(vars)=>
     nb = L.div key:'notebook', L_ Notebook, nb_name:get_nb_name()
@@ -102,5 +100,3 @@ export default class App extends React.Component
             if not vars
               return 'Loading...'
             @_grid vars
-
-
