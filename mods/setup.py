@@ -7,7 +7,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
         long_description = f.read()
 
 setup(
-    name='webvis_mods',
+    name='libvis_mods',
     version='0.1.8',
     license='MIT',
 
@@ -25,7 +25,7 @@ setup(
     keywords = ['tools', 'libvis', 'package manager', 'data', 'framework', 'visualization'],
 
     entry_points = {
-        'console_scripts':['webvis-mods=webvis_mods.cli:cli']
+        'console_scripts':['libvis-mods=libvis_mods.cli:cli']
     },
 
     long_description=long_description,

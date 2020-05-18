@@ -1,1 +1,1 @@
-Package manager for webvis modules
+Package manager for libvis modules
