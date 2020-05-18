@@ -1,4 +1,4 @@
-from webvis.modules.Base import BaseModule
+from libvis.modules.Base import BaseModule
 from .bottles import beer
 
 class Bir(BaseModule):
