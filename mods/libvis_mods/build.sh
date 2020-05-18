@@ -5,11 +5,11 @@
 cd $1
 
 if yarn -v; then
-    yarn
-    yarn build
+    echo "Using yarn version: $(yarn -v)"
+    yarn && yarn build
 elif npm -v; then
-    npm i
-    npm run build
+    echo "Using npm version: $(npm -v)"
+    npm i && npm run build
 else
     >&2 echo "You don't have neither yarn nor npm installed."
 fi
