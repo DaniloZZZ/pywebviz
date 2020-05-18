@@ -11,7 +11,7 @@ def test_setup(capsys):
         setup(
             name='spam',
             version='0',
-            packages = ['mocks']
+            packages = ['']
         )
         out, err = capsys.readouterr()
         assert 'FooBar' in  out
