@@ -1,4 +1,4 @@
-from webvis.modules.Base import BaseModule
+from libvis.modules.Base import BaseModule
 
 class Test(BaseModule):
     name="Test"

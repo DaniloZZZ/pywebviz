@@ -1,4 +1,0 @@
-include readme.md
-include webvis-mod.conf
-recursive-include packagedMod *
-prune packagedMod/.webvis_publish

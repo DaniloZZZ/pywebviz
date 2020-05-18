@@ -28,6 +28,8 @@ module.exports =
   resolve:
     symlinks:true
     modules: [path.resolve(__dirname, 'node_modules')]
+    alias:
+      libvis: path.resolve(__dirname, 'src/libvis.coffee')
   devServer:
     contentBase: path.join(__dirname, 'dist'),
     compress: true
@@ -54,6 +56,15 @@ module.exports =
         exclude: /node_modules/
       },
       {
+        test: /\.styl(us)?$/,
+        #exclude: /node_modules/
+        use: [
+          # this will apply to both plain `.scss` files
+          #AND `<style lang="stylus">` blocks in `.vue` files
+          'vue-style-loader',
+          'style-loader','css-loader','stylus-loader']
+      }
+      {
         test: /\.less$/,
         use: [{
           loader: 'style-loader' ,
@@ -64,9 +75,16 @@ module.exports =
         }],
       },
       {
+        test: /\.vue$/,
+        #exclude: /node_modules/
+        use: ['vue-loader'],
+      },
+      {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
+       {test: /\.(jpg|jpeg|png|woff|woff2|eot|ttf|svg)$/,loader: 'url-loader?limit=100000'}
+
 
     ]
   plugins: [

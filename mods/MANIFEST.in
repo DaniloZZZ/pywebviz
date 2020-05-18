@@ -1,4 +1,7 @@
-include webvis_mods/web/*
-recursive-include webvis_mods/web/src/ *
-recursive-include webvis_mods/project-templates *
-include webvis_mods/build.sh
+include libvis_mods/web/*
+recursive-include libvis_mods/tests/ *
+recursive-include libvis_mods/web/src/ *
+recursive-include libvis_mods/project-templates *
+include libvis_mods/build.sh
+prune **/.git
+prune **/node_modules

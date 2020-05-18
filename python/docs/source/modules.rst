@@ -1,7 +1,8 @@
-webvis
+libvis
 ======
 
 .. toctree::
    :maxdepth: 4
 
-   webvis
+.. automodule:: libvis
+    :members:
