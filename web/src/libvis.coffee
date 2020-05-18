@@ -1,7 +1,7 @@
 import LeClient from 'legimens'
 import L from 'react-dom-factories'
 import React, { Component } from 'react'
-export {LibvisModule as LibvisMod} from './modules/visualiser.coffee'
+export {LibvisModule as LibvisModule} from './modules/visualiser.coffee'
 L_ = React.createElement
 
 export Widget = ({refval, addr, children})=>
