@@ -53,7 +53,7 @@ export default Vis = (props)->
 
   render_dots = data.length < 30
 
-  L.div className:'container graph',
+  L.div className:'flex-col graph',
     L_ ResponsiveContainer,
       width:"100%"
       height:"100%"
@@ -71,5 +71,3 @@ export default Vis = (props)->
             animationDuration:500
             dot: render_dots
             dataKey:k
-
-
