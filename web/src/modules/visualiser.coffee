@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import L from 'react-dom-factories'
 L_ = React.createElement
 import Input from './UIcomponents/input.coffee'
-import LineGraph from './presenters/lineGraph_recharts.coffee'
-import MplD3 from './presenters/mpld3.coffee'
-import Image from './presenters/image.coffee'
+import ErrorBoundary from './error_boundary.coffee'
 import * as Modules from './presenters'
 import {installed} from './presenters'
 Object.assign( Modules, installed )
@@ -48,4 +46,5 @@ export LibvisModule = ({object, addr})->
   type = get_var_type type, value
   Pres = choosePresenter type, value
   L.div className:"libvismod vistype-#{type}",
-    L_ Pres, data:value, addr:addr
+    L_ ErrorBoundary, type:type,value:value,
+      L_ Pres, data:value, addr:addr

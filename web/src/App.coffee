@@ -75,7 +75,7 @@ export default class App extends React.Component
   _grid:(vars)->
     L_ ResponsiveGL,
       className:'grid'
-      draggableCancel:".container, input"
+      draggableCancel:".container, input, textarea"
       @_get_widgets vars
 
   render: ->
