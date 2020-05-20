@@ -37,10 +37,26 @@
 }
 .title label{
     margin-right:-5px;
+    &:hover {
+        position: relative;
+        top:-2px;
+    }
 }
 .title input{
     margin-right:-4px;
     font-family:monospace;
+}
+
+.title-hidden {
+    height:6px;
+    background-color:transparent;
+    border-bottom: 1px solid #e8e8e8;
+    cursor: move;
+
+}
+
+.title-hidden:hover{
+    background-color:blue
 }
 
 .frame {
