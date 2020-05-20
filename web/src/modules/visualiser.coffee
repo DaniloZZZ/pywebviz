@@ -31,12 +31,12 @@ get_var_type = (type, val)->
 
 export choosePresenter = (type, val)->
   type = get_var_type type, val
-  console.log "Choosing presenter for '#{type}' value", val, "from", Modules
+  console.log "Modules dict:", Modules
   presenter = Modules[type]
-  if presenter
-    return presenter
-  else
-    return ({data})->L.div 0,JSON.stringify data
+  if not presenter
+    presenter = Modules['Raw']
+  console.log "Using presenter #{presenter.constructor.name} for '#{type}' value:", val
+  return presenter
 
 export LibvisModule = ({object, addr})->
   if object is undefined

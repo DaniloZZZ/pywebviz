@@ -6,7 +6,7 @@ import LeClient from 'legimens'
 
 export wrapModuleWithLegimens = (Pres) => ({data, addr}) =>
   console.log 'wrapping pres', Pres
-  L.div className:'wrapper',
+  L.div className:'contents',
     L_ LeClient, addr:addr, refval:data,
       (variable, setattr) =>
         console.log "in wrapper of #{Pres} variable #{variable}"

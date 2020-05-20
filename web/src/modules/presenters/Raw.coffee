@@ -6,4 +6,4 @@ export default Vis = (props)->
   {data} = props
   if typeof data == 'object'
     data = JSON.stringify data
-  data
+  L.div style:margin: 8, data

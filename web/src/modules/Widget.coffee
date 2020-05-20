@@ -4,7 +4,7 @@ import L from 'react-dom-factories'
 L_ = React.createElement
 
 withDeleteButton = (onDelete, children)->
-  L.div className:'wrapper',
+  L.div className:'contents',
     L.div
       className:'delete-card'
       onClick:onDelete
@@ -12,7 +12,7 @@ withDeleteButton = (onDelete, children)->
     children
 
 withName = (name, onNameChange, children)->
-  L.div className:'wrapper',
+  L.div className:'contents',
     L.div className:'title',
       "Name: "
       L_ Input, value:name, onChange:onNameChange
@@ -23,5 +23,5 @@ export default Widget = (props, children)->
   L.div className:'widget', key:props.key,
     withDeleteButton onDelete,
       withName name, onNameChange,
-        L.div className:'container',
+        L.div className:'widget-contents',
           children
