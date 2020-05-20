@@ -14,7 +14,7 @@ withDeleteButton = (onDelete, children)->
 withName = (name, onNameChange, children)->
   L.div className:'contents',
     L.div className:'title',
-      "Name: "
+      L.label 0, "vis.vars."
       L_ Input, value:name, onChange:onNameChange
     children
 

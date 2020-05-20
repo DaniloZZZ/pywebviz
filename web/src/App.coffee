@@ -43,7 +43,7 @@ export default class App extends React.Component
     @set_widgets @state.widgets
 
   addWidget: ()=>
-    new_widget = name:'variable name'
+    new_widget = name:'fobar'
     new_id = Date.now()
     @state.widgets[new_id] = new_widget
     @set_widgets @state.widgets
