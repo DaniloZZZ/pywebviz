@@ -45,6 +45,7 @@ export LibvisModule = ({object, addr})->
   else
     {type, value} =  object
 
+  type = get_var_type type, value
   Pres = choosePresenter type, value
-  L.div className:'libvismod',
+  L.div className:"libvismod vistype-#{type}",
     L_ Pres, data:value, addr:addr

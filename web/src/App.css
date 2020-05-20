@@ -1,6 +1,7 @@
 body {
-    font-family:'Roboto', sans-serif;
+    font-family:'Open Sans', 'Roboto', sans-serif;
     background:#f8f8f8;
+    color: rgb(50,49,48);
 }
 
 iframe{
