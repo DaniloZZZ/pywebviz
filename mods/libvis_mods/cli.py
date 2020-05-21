@@ -67,7 +67,7 @@ def where(request):
     """ Prints locations of where modules are installed """
     if request == 'back':
         print(python_user_mods.absolute())
-    if request == 'front':
+    elif request == 'front':
         print(web_user_mods.absolute())
     else:
         print('back: {}'.format(python_user_mods))
