@@ -4,27 +4,31 @@ import libvis_mods
 
 from pathlib import Path
 
-mocks = Path(__file__).parent / 'mocks'
+def test_install():
+    global modules
+    mocks = Path(__file__).parent / 'mocks'
 
-pyfile, webfle = mocks/'module.py', mocks/'blah.coffee'
+    pyfile, webfle = mocks/'module.py', mocks/'blah.coffee'
 
-try:
-    libvis_mods.install('Test', pyfile, webfle)
-    modules = reload(modules)
+    try:
+        libvis_mods.install('Test', pyfile, webfle)
+        modules = reload(modules)
 
-    t = modules.Test()
-    t = None
-finally:
-    libvis_mods.uninstall('Test')
+        _ = modules.Test()
+    finally:
+        libvis_mods.uninstall('Test')
 
-try:
-    pyfile, webfle = mocks/'BirModule'/'back', mocks/'BirModule'/'front'
+    try:
+        pyfile, webfle = mocks/'BirModule'/'back', mocks/'BirModule'/'front'
 
-    libvis_mods.install('BirModule', pyfile, webfle)
-    modules = reload(modules)
+        libvis_mods.install('BirModule', pyfile, webfle)
+        modules = reload(modules)
 
-    m = modules.BirModule(count=5)
-    m.serial()
-    m = None
-finally:
-    libvis_mods.uninstall('BirModule')
+        m = modules.BirModule(count=5)
+        m.serial()
+        m = None
+    finally:
+        libvis_mods.uninstall('BirModule')
+
+if __name__ == '__main__':
+    test_install()
