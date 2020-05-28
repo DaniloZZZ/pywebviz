@@ -86,7 +86,10 @@ class ModHotReload(events.PatternMatchingEventHandler):
         Mod = getattr(self.parent, self.name)
         print("Module dict:", Mod.__dict__)
         with log.catch():
-            m = Mod.test_object()
+            if hasattr(Mod, "test_object"):
+                m = Mod.test_object()
+            else:
+                m = Mod()
             return m
             #print('Fix the module, save the file, libvis will reload it for you.')
 
