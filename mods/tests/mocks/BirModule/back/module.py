@@ -3,10 +3,20 @@ from .bottles import beer
 
 class Bir(BaseModule):
     name="BirModule"
-    def serial(self):
+    def __init__(self):
+        super().__init__()
+        self.count = 7
+        self.text = beer(self.count)
+
+    def vis_set(self, key, value):
+        super().vis_set(key, value) 
         try:
-            cnt = int(self.count)
+            rhymes = beer(int(value))
+            self.text = rhymes
+            self.count = int(value)
         except:
-            cnt = 5
-        rhymes = beer(cnt)
-        return rhymes
+            self.count = 0
+
+    def vis_get(self,name):
+        return self[name]
+
