@@ -16,6 +16,8 @@ def make_sure_path_exists(path):
     except OSError as exception:
         if exception.errno != errno.EEXIST:
             return False
+        else:
+            raise
     return True
 
 def only_required_kwargs_call(f, *args, **kwargs):
@@ -60,13 +62,11 @@ def copy(src, dest):
     run_cmd(['rsync','-ri', src, dest])
 
 def ln(src, dest):
-    print("ln -sf", src, dest)
-    if src.is_dir():
-        src = str(src) + str(os.sep)
-    try:
-        run_cmd(['ln','-s', src, dest])
-    except:
-        print("Failed to link,skipping")
+    print("ln -s", src, dest)
+    if dest.is_dir():
+        print('W: Link destination directory exists, removing.')
+        rm(dest)
+    run_cmd(['ln', '-s', src, dest])
 
 def write_to(s, dest):
     with open(dest, 'w+') as f:
