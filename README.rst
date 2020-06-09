@@ -44,9 +44,16 @@ Simple Feature list
 
 Usecase: machine learning
 
-- Watch learning rate
+- Watch **and change** learning rate
 - Watch Loss and accuracy
 - Watch output pictures on prediction
+- Display confusion matrix
+- Control experiments using simple buttons
+
+Advanced: 
+
+- Download data of widget
+- Filter data to download and send
 
 Feedback from ODS:
 
@@ -54,6 +61,8 @@ Feedback from ODS:
   solved with custom X axis.
 - Fast pictures:
   Solved using legimens module with dict of pictures
+- Native support for confusion matrix:
+  Solved by bokeh/matplotlib. 
 - Storing format of data: Solved by caching utility in front.
   Also solvable by hook in legimens send
 - Control experiments in browser: Solved by
