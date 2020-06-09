@@ -37,3 +37,27 @@ The values are updated dynamically, a separate thread is created that checks the
 
 values can be matplotlib figures, 1-d and 2-d arrays,
 and even bokeh is supported!
+
+
+Simple Feature list
+-------------------
+
+Usecase: machine learning
+
+- Watch learning rate
+- Watch Loss and accuracy
+- Watch output pictures on prediction
+
+Feedback from ODS:
+
+- Graph val accuracy vs train accuracy:
+  solved with custom X axis.
+- Fast pictures:
+  Solved using legimens module with dict of pictures
+- Storing format of data: Solved by caching utility in front.
+  Also solvable by hook in legimens send
+- Control experiments in browser: Solved by
+  button and lock controls.
+- Filter data: For God's sake use `grep`. But what if need to filter by 'greater than'?
+- Criteria for outliers: Solved by returning nothing in serializer.
+- Large files: Use a dedicated trio coro for every object.
