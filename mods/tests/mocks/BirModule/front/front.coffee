@@ -3,7 +3,7 @@ import './style.css'
 
 export default Vis = ({data, setattr}) =>
   console.log 'data', data
-  if data?.count is undefined
+  if data?.text is undefined
     return <div> loading...</div>
   data = data.text.split('\n')
   return ( <div className="beer">
