@@ -26,13 +26,20 @@ def serialize_to_vis(value):
     value, type_= preprocess_value(value)
     return {'value': value, 'type': type_}
 
+def infer_type(val):
+    if isinstance(val, VisVars):
+        type_ = type(val).name
+    else :
+        type_ = type(val).__name__
+    return type_
+
 def preprocess_value(val):
+    if hasattr(val, 'vis_repr'):
+        ret, type_ = val.vis_repr()
+        return ret, type_
 
     if type(val) in IFC.keys():
-        if isinstance(val, VisVars):
-            type_ = type(val).name
-        else :
-            type_ = type(val).__name__
+        type_ = infer_type(val)
         ret = IFC[type(val)](val)
     elif is_bokeh(val):
         ret = bokeh.embed.file_html(val, bokeh.resources.Resources('cdn'))
