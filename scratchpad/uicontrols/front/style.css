@@ -47,6 +47,7 @@
 }
 
 .slider-group {
+    margin: .5em;
     vertical-align: middle;
     position: relative;
 }
