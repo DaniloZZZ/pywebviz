@@ -14,5 +14,7 @@ jobs:
     - name: build docs
       run: |
           python3 python/setup.py develop --user
-          cd python/docs
+          cd python
+          ./setup-docs.sh
+          cd docs
           make html
