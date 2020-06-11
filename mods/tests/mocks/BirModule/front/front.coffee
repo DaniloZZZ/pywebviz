@@ -2,7 +2,10 @@ import React from 'react'
 import './style.css'
 
 export default Vis = ({data, setattr}) =>
-  data = data.split('\n')
+  console.log 'data', data
+  if data?.text is undefined
+    return <div> loading...</div>
+  data = data.text.split('\n')
   return ( <div className="beer">
     <h2>Beer song!</h2>
     <div className='input'>
