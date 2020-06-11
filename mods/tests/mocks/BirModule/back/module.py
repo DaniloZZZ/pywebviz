@@ -3,9 +3,9 @@ from .bottles import beer
 
 class Bir(BaseModule):
     name="BirModule"
-    def __init__(self):
+    def __init__(self, count):
         super().__init__()
-        self.text = beer(3)
+        self.text = beer(count)
 
     def vis_set(self, key, value):
         super().vis_set(key, value) # same as self[key] = value

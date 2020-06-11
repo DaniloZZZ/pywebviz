@@ -3,10 +3,10 @@ import libvis.modules.installed as modules
 import libvis_mods
 
 from pathlib import Path
+mocks = Path(__file__).parent / 'mocks'
 
-def test_install():
+def test_install_files():
     global modules
-    mocks = Path(__file__).parent / 'mocks'
 
     pyfile, webfle = mocks/'module.py', mocks/'blah.coffee'
 
@@ -18,6 +18,8 @@ def test_install():
     finally:
         libvis_mods.uninstall('Test')
 
+def test_install_dirs():
+    global modules
     try:
         pyfile, webfle = mocks/'BirModule'/'back', mocks/'BirModule'/'front'
 
@@ -25,10 +27,9 @@ def test_install():
         modules = reload(modules)
 
         m = modules.BirModule(count=5)
-        m.serial()
-        m = None
     finally:
         libvis_mods.uninstall('BirModule')
 
 if __name__ == '__main__':
-    test_install()
+    test_install_dirs()
+    test_install_files()
