@@ -42,11 +42,21 @@ export default class App extends React.Component
     @state.widgets[id].name = name
     @set_widgets @state.widgets
 
-  addWidget: ()=>
-    new_widget = name:'fobar'
+  addWidget: ({name})=>
+    new_widget = name: (name or 'foobar')
     new_id = Date.now()
     @state.widgets[new_id] = new_widget
     @set_widgets @state.widgets
+
+  add_widgets_from: (vars) =>
+    current_widgets_names = []
+    for id, w of @state.widgets
+      current_widgets_names.push w.name
+
+    for name, variable of vars
+      if name not in current_widgets_names
+        @addWidget {name}
+
 
   deleteWidget: (id)->()=>
     console.log "Deleting widget #{id}"
@@ -62,8 +72,8 @@ export default class App extends React.Component
       LibvisModule object:var_, addr:@state.addr
 
   _get_widgets:(vars)=>
-    nb = L.div key:'notebook', L_ Notebook, nb_name:get_nb_name()
-    widgets = [nb]
+    #nb = L.div key:'notebook', L_ Notebook, nb_name:get_nb_name()
+    widgets = []
 
     for idx, params of @state.widgets
       {name} = params
@@ -95,4 +105,5 @@ export default class App extends React.Component
             console.log 'vars', vars
             if not vars
               return 'Loading...'
+            @add_widgets_from vars
             @_grid vars
