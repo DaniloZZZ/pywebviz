@@ -11,6 +11,7 @@ Release v\ |version|
 .. toctree::
    :maxdepth: 2
 
+   simple_story
    examples/notebooks/test
    legimens/index
 
