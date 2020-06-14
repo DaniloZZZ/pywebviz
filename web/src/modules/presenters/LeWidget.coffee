@@ -5,11 +5,11 @@ L_ = React.createElement
 import LeClient from 'legimens'
 
 export wrapModuleWithLegimens = (Pres) => ({data, addr}) =>
-  console.log 'wrapping pres', Pres
+  console.debug 'wrapping pres', Pres.constructor.name
   L.div className:'contents',
     L_ LeClient, addr:addr, refval:data,
       (variable, setattr) =>
-        console.log "in wrapper of #{Pres} variable #{variable}"
+        console.debug "received updates #{JSON.stringify variable}"
         if variable is undefined
           variable = value:'Loading', type:'raw'
           return "Loading"
@@ -17,5 +17,6 @@ export wrapModuleWithLegimens = (Pres) => ({data, addr}) =>
           try
             variable = JSON.parse variable
           catch
+        console.debug("Returning to presenter", variable)
         L_ Pres, data:variable, addr:addr, setattr:setattr
 

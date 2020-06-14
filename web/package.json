@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "d3": "^5.15.0",
-    "legimens": "^1.0.8",
+    "html2canvas": "^1.0.0-rc.5",
+    "legimens": "file:../../legimens/web/",
     "react": "^16.8.6",
     "react-dom": "^16.0.0",
     "react-dom-factories": "^1.0.2",

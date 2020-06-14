@@ -30,3 +30,24 @@ export default Widget = (props, children)->
       L_ withName, name:name, onNameChange:onNameChange,
         L.div className:'widget-contents',
           children
+
+###
+class Widget_ extends Component
+  constructor:(props)->
+    super(props)
+    @self = React.createRef()
+
+  
+  componentDidMount: ()->
+    html2canvas(@self.current).then (canvas)->
+
+      document.body.appendChild(canvas)
+
+  render:->
+    {variable, name, onNameChange, onDelete} = @props
+    L.div ref:@self, className:'widget', key:@props.key,
+      withDeleteButton onDelete,
+        L_ withName, name:name, onNameChange:onNameChange,
+          L.div className:'widget-contents',
+            @props.children
+###

@@ -59,7 +59,7 @@ export default class App extends React.Component
       onDelete: @deleteWidget idx
       onNameChange: @nameChange idx
       name: name
-      LibvisModule object:var_, addr:@state.addr
+      L_ LibvisModule, object:var_, addr:@state.addr
 
   _get_widgets:(vars)=>
     nb = L.div key:'notebook', L_ Notebook, nb_name:get_nb_name()

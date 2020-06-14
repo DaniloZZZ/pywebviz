@@ -3,6 +3,7 @@ import L from 'react-dom-factories'
 L_ = React.createElement
 import Input from './UIcomponents/input.coffee'
 import ErrorBoundary from './error_boundary.coffee'
+import html2canvas from 'html2canvas'
 import * as Modules from './presenters'
 import {installed} from './presenters'
 Object.assign( Modules, installed )
@@ -28,7 +29,6 @@ get_var_type = (type, val)->
   return type
 
 export choosePresenter = (type, val)->
-  type = get_var_type type, val
   console.log "Modules dict:", Modules
   presenter = Modules[type]
   if not presenter
@@ -43,8 +43,18 @@ export LibvisModule = ({object, addr})->
   else
     {type, value} =  object
 
+  self = React.createRef()
+  React.useEffect( () =>
+    func = ()=>
+      html2canvas(self.current).then (canvas)->
+        document.body.appendChild(canvas)
+    setTimeout func, 1000
+    return
+  )
+
+
   type = get_var_type type, value
   Pres = choosePresenter type, value
-  L.div className:"libvismod vistype-#{type}",
+  L.div ref:self, className:"libvismod vistype-#{type}",
     L_ ErrorBoundary, type:type,value:value,
       L_ Pres, data:value, addr:addr
