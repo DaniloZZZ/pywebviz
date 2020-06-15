@@ -44,7 +44,7 @@ class Vis():
             params = '?p='+self.nb_name
         else: params = ''
         webbrowser.open_new_tab(
-            f"localhost:{self.vis_port}/{params}"
+            f"http://localhost:{self.vis_port}/{params}"
         )
 
     def stop(self):
