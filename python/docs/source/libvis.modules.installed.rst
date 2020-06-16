@@ -7,12 +7,12 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   libvis.modules.installed.VisVar
    libvis.modules.installed.WebPage
    libvis.modules.installed.google_charts
    libvis.modules.installed.graph
-   libvis.modules.installed.meta_module
+   libvis.modules.installed.testmet
    libvis.modules.installed.torchTensor
+   libvis.modules.installed.uicontrols
 
 Module contents
 ---------------

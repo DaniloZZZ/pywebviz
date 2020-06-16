@@ -1,6 +1,14 @@
 libvis.modules.installed.google\_charts package
 ===============================================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   libvis.modules.installed.google_charts.back
+
 Submodules
 ----------
 
