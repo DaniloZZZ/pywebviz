@@ -14,7 +14,7 @@ def make_sure_path_exists(path):
         os.makedirs(path)
         log.debug("Created directory at: {}", path)
     except OSError as exception:
-        if exception.errno != errno.EEXIST:
+        if exception.errno  == errno.EEXIST:
             return False
         else:
             raise
