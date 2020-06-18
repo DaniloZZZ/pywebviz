@@ -37,7 +37,7 @@ def test_init_instal(tmp_path):
         print(libvis_mods.installed())
 
         # 3.
-        v = libvis.Vis(ws_port=7700, vis_port=7000)
+        v = libvis.Vis(ws_port=7700, vis_port=7000, debug=True)
         m = modules.TestMod(foo='bar')
         assert m.serial()
 
