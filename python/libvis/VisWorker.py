@@ -14,6 +14,7 @@ class Vis():
     def __init__(self, ws_port = 7700, vis_port=7000
                  , nb_name=None
                  , debug=False
+                 , allow_remote=False
                 ):
 
         self.ws_port = ws_port
@@ -21,15 +22,17 @@ class Vis():
 
         if debug: log_level = 'DEBUG'
         else: log_level = 'ERROR'
-        self.configure_logging(log_level)
         self.nb_name = nb_name
 
-        self.app = App(addr='localhost', port=ws_port)
+        addr = '0.0.0.0' if allow_remote else 'localhost' 
+
+        self.app = App(addr=addr, port=ws_port)
         self.app.vars = VisVars()
         self.app._register_child(self.app.vars)
         self.app.serialize_value = serialize_to_vis
         self.vars = self.app.vars
 
+        self.configure_logging(log_level)
         self.start()
 
 
@@ -40,7 +43,7 @@ class Vis():
 
         1. Starts an http server with dashboard app
             on `vis_port`.
-        2. Starts the legimens app using `vis.app.run()`.
+        2. Starts the legimens app using `Vis.app.run()`.
 
 
         Raises:
@@ -48,12 +51,21 @@ class Vis():
                 http or websocket server in legimens.
 
         """
-        self.http_server = create_http(port=self.vis_port)
-        if self.http_server is None:
-            raise Exception("http server not initialized. Recreate Vis instance.")
+        try:
+            self.start_http(self.vis_port)
+        except Exception as e:
+            print(f"Webapp HTTP server failed to start at port {self.vis_port}."
+                  " To start manually: `Vis.start_http(port)`."
+                  #"Error was:", e
+                  , file=sys.stderr)
+
+        self.app.run()
+
+    def start_http(self, port=None):
+        if port is None: port=self.vis_port
+        self.http_server = create_http(port=port)
         self.phttp = threaded( self.http_server.serve_forever, name='http')
         print(f'Started libvis app at http://localhost:{self.vis_port}')
-        self.app.run()
 
     def use(type_, serializer):
         add_serializer(type_, serializer)
@@ -91,10 +103,10 @@ class Vis():
             print('Warning: no http server to stop.')
 
     def stop(self):
-        print("Stopping app server...", end="", flush=True)
+        print("Stopping webapp http server: `Vis.stop_http()`...", end="", flush=True)
         self.stop_http()
         print(" OK")
-        print("Stopping websocket server...", end="", flush=True)
+        print("Stopping websocket server: `Vis.app.stop()`...", end="", flush=True)
         self.app.stop()
         print(" OK")
 
