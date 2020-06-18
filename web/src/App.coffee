@@ -32,6 +32,8 @@ export default class App extends React.Component
   constructor:->
     super()
     @state.widgets = visStorage.get('widgets') or {}
+    hostname = window.location.hostname
+    @state.addr = "ws://#{hostname}:7700"
 
   set_widgets:(widgets)->
     @setState {widgets}
