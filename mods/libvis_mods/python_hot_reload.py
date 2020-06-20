@@ -33,6 +33,8 @@ class ModHotReload(events.PatternMatchingEventHandler):
         self.modname = modname
         modules = importlib.import_module('libvis.modules.installed')
         libvis = importlib.import_module('libvis')
+        interface = libvis.interface
+        self._interface = interface
 
         # We may already have libvis modules in cache, 
         # so better reload them, modules/installed/__init__.py should 
@@ -86,10 +88,18 @@ class ModHotReload(events.PatternMatchingEventHandler):
         Mod = getattr(self.parent, self.name)
         print("Module dict:", Mod.__dict__)
         with log.catch():
+
+            # Initialize test module
             if hasattr(Mod, "test_object"):
                 m = Mod.test_object()
             else:
                 m = Mod()
+
+            # If module provides a serializer, register it
+            if hasattr(Mod, 'to_type_and_dict'):
+                serializer = Mod.to_type_and_dict
+                self._interface.add_vis_pair(type(m), serializer)
+
             return m
             #print('Fix the module, save the file, libvis will reload it for you.')
 
