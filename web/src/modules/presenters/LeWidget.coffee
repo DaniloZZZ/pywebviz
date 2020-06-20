@@ -5,8 +5,12 @@ L_ = React.createElement
 import LeClient from 'legimens'
 
 export wrapModuleWithLegimens = (Pres) => ({data, addr}) =>
-  console.log 'wrapping pres', Pres
+  console.log 'In wrapped module:', data, addr
+  variable = data
+  setattr = null
   L.div className:'contents',
+    L_ Pres, data:variable, addr:addr, setattr:setattr
+    '''
     L_ LeClient, addr:addr, refval:data,
       (variable, setattr) =>
         console.log "in wrapper of #{Pres} variable #{variable}"
@@ -18,4 +22,5 @@ export wrapModuleWithLegimens = (Pres) => ({data, addr}) =>
             variable = JSON.parse variable
           catch
         L_ Pres, data:variable, addr:addr, setattr:setattr
+        '''
 
