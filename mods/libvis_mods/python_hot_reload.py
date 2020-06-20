@@ -1,3 +1,4 @@
+
 from importlib import reload
 import time
 import importlib
@@ -59,7 +60,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
         self.parent = importlib.import_module(parent_name)
         self.name = name
 
-        self.vis = libvis.Vis()
+        self.vis = libvis.Vis(debug=True)
         self.test_data = {}
         self.vis.start()
 
@@ -99,6 +100,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
             if hasattr(Mod, 'to_type_and_dict'):
                 serializer = Mod.to_type_and_dict
                 self._interface.add_vis_pair(type(m), serializer)
+                log.info("Added interface for type {}", type(m))
 
             return m
             #print('Fix the module, save the file, libvis will reload it for you.')
