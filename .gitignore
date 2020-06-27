@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+**/node_modules/
+**/__pycache__/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -106,3 +108,4 @@ warehouse
 python/data/
 web/src/modules/presenters/installed
 python/libvis/modules/installed
+scratchpad
