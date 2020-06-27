@@ -59,7 +59,10 @@ class Vis():
                   #"Error was:", e
                   , file=sys.stderr)
 
-        self.app.run()
+        if not self.app._running:
+            self.app.run()
+        else:
+            print("Legimens app is already running, what are you doing? To stop: `Vis.stop()`")
 
     def start_http(self, port=None):
         if port is None: port=self.vis_port
