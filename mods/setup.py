@@ -3,12 +3,12 @@ from setuptools import setup, find_packages
 
 # read the contents of your README file
 this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+with open(path.join(this_directory, 'README.rst'), encoding='utf-8') as f:
         long_description = f.read()
 
 setup(
     name='libvis_mods',
-    version='0.1.9',
+    version='0.1.10',
     license='MIT',
 
     packages=find_packages(),
@@ -32,7 +32,7 @@ setup(
     url='https://github.com/libvis',
     description='cli tool to manage libivs modules',
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type='text/x-rst',
     keywords = ['tools', 'libvis', 'package manager', 'data', 'framework', 'visualization'],
 
 )
