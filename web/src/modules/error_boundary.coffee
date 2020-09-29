@@ -5,16 +5,16 @@ L_ = React.createElement
 export default class ErrorBoundary extends Component
   constructor:(props)->
     super(props)
-    @state = error:{}
+    @state = error:null
 
   componentDidCatch:(error, errorInfo)->
     e = error:error, info:errorInfo
-    console.log e
+    console.log 'error boundary catched:', e
     @setState error: error:error, info:errorInfo
 
   render:()->
-    console.log @state.error
-    if @state.error.error
+    console.log @state.error if @state?.error
+    if @state.error?.error
       L.div className:'error-module',
         L.span  0, 'Error:'
         L.span className:'error-message',

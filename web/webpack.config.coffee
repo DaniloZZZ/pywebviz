@@ -27,9 +27,12 @@ module.exports =
     publicPath: '/'
   resolve:
     symlinks:true
-    modules: [path.resolve(__dirname, 'node_modules')]
+    modules: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules') ]
     alias:
       libvis: path.resolve(__dirname, 'src/libvis.coffee')
+      components: path.resolve(__dirname, 'src/modules/UIcomponents')
+    mainFiles: ['index', 'index.coffee']
+  devtool: 'inline-module-source-map'
   devServer:
     contentBase: path.join(__dirname, 'dist'),
     compress: true
@@ -51,7 +54,12 @@ module.exports =
             options:
               presets: ['@babel/preset-env', '@babel/preset-react'],
           }
-          'coffee-loader'
+          {
+            loader: 'coffee-loader'
+            options: {
+              sourceMap: true,
+            }
+          }
         ],
         exclude: /node_modules/
       },
