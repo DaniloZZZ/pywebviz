@@ -59,6 +59,3 @@ export default Vis = (props)->
             parent: border: '1px solid #ccc'
           data: data
 
-
-
-

@@ -77,7 +77,7 @@ export default Vis = (props)->
   current_color = -1
 
   L.div className:'flex-col graph',
-    console.log 'chart data', data, domainLabel
+    console.debug 'chart data', data, domainLabel
     L_ ResponsiveContainer,
       width:"100%"
       height:"100%"

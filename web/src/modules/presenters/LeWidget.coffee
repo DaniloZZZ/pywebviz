@@ -6,20 +6,14 @@ import useLegimens from 'legimens'
 
 export wrapModuleWithLegimens = (Pres) => ({data, addr}) =>
   {data, status, respond} = useLegimens {addr, ref:data}
-  data
   variable=data
   setattr=respond
-  console.log "in wrapper of #{Pres} variable #{variable}"
-  console.log 'wrapping pres', Pres
+  console.debug "in wrapper of variable", variable
   if variable is undefined
     variable = value:'Loading', type:'raw'
     content = "Loading"
   else
-    try
-      variable = JSON.parse variable
-    catch
-      content = "data error"
+    content = L_ Pres, data:variable, addr:addr, setattr:setattr
 
-  L.div className:'contents',
-    L_ Pres, data:variable, addr:addr, setattr:setattr
+  L.div className:'contents', content
 

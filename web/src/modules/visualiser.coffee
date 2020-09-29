@@ -29,11 +29,11 @@ get_var_type = (type, val)->
 
 export choosePresenter = (type, val)->
   type = get_var_type type, val
-  console.log "Modules dict:", Modules
+  console.debug "Modules dict:", Modules
   presenter = Modules[type]
   if not presenter
     presenter = Modules['Raw']
-  console.log "Using presenter #{presenter.constructor.name} for '#{type}' value:", val
+  console.debug "Using presenter #{presenter.constructor.name} for '#{type}' value:", val
   return presenter
 
 export LibvisModule = ({object, addr})->
