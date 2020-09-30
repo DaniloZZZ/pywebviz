@@ -15,7 +15,7 @@ export default topbar=({addr, addWidget, addrChange, connected})=>
         L_ Input,
           value: addr
           onChange: addrChange
-        L.span className:'', L_ statusBadge, isConnected:connected
+        L_ statusBadge, isConnected:connected
       L_ Button,
         className: 'add-widget'
         text: 'Add widget'
@@ -32,11 +32,11 @@ statusBadge = ({isConnected}) ->
     L.span
       className:'popup'
       style:
-        maxWidth: if displayHover then 200 else 0
-        maxHeight: if displayHover then 100 else 0
-        opacity: if displayHover then 1 else 0.2
+        maxWidth: if displayHover then 200 else 100
+        maxHeight: if displayHover then 130 else 0
+        opacity: if displayHover then .9 else 0.0
         transitionDuration: '150ms'
         transitionProperty: 'max-width max-height opacity'
         overflow: 'hidden'
-      if isConnected then 'Connected!' else 'Disconnected! Start Libvis Websocket server to display your variables'
+      if isConnected then 'Connected!' else 'Disconnected! If Libvis Websocket server is already running, try reloading the page. Also, make sure you use the same ws_address as the server.'
 

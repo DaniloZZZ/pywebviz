@@ -9,6 +9,7 @@ Object.assign( Modules, installed )
 console.log(Modules)
 
 get_var_type = (type, val)->
+  console.log 'in get_var_type', type
   if type=='mpl'
     return 'MplD3'
   if type=='img'
@@ -29,11 +30,11 @@ get_var_type = (type, val)->
 
 export choosePresenter = (type, val)->
   type = get_var_type type, val
-  console.debug "Modules dict:", Modules
+  #console.debug "Modules dict:", Modules
   presenter = Modules[type]
   if not presenter
     presenter = Modules['Raw']
-  console.debug "Using presenter #{presenter.constructor.name} for '#{type}' value:", val
+  console.debug "Using presenter #{presenter.constructor.name} for '#{type}'"
   return presenter
 
 export LibvisModule = ({object, addr})->
@@ -43,7 +44,6 @@ export LibvisModule = ({object, addr})->
   else
     {type, value} =  object
 
-  type = get_var_type type, value
   Pres = choosePresenter type, value
   L.div className:"libvismod vistype-#{type}",
     L_ ErrorBoundary, type:type,value:value,

@@ -8,7 +8,7 @@ export wrapModuleWithLegimens = (Pres) => ({data, addr}) =>
   {data, status, respond} = useLegimens {addr, ref:data}
   variable=data
   setattr=respond
-  console.debug "in wrapper of variable", variable
+  #console.debug "in wrapper of variable", variable
   if variable is undefined
     variable = value:'Loading', type:'raw'
     content = "Loading"
