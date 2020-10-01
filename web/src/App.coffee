@@ -86,7 +86,7 @@ export default App = (props) =>
   _grid=(vars)->
     L_ ResponsiveGL,
       className:'grid'
-      draggableCancel:".container, input, textarea"
+      draggableCancel:".container, input, textarea, .nodrag"
       _get_widgets vars
 
   console.log "****************"

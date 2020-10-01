@@ -9,7 +9,7 @@ Object.assign( Modules, installed )
 console.log(Modules)
 
 get_var_type = (type, val)->
-  console.log 'in get_var_type', type
+  #console.log 'in get_var_type', type
   if type=='mpl'
     return 'MplD3'
   if type=='img'

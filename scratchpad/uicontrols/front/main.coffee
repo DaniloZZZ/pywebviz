@@ -6,7 +6,7 @@ button = ({data, setattr}) =>
     console.debug 'down'
     setattr 'depressed', true
   <div className="uicontrols-presenter">
-    <button className="button"
+    <button className="button nodrag"
       onMouseDown={on_press}
       onMouseUp={()->setattr 'depressed', false}
       >{data.label}</button>
@@ -14,6 +14,8 @@ button = ({data, setattr}) =>
 
 
 slider = ({data, setattr}) =>
+  wheelstep = 0.02 * (data.max-data.min)
+  console.log 'wheelstep', wheelstep
   <div className="uicontrols-presenter">
     <div className="slider-group">
       <input type='range' className="slider"
@@ -21,6 +23,9 @@ slider = ({data, setattr}) =>
         max={data.max}
         value={data.value}
         onChange={(e)->setattr 'value', e.target.value}
+        onWheel={(e)->
+          console.log 'wheel ev', e.deltaY
+          setattr 'value', Math.sign(e.deltaY)*wheelstep + Number(data.value)}
         />
       <label>{data.value}</label>
     </div>
@@ -31,6 +36,7 @@ modules =
   slider: slider
 
 export default Presenter = ({data, setattr}) =>
+  console.log 'Data in uicontrols', data
   if data is undefined
     return "Loading.."
   if data.type is undefined

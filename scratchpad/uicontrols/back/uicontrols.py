@@ -38,7 +38,6 @@ class Slider(BaseModule):
     def vis_set(self, key, value):
         if key == 'value':
             self.on_change(value)
-        self.depressed = value
 
     def vis_get(self, key):
         tv = serialize_to_vis(self[key])

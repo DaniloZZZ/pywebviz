@@ -79,8 +79,8 @@ export default Vis = (props)->
   L.div className:'flex-col graph',
     #console.debug 'chart data', data, domainLabel
     L_ ResponsiveContainer,
-      width:"100%"
-      height:"100%"
+      width:"99%"
+      height:"97%" # Magic value: sometimes 100% triggers overflow
       L_ LineChart,
         data: data
         margin: {top: 2, right: 8, left: -20, bottom: 2}

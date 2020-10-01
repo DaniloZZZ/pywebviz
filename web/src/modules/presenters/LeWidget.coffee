@@ -9,6 +9,8 @@ export wrapModuleWithLegimens = (Pres) => ({data, addr}) =>
   variable=data
   setattr=respond
   #console.debug "in wrapper of variable", variable
+  setattr = (key, value) ->
+    respond JSON.stringify [key]:value
   if variable is undefined
     variable = value:'Loading', type:'raw'
     content = "Loading"
