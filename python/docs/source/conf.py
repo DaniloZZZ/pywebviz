@@ -63,7 +63,9 @@ html_theme_options = {
     'logo': 'logo.png',
     'github_user': 'libvis',
     'github_repo': 'python-libvis',
-    'head_font_family': "'Libre Baskerville', 'Garamond', 'Georgia', serif"
+    'head_font_family': "'Libre Baskerville', 'Garamond', 'Georgia', serif",
+    'page_width': '900px',
+    'sidebar_width': '250px',
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
