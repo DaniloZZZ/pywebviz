@@ -12,7 +12,6 @@ libvis.modules.installed.WebPage.back module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

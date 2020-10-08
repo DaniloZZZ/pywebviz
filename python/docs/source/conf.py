@@ -38,6 +38,7 @@ copyright = u'Copyright 2016 - {0} {1}'.format(date.today().year, author)
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
+    'sphinx.ext.napoleon',
     'nbsphinx',
     'sphinx.ext.mathjax',
 ]
@@ -57,6 +58,12 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+html_theme_options = {
+    'logo': 'logo.png',
+    'github_user': 'libvis',
+    'github_repo': 'python-libvis',
+    'head_font_family': "'Libre Baskerville', 'Garamond', 'Georgia', serif"
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

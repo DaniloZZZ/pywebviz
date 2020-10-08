@@ -20,7 +20,6 @@ libvis.helpers.threaded module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 
