@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&family=Open+Sans&display=swap');
 
+h1 {margin-top: 72px; 
+    border-bottom: 6px solid #b503b7;
+    border-bottom-left-radius: 10px;
+}
 
 .method, .attribute {
     margin: 1em 0em;

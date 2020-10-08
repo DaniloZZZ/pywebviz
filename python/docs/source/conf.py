@@ -59,6 +59,7 @@ exclude_patterns = []
 #
 html_theme = 'alabaster'
 html_theme_options = {
+    'fixed_sidebar': True,
     'logo': 'logo.png',
     'github_user': 'libvis',
     'github_repo': 'python-libvis',

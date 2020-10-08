@@ -79,7 +79,7 @@ class Image(BaseModule):
         def f(z):
             k = 3
             return (z**k - 1)/(z**k + 1 + 4j)
-        N = 1200
+        N = 400
         x, y = np.meshgrid(np.linspace(-2, 2, N), np.linspace(-2, 2, N))
         z = f(x + 1j*y)
         scale = lambda x: np.interp(x, (x.min(), x.max()), (0, 1))
