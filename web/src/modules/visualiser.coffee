@@ -3,17 +3,18 @@ import L from 'react-dom-factories'
 L_ = React.createElement
 import Input from './UIcomponents/input.coffee'
 import ErrorBoundary from './error_boundary.coffee'
-import * as Modules from './presenters'
-import {installed} from './presenters'
-Object.assign( Modules, installed )
+import * as Modules_def from './presenters'
+import { installed } from './presenters'
+
+Modules = { Modules_def..., installed... }
 console.log(Modules)
 
 get_var_type = (type, val)->
   #console.log 'in get_var_type', type
   if type=='mpl'
     return 'MplD3'
-  if type=='img'
-    return 'Image'
+  if type=='_img'
+    return 'sys_Image'
   if val is null
     return 'Raw'
   try

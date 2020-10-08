@@ -1,5 +1,5 @@
 export {default as LineGraph} from './lineGraph_recharts.coffee'
-export {default as Image} from './Image.coffee'
+export {default as sys_Image} from './sys_Image.coffee'
 export {default as MplD3} from './mpld3.coffee'
 export {default as Raw} from './Raw.coffee'
 
