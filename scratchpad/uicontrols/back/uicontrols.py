@@ -37,7 +37,9 @@ class Slider(BaseModule):
 
     def vis_set(self, key, value):
         if key == 'value':
-            self.on_change(value)
+            slider_value = float(value)
+            self.on_change(slider_value)
+            self.value = slider_value
 
     def vis_get(self, key):
         tv = serialize_to_vis(self[key])

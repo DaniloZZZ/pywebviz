@@ -14,7 +14,11 @@ button = ({data, setattr}) =>
 
 
 slider = ({data, setattr}) =>
-  wheelstep = 0.02 * (data.max-data.min)
+  round = (value) =>
+    v = Number.parseFloat(value.toPrecision(6))
+    console.log 'rounded', v, value
+    return v
+  wheelstep = round(0.02 * (data.max-data.min))
   console.log 'wheelstep', wheelstep
   <div className="uicontrols-presenter">
     <div className="slider-group">
@@ -23,9 +27,11 @@ slider = ({data, setattr}) =>
         max={data.max}
         value={data.value}
         onChange={(e)->setattr 'value', e.target.value}
+        step={round(wheelstep/2)}
         onWheel={(e)->
           console.log 'wheel ev', e.deltaY
-          setattr 'value', Math.sign(e.deltaY)*wheelstep + Number(data.value)}
+          setattr 'value', round( -Math.sign(e.deltaY)*wheelstep + Number(data.value))
+        }
         />
       <label>{data.value}</label>
     </div>
@@ -42,8 +48,5 @@ export default Presenter = ({data, setattr}) =>
   if data.type is undefined
     return "Loading..."
   f = modules[data.type]
-  try
-    return f({data, setattr})
-  catch
-    return JSON.stringify data
+  return f({data, setattr})
 
