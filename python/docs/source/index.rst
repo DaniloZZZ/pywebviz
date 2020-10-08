@@ -14,8 +14,8 @@ Release v\ |version|
 .. toctree::
    :maxdepth: 2
 
-   examples/notebooks/test
-   examples/notebooks/libvis_with_pytorch
+   examples/test
+   examples/libvis_with_pytorch
    legimens/index
 
    usage/installation
