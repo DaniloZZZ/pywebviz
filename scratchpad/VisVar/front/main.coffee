@@ -5,5 +5,5 @@ import {LibvisModule} from 'libvis'
 export default Presenter = ({data, setattr, addr}) =>
   if data is undefined
     return "Loading..."
-  console.log 'data', data
+  #console.debug 'data', data
   <LibvisModule object={data.body} addr={addr}/>

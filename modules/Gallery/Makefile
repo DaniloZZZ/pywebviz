@@ -6,7 +6,7 @@ back_src = $(shell $(get_path) --back)
 install:
 	libvis_mods install
 
-requirements: req_py req_js
+requirements: req_py 
 	@echo "Installed requirements"
 
 req_py:
