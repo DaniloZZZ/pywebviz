@@ -34,33 +34,36 @@ def test_init_instal(tmp_path):
                        )
     try:
         modules = reload(modules)
-        print(libvis_mods.installed())
+        print("Installed:", libvis_mods.installed())
 
         # 3.
         v = libvis.Vis(ws_port=7700, vis_port=7000, debug=True)
-        m = modules.TestMod(foo='bar')
-        assert m.serial()
+        try:
+            m = modules.TestMod(foo='bar')
+            assert m.serial()
 
-        v.start()
-        v.vars.test = m
+            v.vars.test = m
 
-        # 4.
-        browser.get('http://localhost:7000')
+            # 4.
+            browser.get('http://localhost:7000')
 
-        widget = add_widget(browser, 'test')
-        # Wait for libvis to answer. 
-        # This is probably not the best way, since loading time may vary 
-        # for complex visualisations or big data. 
-        # May cause false negatives
-        time.sleep(0.1)
-        test_root = widget.find_element_by_xpath(
-            f".//*[@class=\"{modname}-presenter\"]")
-        assert test_root
+            widget = add_widget(browser, 'test')
+            # Wait for libvis to answer. 
+            # This is probably not the best way, since loading time may vary 
+            # for complex visualisations or big data. 
+            # May cause false negatives
+            time.sleep(0.1)
+            test_root = widget.find_element_by_xpath(
+                f".//*[@class=\"{modname}-presenter\"]")
+            assert test_root
+
+        finally:
+            v.stop()
 
     finally:
         libvis_mods.uninstall(modname)
-        v.stop()
-        browser.quit()
+
+    browser.quit()
 
 
 def add_widget(browser, name):

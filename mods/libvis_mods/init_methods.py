@@ -1,5 +1,6 @@
+""" Functions to initialize a libvis module for development """
 
-from libvis_mods.paths_config import (
+from libvis_mods.config.paths import (
     files_template, dirs_template
 )
 

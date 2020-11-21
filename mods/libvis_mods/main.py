@@ -12,7 +12,7 @@ from .imports import (
     , index_import_js , root_import_js
 )
 
-from libvis_mods.paths_config import (
+from libvis_mods.config.paths import (
     manager_path,
     web_src, web_user_mods,
     build_dir, python_user_mods
@@ -32,7 +32,7 @@ def _prepare_dir_struct(src, usr_mods, modname, action):
     action(src.absolute(), moddir)
     return moddir
 
-def _update_imports():
+def _reindex_imports():
     index_import_py(python_user_mods)
     index_import_js(web_user_mods)
 
@@ -57,7 +57,7 @@ def develop(modname, back_src, front_src):
     _process_py(modname, back_src, action=utils.ln)
     _process_js(modname, front_src, action=utils.ln)
 
-    _update_imports()
+    _reindex_imports()
 
     print(f"watching python src dir")
     python_dev_server(modname, back_src)
@@ -81,7 +81,7 @@ def install(modname, back_src, front_src,
             print("Running pre install", post_cmd)
             utils.run_cmd(pre_cmd.split())
 
-        _update_imports()
+        _reindex_imports()
         ## Build the front and copy dist
         print(f"Building the app from {web_src}...")
         utils.run_cmd([manager_path/'build.sh', web_src])
@@ -91,7 +91,7 @@ def install(modname, back_src, front_src,
         uninstall(modname)
         raise
     finally:
-        _update_imports()
+        _reindex_imports()
         if post_cmd:
             print("Running post install", post_cmd)
             utils.run_cmd(post_cmd.split())
@@ -99,9 +99,20 @@ def install(modname, back_src, front_src,
 def uninstall(modname):
     utils.rm(python_user_mods / modname)
     utils.rm(web_user_mods / modname)
-    _update_imports()
+    _reindex_imports()
     print(f"Uninstalled module {modname}")
 
 def installed():
+    try:
+        import libvis.modules.installed as installed
+    except Exception as e:
+        print(f"Broken install: {e.__str__()}.")
+        print(f"Reindexing... ", end='')
+        _reindex_imports()
+        print(f"OK")
+        print()
+
     import libvis.modules.installed as installed
+
+
     return [x for x in installed.__dir__() if x[0] != '_']

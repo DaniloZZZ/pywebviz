@@ -1,13 +1,13 @@
 """ Cli interface for libvis modules and dev """
 import click
-import libvis_mods as wm
+import libvis_mods
 
-from libvis_mods.config_gen import with_libvis_config
+from libvis_mods.config import with_libvis_config
 from libvis_mods.publish import publish
 from libvis_mods.utils import only_required_kwargs_call
 from libvis_mods.download import repository
 
-from libvis_mods.paths_config import (
+from libvis_mods.config.paths import (
     web_user_mods, python_user_mods
 )
 
@@ -35,20 +35,20 @@ def install(*args, **kwargs):
     """ Install a module from directory """
     print('Arguments', kwargs)
     only_required_kwargs_call(
-        wm.install, *args, **kwargs)
+        libvis_mods.install, *args, **kwargs)
 
 
 @cli.command('list')
 def list_():
     """ list installed modules """
-    mods = wm.installed()
+    mods = libvis_mods.installed()
     print("\n".join(mods))
 
 @cli.command()
 @name
 def uninstall(**kwargs):
     """ Uninstall module """
-    wm.uninstall(kwargs['modname'])
+    libvis_mods.uninstall(kwargs['modname'])
 
 ## ## ## Utils ## ## ##
 
@@ -82,20 +82,20 @@ def develop(*args, **kwargs):
     """ Run the web server in development mode with hot reload """
     print(args, kwargs)
     only_required_kwargs_call(
-        wm.develop, *args, **kwargs)
+        libvis_mods.develop, *args, **kwargs)
 
 
 @cli.command()
 @click.option('-o', '--output-dir', 'output_dir', default='.')
 @name
 def init_file(modname, output_dir):
-    wm.init_file(modname, output_dir=output_dir)
+    libvis_mods.init_file(modname, output_dir=output_dir)
 
 @cli.command()
 @click.option('-o', '--output-dir', 'output_dir', default='.')
 @name
 def init_dir(modname, output_dir):
-    wm.init_dir(modname, output_dir=output_dir)
+    libvis_mods.init_dir(modname, output_dir=output_dir)
 
 
 cli.command()(publish)

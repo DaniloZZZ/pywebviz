@@ -11,6 +11,6 @@ elif npm -v; then
     npm i
     npm run dev
 else
-    >&2 echo "You don't have neither yarn nor npm installed."
+    >&2 echo "E [libvis-mods] develop: You don't have neither yarn nor npm installed."
 fi
 

@@ -6,13 +6,13 @@ from loguru import logger as log
 import sys
 from libvis_mods.utils import run_cmd, safe_copy
 from libvis_mods.libvis_dist import libvis_setup
-from libvis_mods.config_gen import read_config
+from libvis_mods.config import read_module_config
 
 setup_file = libvis_setup.__file__
 
 def publish(path='.'):
     path = Path(path)
-    config = read_config(path)
+    config = read_module_config(path)
     log.info('Module config {}', config)
 
     try:

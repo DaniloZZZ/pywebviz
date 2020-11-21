@@ -84,12 +84,16 @@ class ModHotReload(events.PatternMatchingEventHandler):
     def _init_mod(self):
         self._update_module()
         Mod = getattr(self.parent, self.name)
-        print("Module dict:", Mod.__dict__)
+        print("D [libvis-mods] Module dict:", Mod.__dict__)
         with log.catch():
             if hasattr(Mod, "test_object"):
                 m = Mod.test_object()
             else:
-                m = Mod()
+                try:
+                    m = Mod()
+                except Exception as e:
+                    print(f"E [libvis-mods] develop: Faled to initialize module {self.modulename} without arguments. You may need to define 'test_object' classmethod or provide defaults for all arguments of __init__.", e)
+                    return None
             return m
             #print('Fix the module, save the file, libvis will reload it for you.')
 
