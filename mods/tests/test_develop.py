@@ -1,5 +1,6 @@
 import libvis_mods
-from threading import Thread
+#from threading import Thread
+from multiprocessing import Process
 from pathlib import Path
 import time
 mocks = Path(__file__).parent / 'mocks'
@@ -12,10 +13,12 @@ def test_develop_installed():
         libvis_mods.install('BirModule', pyfile, webfle)
         def dev():
             libvis_mods.develop('BirModule', pyfile, webfle)
-        t = Thread(target=dev)
-        t.daemon = True
+        t = Process(target=dev)
+        #t.daemon = True
         t.start()
-        time.sleep(1)
+        time.sleep(2)
+        t.terminate()
+        t.join()
 
     finally:
         libvis_mods.uninstall('BirModule')
