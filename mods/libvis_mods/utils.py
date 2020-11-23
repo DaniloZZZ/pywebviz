@@ -5,10 +5,21 @@ import shutil, os
 from loguru import logger as log
 import errno
 import sys
+import time
+
+START_TIME = time.time()
+
+def smart_ass_time_log(msg):
+    _timedelta = time.time() - START_TIME
+
+    _timestr = f'[{_timedelta:.4}]'
+    print(msg)
+    str(msg).format(_tdelta = _timestr)
+    print(_timestr + msg)
 
 def configure_cli_logging(level='WARNING'):
     log.remove()
-    fmt = "<green>[{time}]</green> libvis-mods :: <level>{message}</level>"
+    fmt = "<green>[{elapsed}]</green> libvis-mods :: <level>{message}</level>"
     log.add(sys.stderr, colorize=True, format=fmt, level=level)
 
 def make_sure_path_exists(path):

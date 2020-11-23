@@ -15,7 +15,7 @@ from libvis_mods.config.paths import (
 
 @click.group()
 def cli():
-    configure_cli_logging('DEBUG')
+    configure_cli_logging('INFO')
 
 name = click.argument('modname', required=False)
 back = click.argument('back_src'

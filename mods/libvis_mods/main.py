@@ -55,8 +55,9 @@ def _process_js(modname, front_src, action=utils.copy):
 ## ## ## API ## ## ##  
 
 def develop(modname, back_src, front_src):
-    log.remove()
-    log.add(sys.stdout, level='DEBUG')
+    #log.remove()
+    #log.add(sys.stdout, level='DEBUG')
+    utils.configure_cli_logging('DEBUG')
     back_src, front_src = Path(back_src), Path(front_src)
     try:
         _process_py(modname, back_src, action=utils.ln)
@@ -98,7 +99,7 @@ def install(modname, back_src, front_src,
         _process_js(modname, front_src, action=utils.copy)
 
         if pre_cmd:
-            log.indfo("running pre install {}", pre_cmd)
+            log.info("running pre install {}", pre_cmd)
             utils.run_cmd(pre_cmd.split())
 
         _reindex_imports()
