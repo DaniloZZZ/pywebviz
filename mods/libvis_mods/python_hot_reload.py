@@ -13,7 +13,7 @@ def _ismodule(mod):
 
 def rreload(module):
     """Recursively reload modules."""
-    print('reload', module)
+    log.debug('reload', module)
     if 'libvis' not in module.__file__:
         # Reload only libvis. Some packages raise recursion error
         return
@@ -26,28 +26,27 @@ def rreload(module):
 
 class ModHotReload(events.PatternMatchingEventHandler):
     @log.catch
-    def __init__(self, modname, *args, **kwargs):
+    def __init__(self, modname, vis, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._last_event = time.time()
         self._timedelta = .5
         self.modname = modname
         modules = importlib.import_module('libvis.modules.installed')
-        libvis = importlib.import_module('libvis')
 
         # We may already have libvis modules in cache, 
         # so better reload them, modules/installed/__init__.py should 
         # contain import string for a new module if it was
         # installed after first import of libvis.modules.installed
         reload(modules)
-        print('libvis modules loaded:', modules.__dict__.keys())
+        log.debug('develop: libvis modules loaded:', modules.__dict__.keys())
         mod = getattr(modules, self.modname)
         # mod can be ModuleType or Class, depending on what user 
         # choses to export
         self._exported = mod
-        print('hot reloading module:', self._exported)
+        log.debug('develop: hot reloading module:', self._exported)
 
         if not isinstance(self._exported, ModuleType):
-            print(f'Assuming {mod} is a class')
+            log.info(f'develop: assuming {mod} is a class')
             parent_name = mod.__module__
             name = mod.__name__
         else:
@@ -57,15 +56,14 @@ class ModHotReload(events.PatternMatchingEventHandler):
         self.parent = importlib.import_module(parent_name)
         self.name = name
 
-        self.vis = libvis.Vis()
         self.test_data = {}
-        self.vis.start()
-
+        self.vis = vis
         self.set_testmod()
+        log.info('develop: started')
 
     def on_any_event(self, event):
         if time.time() - self._last_event > self._timedelta:
-            print('Module changed', event)
+            log.info('develop: Module changed', event)
             self.set_testmod()
             self._last_event = time.time()
 
@@ -84,7 +82,7 @@ class ModHotReload(events.PatternMatchingEventHandler):
     def _init_mod(self):
         self._update_module()
         Mod = getattr(self.parent, self.name)
-        print("D [libvis-mods] Module dict:", Mod.__dict__)
+        log.debug("develop: Module dict:", Mod.__dict__)
         with log.catch():
             if hasattr(Mod, "test_object"):
                 m = Mod.test_object()
@@ -92,18 +90,29 @@ class ModHotReload(events.PatternMatchingEventHandler):
                 try:
                     m = Mod()
                 except Exception as e:
-                    print(f"E [libvis-mods] develop: Faled to initialize module {self.modname} without arguments. You may need to define 'test_object' classmethod or provide defaults for all arguments of __init__.", e)
+                    log.error(f"develop: Faled to initialize module {self.modname} without arguments. You may need to define 'test_object' classmethod or provide defaults for all arguments of __init__.", e)
                     return None
-            return m
             #print('Fix the module, save the file, libvis will reload it for you.')
+            log.debug('develop: loaded module')
+            return m
 
 def python_dev_server(modname, path):
     observer = observers.Observer()
+    # -- libvis and its stopping
+    libvis = importlib.import_module('libvis')
+    vis = libvis.Vis(debug=True)
+    _thread_stop_orig = observer.on_thread_stop
+    def on_thread_stop():
+        _thread_stop_orig()
+        vis.stop()
+    observer.on_thread_stop = on_thread_stop
+    # --
     if path.is_file():
-        handler = ModHotReload(modname, patterns=['*.py'])
+        handler = ModHotReload(modname, vis=vis, patterns=['*.py'])
         print(f"Watching {path.parent}")
         observer.schedule(handler, str(path.parent), recursive=False)
     else:
-        handler = ModHotReload(modname)
+        handler = ModHotReload(modname, vis=vis)
         observer.schedule(handler, str(path), recursive=True)
     observer.start()
+    return observer

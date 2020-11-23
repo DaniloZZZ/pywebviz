@@ -3,7 +3,13 @@ import inspect
 from inspect import Parameter
 import shutil, os
 from loguru import logger as log
-import shutil, os, errno
+import errno
+import sys
+
+def configure_cli_logging(level='WARNING'):
+    log.remove()
+    fmt = "<green>[{time}]</green> libvis-mods :: <level>{message}</level>"
+    log.add(sys.stderr, colorize=True, format=fmt, level=level)
 
 def make_sure_path_exists(path):
     """Ensure that a directory exists.
@@ -33,8 +39,8 @@ def only_required_kwargs_call(f, *args, **kwargs):
         return f(*args, **kwargs)
     else:
         names = pos + keyw
-        print(names)
-        conf = {name:value for 
+        log.debug('allowed arguments: {}', names)
+        conf = {name:value for
                 name, value in kwargs.items() if name in names
                }
         return f(*args, **conf)
@@ -58,32 +64,29 @@ def safe_copy(src, dest):
 def copy(src, dest):
     if src.is_dir():
         src = str(src) + str(os.sep)
-    print("cp", src, dest)
+    log.debug("cp {} {}", src, dest)
     run_cmd(['rsync','-ri', src, dest])
 
 def ln(src, dest):
-    print("ln -s", src, dest)
-    if dest.is_dir():
-        print('W: Link destination directory exists, removing.')
-        rm(dest)
-    run_cmd(['ln', '-s', src, dest])
+    log.debug("ln -sf {} {}", src, dest)
+    run_cmd(['ln', '-sf', src, dest])
 
 def write_to(s, dest):
     with open(dest, 'w+') as f:
         f.write(s)
 
 def run_cmd(cmds):
+    log.debug('Running shell command `{}`', ' '.join([str(x) for x in cmds]))
     try:
         subprocess.run(cmds,
-            #' '.join([str(x) for x in cmds]),
-                   shell=False, check=True
-                  )
+                       #' '.join([str(x) for x in cmds]),
+                       shell=False, check=True
+
+                      )
     except subprocess.CalledProcessError as e:
         output, stderr = e.output, e.stderr
         if output:
             output = output.decode()
         if stderr:
             stderr = stderr.decode()
-        raise Exception(f"Failed to execute `{cmds[0]}`.\n\
- Command: {e.cmd}.\n\
-Output: {output}, stderr: {stderr}")
+        raise

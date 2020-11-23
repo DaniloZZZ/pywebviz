@@ -4,8 +4,9 @@ import libvis_mods
 
 from libvis_mods.config import with_libvis_config
 from libvis_mods.publish import publish
-from libvis_mods.utils import only_required_kwargs_call
+from libvis_mods.utils import only_required_kwargs_call, configure_cli_logging
 from libvis_mods.download import repository
+from loguru import logger as log
 
 from libvis_mods.config.paths import (
     web_user_mods, python_user_mods
@@ -13,7 +14,8 @@ from libvis_mods.config.paths import (
 
 
 @click.group()
-def cli(): pass
+def cli():
+    configure_cli_logging('DEBUG')
 
 name = click.argument('modname', required=False)
 back = click.argument('back_src'
@@ -32,9 +34,21 @@ files = lambda x: back( front(
 @name
 @files
 def install(*args, **kwargs):
-    """ Install a module from directory """
-    print('Arguments', kwargs)
-    only_required_kwargs_call(
+    """ Install a module from directory.
+
+        Arguments can be omitted if the command is run
+        in a directory with libvis-mod.conf
+    """
+    log.debug('install arguments: {}', kwargs)
+    if any([
+        'modname' not in kwargs,
+        'front_src' not in kwargs,
+        'back_src' not in kwargs
+    ]):
+        log.error('Please provide install arguments, `libvis-mods install --help`, or run in a directory with libvis-mod.conf')
+        return 1
+
+    return only_required_kwargs_call(
         libvis_mods.install, *args, **kwargs)
 
 
@@ -48,7 +62,7 @@ def list_():
 @name
 def uninstall(**kwargs):
     """ Uninstall module """
-    libvis_mods.uninstall(kwargs['modname'])
+    return libvis_mods.uninstall(kwargs['modname'])
 
 ## ## ## Utils ## ## ##
 
@@ -80,8 +94,8 @@ def where(request):
 @files
 def develop(*args, **kwargs):
     """ Run the web server in development mode with hot reload """
-    print(args, kwargs)
-    only_required_kwargs_call(
+    log.debug("debug args={}  kwargs={}",args, kwargs)
+    return only_required_kwargs_call(
         libvis_mods.develop, *args, **kwargs)
 
 

@@ -2,10 +2,10 @@ from distutils.command.sdist import sdist as distutils_sdist
 
 from setuptools import setup
 from libvis_mods.tools.setuptools_hook import hooked_distutils_class
-from libvis_mods.config_gen import read_config
+from libvis_mods.config import read_module_config
 
 if __name__ == '__main__':
-    config = read_config('.')
+    config = read_module_config('.')
     print('Config', config)
 
     def message():

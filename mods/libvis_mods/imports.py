@@ -1,7 +1,17 @@
 from pathlib import Path
-from . import utils
+from loguru import logger as log
+from libvis_mods import utils
 
-def generate_index(import_str, mod_dir):
+def clean_broken_links(dir):
+    dir = Path(dir)
+    for sub in dir.iterdir():
+        if sub.is_symlink():
+            if not sub.exists():
+                log.debug('cleaned broken link {}', sub)
+                utils.rm(sub)
+
+
+def generate_index_js(import_str, mod_dir):
     mod_dir = Path(mod_dir)
     mods = [x.name for x in mod_dir.iterdir() if x.is_dir()]
     x = '\n'.join(map(import_str, mods))
@@ -35,7 +45,7 @@ def _import_str_js(modname):
     return f"export {{default as {modname}}} from './{modname}'"
 
 def index_import_js(usr_mods):
-    index = generate_index(_import_str_js, usr_mods)
+    index = generate_index_js(_import_str_js, usr_mods)
     utils.write_to(index, usr_mods/'index.js')
 
 def root_import_js(src_file, moddir):

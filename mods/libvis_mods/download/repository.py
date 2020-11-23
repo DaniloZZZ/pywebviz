@@ -5,7 +5,7 @@ import re
 
 from libvis_mods.exceptions import RepositoryNotFound
 from libvis_mods.download.vcs import clone
-from libvis_mods.config_gen import BUILTIN_ABBREVIATIONS
+from libvis_mods.config import BUILTIN_ABBREVIATIONS
 
 REPO_REGEX = re.compile(
     r"""

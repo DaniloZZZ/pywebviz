@@ -10,6 +10,7 @@ from .python_hot_reload import python_dev_server
 from .imports import (
       index_import_py , root_import_py
     , index_import_js , root_import_js
+    , clean_broken_links
 )
 
 from libvis_mods.config.paths import (
@@ -28,6 +29,7 @@ def _prepare_dir_struct(src, usr_mods, modname, action):
     moddir = usr_mods / modname
     makedirs(usr_mods, exist_ok=True)
     if src.is_file():
+        log.debug('Making directory {}', moddir)
         makedirs(moddir, exist_ok=True)
     action(src.absolute(), moddir)
     return moddir
@@ -35,6 +37,8 @@ def _prepare_dir_struct(src, usr_mods, modname, action):
 def _reindex_imports():
     index_import_py(python_user_mods)
     index_import_js(web_user_mods)
+    clean_broken_links(web_user_mods)
+    clean_broken_links(python_user_mods)
 
 def _process_py(modname, back_src, action=utils.copy):
     back_moddir = _prepare_dir_struct(back_src, python_user_mods, modname,
@@ -54,20 +58,36 @@ def develop(modname, back_src, front_src):
     log.remove()
     log.add(sys.stdout, level='DEBUG')
     back_src, front_src = Path(back_src), Path(front_src)
-    _process_py(modname, back_src, action=utils.ln)
-    _process_js(modname, front_src, action=utils.ln)
+    try:
+        _process_py(modname, back_src, action=utils.ln)
+        _process_js(modname, front_src, action=utils.ln)
+    except Exception as e:
+        log.error(f'Error linking module {modname} {e}, rolling back.')
+        uninstall(modname)
+        raise
+    finally:
+        _reindex_imports()
 
-    _reindex_imports()
+    log.info(f"watching python src dir")
+    observer = python_dev_server(modname, back_src)
 
-    print(f"watching python src dir")
-    python_dev_server(modname, back_src)
-
-    print(f"Running webpack devolopment server from {web_src}...")
+    log.info(f"Running webpack devolopment server from {web_src}...")
 
     p = os.getcwd()
     os.chdir(web_src)
-    utils.run_cmd([manager_path/'develop.sh', web_src])
-    os.chdir(p)
+    try:
+        utils.run_cmd([manager_path/'develop.sh', web_src])
+    except KeyboardInterrupt:
+        log.debug(f"KeyboardInterrupt")
+    except Exception as e:
+        log.error("Error running webpack devolopment server {}", e)
+        print('ex')
+        raise
+    finally:
+        log.info('Stoppnig python hot reload server.')
+        observer.stop()
+        observer.join()
+        os.chdir(p)
 
 def install(modname, back_src, front_src,
             post_cmd=None, pre_cmd=None
@@ -78,29 +98,31 @@ def install(modname, back_src, front_src,
         _process_js(modname, front_src, action=utils.copy)
 
         if pre_cmd:
-            print("Running pre install", post_cmd)
+            log.indfo("running pre install {}", pre_cmd)
             utils.run_cmd(pre_cmd.split())
 
         _reindex_imports()
         ## Build the front and copy dist
-        print(f"Building the app from {web_src}...")
+        log.info(f"Building the app from {web_src}...")
         utils.run_cmd([manager_path/'build.sh', web_src])
         utils.copy(web_src/'dist', build_dir)
-        print(f"Successfully installed module {modname}")
-    except:
+        if post_cmd:
+            log.info("Running post install", post_cmd)
+            utils.run_cmd(post_cmd.split())
+        log.info(f"Successfully installed module {modname}")
+    except Exception as e:
+        log.error(f'Failed to install module {modname}, rolling back.')
         uninstall(modname)
-        raise
+        log.error(e)
+        sys.exit(1)
     finally:
         _reindex_imports()
-        if post_cmd:
-            print("Running post install", post_cmd)
-            utils.run_cmd(post_cmd.split())
 
 def uninstall(modname):
     utils.rm(python_user_mods / modname)
     utils.rm(web_user_mods / modname)
     _reindex_imports()
-    print(f"Uninstalled module {modname}")
+    log.info(f"Uninstalled module {modname}")
 
 def installed():
     try:
