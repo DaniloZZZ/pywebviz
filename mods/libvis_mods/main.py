@@ -27,7 +27,7 @@ def _prepare_dir_struct(src, usr_mods, modname, action):
     :arg action: copy, link or whatever function that takes src and moddir
     """
     moddir = usr_mods / modname
-    makedirs(usr_mods, exist_ok=True)
+    #makedirs(usr_mods, exist_ok=True)
     if src.is_file():
         log.debug('Making directory {}', moddir)
         makedirs(moddir, exist_ok=True)
@@ -54,7 +54,7 @@ def _process_js(modname, front_src, action=utils.copy):
 
 ## ## ## API ## ## ##  
 
-def develop(modname, back_src, front_src):
+def develop(modname, back_src, front_src, pre_cmd=None):
     #log.remove()
     #log.add(sys.stdout, level='DEBUG')
     utils.configure_cli_logging('DEBUG')
@@ -68,8 +68,18 @@ def develop(modname, back_src, front_src):
         raise
     finally:
         _reindex_imports()
+    if pre_cmd:
+        try:
+            log.info("running pre install {}", pre_cmd)
+            utils.run_cmd(pre_cmd.split())
+        except Exception as e:
+            log.error(f'Error running pre-install command {pre_cmd} module {modname} {e}, rolling back.')
+            uninstall(modname)
+            raise
+        finally:
+            _reindex_imports()
 
-    log.info(f"watching python src dir")
+    log.info(f"Watching python src dir {back_src}")
     observer = python_dev_server(modname, back_src)
 
     log.info(f"Running webpack devolopment server from {web_src}...")
@@ -79,7 +89,7 @@ def develop(modname, back_src, front_src):
     try:
         utils.run_cmd([manager_path/'develop.sh', web_src])
     except KeyboardInterrupt:
-        log.debug(f"KeyboardInterrupt")
+        log.debug("KeyboardInterrupt")
     except Exception as e:
         log.error("Error running webpack devolopment server {}", e)
         print('ex')

@@ -1,0 +1,21 @@
+.screenshotable-presenter{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+button{
+    margin: 7px 20px;
+    flex-grow: 1;
+}
+.horisontal-flex{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.wrapper{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
