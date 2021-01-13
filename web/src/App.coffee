@@ -44,7 +44,7 @@ export default App = (props) =>
 
   addWidget= ({name})=>
     new_widget = name: (name or 'foobar')
-    new_id = Date.now()
+    new_id = Date.now() + Math.random()
     widgets[new_id] = new_widget
     set_widgets {[new_id]:new_widget, widgets...}
 
