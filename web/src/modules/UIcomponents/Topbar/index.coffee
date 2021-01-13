@@ -9,17 +9,32 @@ import brokenLinkIcon from './broken-link.svg'
 import styles from './styles.less'
 
 
-export default topbar=({addr, addWidget, addrChange, connected})=>
+export default topbar=({addr, addWidget, addrChange, connected, availableVarNames})=>
     L.div className:'top-bar',
       L.div className:'address inline',
         L_ Input,
           value: addr
           onChange: addrChange
         L_ statusBadge, isConnected:connected
-      L_ Button,
-        className: 'add-widget'
-        text: 'Add widget'
-        onPress: addWidget
+      L.div className: 'widget-buttons',
+        L_ Button,
+          className: 'add-widget'
+          text: 'Add widget'
+          onPress: addWidget
+
+        L.div className:'available-varnames',
+          L_ Button,
+            className: 'add-all'
+            onPress: ()=>
+              availableVarNames.map (name)=> addWidget {name}
+            text: 'Add each'
+          L.div className:'names-list',
+            availableVarNames.map (name)=>
+              L_ Button,
+                className:'varname'
+                onPress: ()=>addWidget {name}
+                text: name
+            
 
 statusBadge = ({isConnected}) ->
   [displayHover, setDisplayHover] = useState(false)

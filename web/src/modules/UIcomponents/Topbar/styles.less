@@ -22,3 +22,30 @@
         z-index: 100;
     }
 }
+
+.widget-buttons{
+    flex-grow:1;
+    direction: rtl;
+}
+
+.available-varnames{
+    margin: 2px 0;
+    font-size: 14px;
+    display: inline-block;
+
+    .names-list{
+        display: inline-flex;
+        flex-direction: row;
+        max-width: calc(100% - 140px);
+        min-width: 50px;
+        margin: 0 1em;
+        overflow: auto;
+    }
+    .varname{
+        margin-left: 9px;
+        padding: 3px 5px;
+    }
+    .add-all{
+        margin: 1px 1em;
+    }
+}

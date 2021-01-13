@@ -5,7 +5,7 @@ L_ = React.createElement
 import {Responsive, WidthProvider} from 'react-grid-layout'
 
 import useLegimens from 'legimens'
-import {useLegimensRoot} from 'legimens'
+import { useLegimensRoot } from 'legimens'
 
 import Notebook from './modules/notebook.coffee'
 import {LibvisModule} from './modules/visualiser.coffee'
@@ -16,6 +16,7 @@ import TopBar from './modules/UIcomponents/Topbar'
 import LocalStorage from './modules/helpers/localStorage.coffee'
 import {get_nb_name} from './modules/helpers/argparser.coffee'
 import {parse_message} from './Data/interface.coffee'
+import {Test} from './modules/Widget.coffee'
 
 import './styles/grid.css'
 import './styles/widget.less'
@@ -92,8 +93,10 @@ export default App = (props) =>
   console.log "****************"
   console.log "App render start"
   console.log "****************"
+  console.log('legr', useLegimensRoot)
   {data, status, respond} = useLegimensRoot addr:addr
   vars = data
+
   console.debug 'vars', vars
   L.div className:'app',
     L_ TopBar,
@@ -101,8 +104,9 @@ export default App = (props) =>
       addWidget: addWidget
       addrChange: setAddr
       connected: status.connected
+      availableVarNames: Object.keys vars || {}
     if not vars
       'Loading...'
     else
-      add_widgets_from vars
+      #add_widgets_from vars
       _grid vars
