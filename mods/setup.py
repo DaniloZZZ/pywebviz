@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='libvis_mods',
-    version='0.1.11',
+    version='0.1.12',
     license='MIT',
 
     packages=find_packages(),
